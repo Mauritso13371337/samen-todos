@@ -3,525 +3,231 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Maurits & Titia — Samen Slim</title>
+    <title>Maurits & Titia — Premium Samen App</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="apple-touch-icon" href="https://samen-todos.vercel.app/ChatGPT%20Image%20Mar%2030,%202026,%2010_43_34%20PM.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Maurits & Titia">
+    <meta name="theme-color" content="#0f172a">
     <style>
       :root {
-        --bg1: #f9fbff;
-        --bg2: #eef4ff;
+        --bg: #f5f7fb;
+        --bg-2: #eef3ff;
+        --surface: rgba(255,255,255,0.82);
+        --surface-strong: rgba(255,255,255,0.95);
+        --line: rgba(148,163,184,.22);
         --text: #0f172a;
         --muted: #64748b;
-        --line: rgba(148, 163, 184, 0.25);
-        --card: rgba(255, 255, 255, 0.78);
-        --card-strong: rgba(255, 255, 255, 0.92);
-        --shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
-        --radius: 26px;
-        --accent: #5b5cf0;
-        --accent-2: #8b5cf6;
-        --success: #16a34a;
-        --warning: #f59e0b;
-        --danger: #dc2626;
+        --primary: #4f46e5;
+        --primary-2: #7c3aed;
         --pink: #ec4899;
-        --blue-soft: #dbeafe;
-        --pink-soft: #fce7f3;
-        --green-soft: #dcfce7;
-        --gold-soft: #fef3c7;
+        --green: #16a34a;
+        --gold: #f59e0b;
+        --red: #dc2626;
+        --shadow: 0 18px 60px rgba(15,23,42,.08);
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 18px;
       }
 
       * { box-sizing: border-box; }
-
+      html, body { height: 100%; }
       body {
         margin: 0;
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 26%),
-          radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.14), transparent 22%),
-          radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.09), transparent 24%),
-          linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
-        min-height: 100vh;
-      }
-
-      .page {
-        max-width: 1180px;
-        margin: 0 auto;
-        padding: 18px;
-      }
-
-      .glass {
-        background: var(--card);
-        backdrop-filter: blur(14px);
-        border: 1px solid rgba(255,255,255,0.7);
-        box-shadow: var(--shadow);
-        border-radius: var(--radius);
+          radial-gradient(circle at top left, rgba(79,70,229,.14), transparent 24%),
+          radial-gradient(circle at top right, rgba(236,72,153,.12), transparent 20%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       }
 
       .hidden { display: none !important; }
-
-      .auth-wrap {
-        max-width: 520px;
-        margin: 30px auto;
+      .app-shell { max-width: 1320px; margin: 0 auto; padding: 18px; }
+      .glass {
+        background: var(--surface);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,.7);
+        box-shadow: var(--shadow);
+        border-radius: var(--radius-xl);
       }
 
-      .hero {
-        overflow: hidden;
-        position: relative;
-        padding: 24px;
-        margin-bottom: 18px;
-      }
-
+      .auth-wrap { max-width: 560px; margin: 32px auto; }
+      .hero { padding: 26px; margin-bottom: 16px; overflow: hidden; position: relative; }
       .hero::before {
-        content: "";
-        position: absolute;
-        right: -80px;
-        top: -80px;
-        width: 260px;
-        height: 260px;
-        background: radial-gradient(circle, rgba(91,92,240,0.18), transparent 65%);
-        border-radius: 999px;
+        content: ""; position: absolute; width: 280px; height: 280px; right: -90px; top: -90px;
+        background: radial-gradient(circle, rgba(124,58,237,.18), transparent 65%); border-radius: 999px;
       }
-
       .hero::after {
-        content: "";
-        position: absolute;
-        left: -60px;
-        bottom: -60px;
-        width: 220px;
-        height: 220px;
-        background: radial-gradient(circle, rgba(236,72,153,0.14), transparent 65%);
-        border-radius: 999px;
+        content: ""; position: absolute; width: 220px; height: 220px; left: -60px; bottom: -70px;
+        background: radial-gradient(circle, rgba(236,72,153,.14), transparent 65%); border-radius: 999px;
       }
-
-      .hero-top {
-        position: relative;
-        z-index: 1;
-        display: grid;
-        gap: 18px;
+      .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; align-items: center; }
+      .title { margin: 0; font-size: 42px; line-height: .96; letter-spacing: -.05em; font-weight: 900; }
+      .gradient { background: linear-gradient(135deg, #4338ca 0%, #7c3aed 48%, #ec4899 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .subtitle { margin-top: 10px; color: var(--muted); font-size: 15px; max-width: 650px; }
+      .hero-art {
+        min-height: 240px; border-radius: 26px;
+        background: linear-gradient(135deg, rgba(219,234,254,.92), rgba(252,231,243,.92));
+        display: flex; align-items: center; justify-content: center; padding: 16px;
+        border: 1px solid rgba(255,255,255,.85);
       }
+      .hero-art svg { width: 100%; max-width: 380px; height: auto; }
 
-      .title {
-        margin: 0;
-        font-size: 40px;
-        line-height: 0.98;
-        letter-spacing: -0.05em;
-        font-weight: 900;
-      }
-
-      .title .gradient {
-        background: linear-gradient(135deg, #4338ca 0%, #7c3aed 45%, #ec4899 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-
-      .subtitle {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 15px;
-        max-width: 650px;
-      }
-
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 16px;
-        align-items: center;
-      }
-
-      .hero-illustration {
-        border-radius: 24px;
-        background:
-          linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.4)),
-          linear-gradient(135deg, #dbeafe, #fce7f3);
-        border: 1px solid rgba(255,255,255,0.7);
-        min-height: 240px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 16px;
-      }
-
-      .hero-illustration svg {
-        width: 100%;
-        max-width: 380px;
-        height: auto;
-      }
-
-      .auth-card, .panel, .stat, .mini-card {
-        padding: 18px;
-      }
-
-      .auth-card h2, .panel h2 {
-        margin: 0 0 14px;
-        font-size: 20px;
-        letter-spacing: -0.03em;
-      }
-
-      .segmented {
-        display: flex;
-        gap: 8px;
-        background: #eef2f7;
-        padding: 6px;
-        border-radius: 16px;
-        margin-bottom: 16px;
-      }
-
+      .card { padding: 20px; }
+      .card h2, .card h3 { margin: 0 0 14px; letter-spacing: -.03em; }
+      .segmented { display: flex; gap: 8px; background: #edf2f7; padding: 6px; border-radius: 18px; margin-bottom: 16px; }
       .segmented button {
-        width: 100%;
-        border: 0;
-        border-radius: 12px;
-        background: transparent;
-        color: #475569;
-        padding: 11px 12px;
-        font-weight: 800;
-        cursor: pointer;
+        width: 100%; background: transparent; border: 0; border-radius: 14px; padding: 11px 12px; cursor: pointer; font-weight: 800; color: #475569;
       }
-
-      .segmented button.active {
-        background: white;
-        color: #111827;
-        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+      .segmented button.active { background: white; color: #111827; box-shadow: 0 6px 20px rgba(15,23,42,.08); }
+      label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+      input, textarea, select, button {
+        width: 100%; font: inherit; padding: 13px 14px; border-radius: 16px; outline: none;
       }
-
-      label {
-        display: block;
-        font-size: 13px;
-        color: var(--muted);
-        margin-bottom: 6px;
-        font-weight: 700;
-      }
-
-      input, select, textarea, button {
-        width: 100%;
-        font: inherit;
-        border-radius: 16px;
-        padding: 13px 14px;
-        outline: none;
-      }
-
-      input, select, textarea {
-        border: 1px solid var(--line);
-        background: rgba(255,255,255,0.95);
-        color: var(--text);
-      }
-
-      input:focus, select:focus, textarea:focus {
-        border-color: rgba(91,92,240,0.6);
-        box-shadow: 0 0 0 4px rgba(91,92,240,0.12);
-      }
-
-      textarea {
-        min-height: 100px;
-        resize: vertical;
-      }
-
-      button {
-        border: 0;
-        cursor: pointer;
-        font-weight: 800;
-        transition: transform .16s ease, opacity .16s ease;
-      }
-
+      input, textarea, select { border: 1px solid var(--line); background: rgba(255,255,255,.96); color: var(--text); }
+      input:focus, textarea:focus, select:focus { border-color: rgba(79,70,229,.55); box-shadow: 0 0 0 4px rgba(79,70,229,.11); }
+      textarea { min-height: 98px; resize: vertical; }
+      button { border: 0; cursor: pointer; font-weight: 800; transition: transform .15s ease, opacity .15s ease; }
       button:hover { transform: translateY(-1px); }
-      button:active { transform: translateY(0); }
-
-      .btn-primary {
-        color: white;
-        background: linear-gradient(135deg, #111827 0%, #334155 100%);
-      }
-
-      .btn-accent {
-        color: white;
-        background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 60%, #ec4899 100%);
-      }
-
-      .btn-soft {
-        background: #f8fafc;
-        color: var(--text);
-        border: 1px solid var(--line);
-      }
-
-      .btn-danger {
-        background: #fee2e2;
-        color: #991b1b;
-      }
-
-      .message {
-        margin-top: 12px;
-        font-size: 14px;
-        color: var(--muted);
-      }
-
+      .btn-primary { background: linear-gradient(135deg, #111827 0%, #334155 100%); color: white; }
+      .btn-accent { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #ec4899 100%); color: white; }
+      .btn-soft { background: #f8fafc; border: 1px solid var(--line); color: var(--text); }
+      .btn-danger { background: #fee2e2; color: #991b1b; }
+      .btn-mini { width: auto; padding: 11px 13px; border-radius: 14px; }
+      .message { margin-top: 12px; font-size: 14px; color: var(--muted); }
       .error { color: #b91c1c; }
 
-      .app-shell {
-        display: grid;
-        gap: 16px;
-      }
+      .topbar { display: flex; justify-content: space-between; gap: 14px; align-items: center; flex-wrap: wrap; }
+      .badge-user { padding: 10px 14px; border-radius: 999px; font-size: 13px; font-weight: 900; background: linear-gradient(135deg, #eef2ff, #fce7f3); color: #4338ca; }
+      .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 16px; }
+      .stat { padding: 18px; }
+      .stat-label { color: var(--muted); font-size: 13px; }
+      .stat-value { margin-top: 8px; font-size: 32px; line-height: 1; letter-spacing: -.04em; font-weight: 900; }
+      .smart-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+      .mini-text { color: var(--muted); font-size: 14px; line-height: 1.5; }
 
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
+      .layout { display: grid; grid-template-columns: 340px 1fr 320px; gap: 16px; align-items: start; margin-top: 16px; }
 
-      .topbar-right {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        flex-wrap: wrap;
+      .profile-stack { display: grid; gap: 14px; }
+      .person-card {
+        display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; padding: 14px;
+        border-radius: 22px; border: 1px solid transparent; background: rgba(255,255,255,.7); cursor: pointer;
+        transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
       }
-
-      .badge-user {
-        padding: 10px 14px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, #eef2ff, #fce7f3);
-        color: #3730a3;
-        font-size: 13px;
-        font-weight: 900;
+      .person-card:hover { transform: translateY(-1px); }
+      .person-card.active { border-color: rgba(79,70,229,.3); box-shadow: inset 0 0 0 1px rgba(79,70,229,.08); }
+      .avatar {
+        width: 72px; height: 72px; border-radius: 20px; object-fit: cover; display: block;
+        background: linear-gradient(135deg, #dbeafe, #fce7f3);
       }
+      .person-name { font-size: 18px; font-weight: 900; letter-spacing: -.03em; }
+      .person-role { color: var(--muted); font-size: 13px; margin-top: 4px; }
+      .person-pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+      .pill { border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 800; }
+      .pill.m { background: #dbeafe; color: #1d4ed8; }
+      .pill.t { background: #fce7f3; color: #be185d; }
+      .pill.neutral { background: #f1f5f9; color: #334155; }
 
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 14px;
+      .task-toolbar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+      .task-list { display: grid; gap: 12px; }
+      .task-card {
+        border: 1px solid var(--line); background: var(--surface-strong); border-radius: 24px; padding: 16px; cursor: pointer;
+        transition: transform .14s ease, box-shadow .14s ease;
       }
-
-      .stat-label {
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      .stat-value {
-        font-size: 32px;
-        line-height: 1;
-        font-weight: 900;
-        margin-top: 8px;
-        letter-spacing: -0.04em;
-      }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 390px 1fr;
-        gap: 16px;
-        align-items: start;
-      }
-
-      .panel h2 {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .smart-cards {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-      }
-
-      .mini-card h3 {
-        margin: 0 0 8px;
-        font-size: 15px;
-      }
-
-      .mini-text {
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.45;
-      }
-
-      .toolbar {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-
-      .task-list {
-        display: grid;
-        gap: 12px;
-      }
-
-      .task {
-        border-radius: 22px;
-        border: 1px solid var(--line);
-        background: var(--card-strong);
-        padding: 15px;
-      }
-
-      .task-top {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-      }
-
+      .task-card:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(15,23,42,.08); }
+      .task-top { display: flex; gap: 12px; align-items: flex-start; }
       .check {
-        width: 24px;
-        height: 24px;
-        min-width: 24px;
-        border-radius: 999px;
-        border: 2px solid #cbd5e1;
-        background: white;
-        position: relative;
-        margin-top: 2px;
-        cursor: pointer;
+        width: 24px; height: 24px; min-width: 24px; border-radius: 999px; border: 2px solid #cbd5e1; background: white;
+        position: relative; margin-top: 2px; cursor: pointer;
       }
-
-      .check.done {
-        border-color: var(--success);
-        background: var(--success);
-      }
-
-      .check.done::after {
-        content: "✓";
-        color: white;
-        position: absolute;
-        top: -1px;
-        left: 5px;
-        font-size: 15px;
-      }
-
-      .task-title {
-        font-size: 18px;
-        font-weight: 850;
-        letter-spacing: -0.02em;
-      }
-
-      .task-title.done {
-        color: #94a3b8;
-        text-decoration: line-through;
-      }
-
-      .task-notes {
-        margin-top: 7px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.5;
-      }
-
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-
-      .chip {
-        font-size: 12px;
-        font-weight: 800;
-        border-radius: 999px;
-        padding: 7px 11px;
-      }
-
-      .chip.maurits { background: var(--blue-soft); color: #1d4ed8; }
-      .chip.titia { background: var(--pink-soft); color: #be185d; }
-      .chip.done { background: var(--green-soft); color: #166534; }
-      .chip.open { background: var(--gold-soft); color: #92400e; }
+      .check.done { border-color: var(--green); background: var(--green); }
+      .check.done::after { content: "✓"; position: absolute; left: 5px; top: -1px; font-size: 15px; color: white; }
+      .task-title { font-size: 18px; font-weight: 850; letter-spacing: -.02em; }
+      .task-title.done { text-decoration: line-through; color: #94a3b8; }
+      .task-notes { margin-top: 7px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+      .chip { padding: 7px 11px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+      .chip.owner-m { background: #dbeafe; color: #1d4ed8; }
+      .chip.owner-t { background: #fce7f3; color: #be185d; }
+      .chip.open { background: #fef3c7; color: #92400e; }
+      .chip.done { background: #dcfce7; color: #166534; }
       .chip.category { background: #f1f5f9; color: #334155; }
       .chip.priority-high { background: #fee2e2; color: #b91c1c; }
-      .chip.priority-normal { background: #fef3c7; color: #92400e; }
+      .chip.priority-normal { background: #ede9fe; color: #6d28d9; }
       .chip.priority-low { background: #e0f2fe; color: #0369a1; }
-      .chip.deadline { background: #ede9fe; color: #6d28d9; }
+      .chip.deadline { background: #fff7ed; color: #c2410c; }
+      .task-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+      .empty { border: 1px dashed #cbd5e1; border-radius: 20px; padding: 32px 18px; text-align: center; color: var(--muted); background: rgba(255,255,255,.55); }
 
-      .task-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 14px;
-        flex-wrap: wrap;
+      .chat-box { display: grid; gap: 12px; }
+      .chat-feed { max-height: 440px; overflow: auto; display: grid; gap: 10px; padding-right: 4px; }
+      .chat-msg {
+        border-radius: 20px; padding: 12px 14px; background: rgba(255,255,255,.9); border: 1px solid var(--line);
       }
+      .chat-msg.mine { background: linear-gradient(135deg, #eef2ff, #fce7f3); }
+      .chat-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 800; }
+      .chat-text { font-size: 14px; line-height: 1.45; }
+      .chat-form { display: grid; gap: 10px; }
 
-      .task-actions button {
-        width: auto;
-        padding: 11px 14px;
-        border-radius: 14px;
+      .task-modal {
+        position: fixed; inset: 0; background: rgba(15,23,42,.34); display: flex; align-items: center; justify-content: center; padding: 18px; z-index: 50;
       }
+      .task-modal-card { width: min(760px, 100%); max-height: 88vh; overflow: auto; }
+      .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .detail-box { padding: 14px; border-radius: 18px; background: rgba(248,250,252,.9); border: 1px solid var(--line); }
+      .detail-label { font-size: 12px; color: var(--muted); font-weight: 800; }
+      .detail-value { margin-top: 6px; font-size: 15px; }
 
-      .empty {
-        border-radius: 18px;
-        border: 1px dashed #cbd5e1;
-        padding: 34px 18px;
-        text-align: center;
-        color: var(--muted);
-        background: rgba(255,255,255,0.6);
+      @media (max-width: 1160px) {
+        .hero-grid, .layout { grid-template-columns: 1fr; }
+        .smart-row { grid-template-columns: 1fr; }
       }
-
-      .heart-note {
-        margin-top: 14px;
-        border-radius: 18px;
-        padding: 14px;
-        background: linear-gradient(135deg, rgba(236,72,153,0.09), rgba(91,92,240,0.09));
-        color: #4c1d95;
-        font-size: 14px;
-        font-weight: 700;
-      }
-
-      .footnote {
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 12px;
-      }
-
-      @media (max-width: 1020px) {
-        .hero-grid { grid-template-columns: 1fr; }
+      @media (max-width: 900px) {
         .stats { grid-template-columns: repeat(2, 1fr); }
-        .layout { grid-template-columns: 1fr; }
-        .smart-cards { grid-template-columns: 1fr; }
-        .toolbar { grid-template-columns: repeat(2, 1fr); }
+        .task-toolbar { grid-template-columns: repeat(2, 1fr); }
       }
-
       @media (max-width: 640px) {
-        .page { padding: 14px; }
-        .title { font-size: 31px; }
-        .toolbar { grid-template-columns: 1fr; }
-        .stats { grid-template-columns: 1fr 1fr; }
+        .title { font-size: 32px; }
+        .app-shell, .page { padding: 0; }
+        .stats, .task-toolbar { grid-template-columns: 1fr; }
+        .detail-grid { grid-template-columns: 1fr; }
       }
     </style>
-    <link rel="apple-touch-icon" href="https://samen-todos.vercel.app/ChatGPT%20Image%20Mar%2030,%202026,%2010_43_34%20PM.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Maurits & Titia">
-<meta name="theme-color" content="#000000">
   </head>
   <body>
-    <div class="page">
+    <div class="app-shell">
       <div id="authView" class="auth-wrap">
         <div class="glass hero">
-          <div class="hero-top hero-grid">
+          <div class="hero-grid">
             <div>
-              <h1 class="title">
-                Voor <span class="gradient">Maurits & Titia</span><br />
-                samen slimmer.
-              </h1>
-              <div class="subtitle">
-                Jullie persoonlijke to-do app: warm, slim, stijlvol en gemaakt om samen het leven net wat lichter te maken.
-              </div>
+              <h1 class="title">Jullie mooiste <span class="gradient">samen-app</span><br>voor thuis en hart.</h1>
+              <div class="subtitle">Speciaal voor Maurits en Titia: taken, overzicht, detailweergave, persoonlijke profielen en een lieve chat in één stijlvolle app.</div>
             </div>
-            <div class="hero-illustration">
+            <div class="hero-art">
               <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                  <linearGradient id="g1" x1="0" x2="1">
-                    <stop offset="0%" stop-color="#818cf8"/>
+                  <linearGradient id="gg" x1="0" x2="1">
+                    <stop offset="0%" stop-color="#6366f1"/>
                     <stop offset="100%" stop-color="#ec4899"/>
                   </linearGradient>
                 </defs>
-                <rect x="72" y="42" rx="26" ry="26" width="276" height="172" fill="white" opacity="0.78"/>
-                <rect x="96" y="72" rx="12" ry="12" width="108" height="18" fill="#dbeafe"/>
-                <rect x="96" y="104" rx="12" ry="12" width="210" height="16" fill="#e2e8f0"/>
-                <rect x="96" y="132" rx="12" ry="12" width="184" height="16" fill="#fce7f3"/>
-                <rect x="96" y="160" rx="12" ry="12" width="156" height="16" fill="#dcfce7"/>
-                <circle cx="326" cy="76" r="30" fill="url(#g1)" opacity="0.9"/>
-                <path d="M317 76c0-5 4-9 9-9 4 0 7 2 9 5 2-3 5-5 9-5 5 0 9 4 9 9 0 11-18 20-18 20s-18-9-18-20z" fill="white"/>
-                <circle cx="120" cy="236" r="24" fill="#dbeafe"/>
-                <circle cx="170" cy="236" r="24" fill="#fce7f3"/>
-                <path d="M126 232h38" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
-                <path d="M234 228c10-14 28-18 42-9" stroke="#818cf8" stroke-width="8" stroke-linecap="round"/>
+                <rect x="58" y="34" width="300" height="196" rx="28" fill="white" opacity=".82"/>
+                <rect x="82" y="64" width="108" height="18" rx="10" fill="#dbeafe"/>
+                <rect x="82" y="98" width="226" height="16" rx="10" fill="#e2e8f0"/>
+                <rect x="82" y="126" width="176" height="16" rx="10" fill="#fce7f3"/>
+                <rect x="82" y="154" width="142" height="16" rx="10" fill="#dcfce7"/>
+                <circle cx="320" cy="82" r="30" fill="url(#gg)"/>
+                <path d="M309 82c0-5 4-9 9-9 4 0 8 2 10 5 2-3 6-5 10-5 5 0 9 4 9 9 0 12-19 21-19 21s-19-9-19-21z" fill="white"/>
+                <circle cx="116" cy="240" r="22" fill="#dbeafe"/>
+                <circle cx="166" cy="240" r="22" fill="#fce7f3"/>
+                <path d="M123 236h36" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
               </svg>
             </div>
           </div>
         </div>
 
-        <div class="glass auth-card">
+        <div class="glass card">
           <div class="segmented">
             <button id="tabLogin" class="active" type="button">Inloggen</button>
             <button id="tabSignup" type="button">Account maken</button>
@@ -538,12 +244,12 @@
 
           <div style="margin-top:12px;">
             <label for="email">E-mailadres</label>
-            <input id="email" type="email" placeholder="naam@email.com" />
+            <input id="email" type="email" placeholder="naam@email.com">
           </div>
 
           <div style="margin-top:12px;">
             <label for="password">Wachtwoord</label>
-            <input id="password" type="password" placeholder="Minimaal 6 tekens" />
+            <input id="password" type="password" placeholder="Minimaal 6 tekens">
           </div>
 
           <button id="authActionBtn" class="btn-accent" style="margin-top:14px;" type="button">Inloggen</button>
@@ -551,136 +257,126 @@
         </div>
       </div>
 
-      <div id="appView" class="hidden app-shell">
+      <div id="appView" class="hidden">
         <div class="glass hero">
           <div class="topbar">
             <div>
-              <h1 class="title">
-                Maurits <span class="gradient">&</span> Titia
-              </h1>
-              <div class="subtitle">
-                Jullie gedeelde thuis-dashboard. Slim plannen, taken verdelen en elkaar subtiel helpen.
-              </div>
+              <h1 class="title">Maurits <span class="gradient">&</span> Titia</h1>
+              <div class="subtitle">Eén gezamenlijke plek voor overzicht, aandacht en slim samenwerken.</div>
             </div>
             <div class="topbar-right">
               <div id="currentUserBadge" class="badge-user"></div>
-              <button id="logoutBtn" class="btn-soft" type="button" style="width:auto;">Uitloggen</button>
+              <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
             </div>
           </div>
         </div>
 
         <div class="stats">
-          <div class="glass stat">
-            <div class="stat-label">Totaal</div>
-            <div id="statTotal" class="stat-value">0</div>
-          </div>
-          <div class="glass stat">
-            <div class="stat-label">Open</div>
-            <div id="statOpen" class="stat-value">0</div>
-          </div>
-          <div class="glass stat">
-            <div class="stat-label">Klaar</div>
-            <div id="statDone" class="stat-value">0</div>
-          </div>
-          <div class="glass stat">
-            <div class="stat-label">Maurits</div>
-            <div id="statMaurits" class="stat-value">0</div>
-          </div>
-          <div class="glass stat">
-            <div class="stat-label">Titia</div>
-            <div id="statTitia" class="stat-value">0</div>
-          </div>
+          <div class="glass stat"><div class="stat-label">Totaal</div><div id="statTotal" class="stat-value">0</div></div>
+          <div class="glass stat"><div class="stat-label">Open</div><div id="statOpen" class="stat-value">0</div></div>
+          <div class="glass stat"><div class="stat-label">Klaar</div><div id="statDone" class="stat-value">0</div></div>
+          <div class="glass stat"><div class="stat-label">Maurits</div><div id="statMaurits" class="stat-value">0</div></div>
+          <div class="glass stat"><div class="stat-label">Titia</div><div id="statTitia" class="stat-value">0</div></div>
         </div>
 
-        <div class="smart-cards">
-          <div class="glass mini-card">
-            <h3>Focus van vandaag</h3>
-            <div id="focusToday" class="mini-text">Nog geen focuspunten.</div>
-          </div>
-          <div class="glass mini-card">
-            <h3>Slimme suggestie</h3>
-            <div id="smartSuggestion" class="mini-text">Voeg een paar taken toe en ik geef jullie slimme suggesties.</div>
-          </div>
-          <div class="glass mini-card">
-            <h3>Kleine liefdevolle noot</h3>
-            <div id="loveNote" class="mini-text">Samen kleine dingen doen is ook samen bouwen.</div>
-          </div>
+        <div class="smart-row">
+          <div class="glass card"><h3>Focus van vandaag</h3><div id="focusToday" class="mini-text">Nog geen focuspunten.</div></div>
+          <div class="glass card"><h3>Slimme suggestie</h3><div id="smartSuggestion" class="mini-text">Voeg taken toe voor slimme hints.</div></div>
+          <div class="glass card"><h3>Bericht van de dag</h3><div id="loveNote" class="mini-text">Kleine dingen samen doen is ook liefde organiseren.</div></div>
         </div>
 
         <div class="layout">
-          <div class="glass panel">
-            <h2>✨ Nieuwe taak</h2>
+          <div class="profile-stack">
+            <div class="glass card">
+              <h3>Jullie profielen</h3>
+              <div id="personMaurits" class="person-card active" data-person="Maurits">
+                <img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" alt="Maurits">
+                <div>
+                  <div class="person-name">Maurits</div>
+                  <div class="person-role">Klik om alleen Maurits zijn taken te zien</div>
+                  <div class="person-pill-row">
+                    <span class="pill m">Jouw overzicht</span>
+                    <span id="pillMauritsCount" class="pill neutral">0 taken</span>
+                  </div>
+                </div>
+              </div>
 
-            <label for="taskTitle">Titel</label>
-            <input id="taskTitle" placeholder="Bijv. Bloemen halen, boodschappen, afspraak plannen..." />
+              <div id="personTitia" class="person-card" data-person="Titia">
+                <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Titia">
+                <div>
+                  <div class="person-name">Titia</div>
+                  <div class="person-role">Klik om alleen Titia haar taken te zien</div>
+                  <div class="person-pill-row">
+                    <span class="pill t">Haar overzicht</span>
+                    <span id="pillTitiaCount" class="pill neutral">0 taken</span>
+                  </div>
+                </div>
+              </div>
 
-            <div style="margin-top:12px;">
-              <label for="taskNotes">Notities</label>
-              <textarea id="taskNotes" placeholder="Extra details, winkel, tijdstip, merk, locatie..."></textarea>
+              <button id="showEveryoneBtn" class="btn-soft" style="margin-top:12px;" type="button">Toon weer alles</button>
             </div>
 
-            <div style="margin-top:12px;">
-              <label for="taskOwner">Voor wie?</label>
-              <select id="taskOwner">
-                <option value="Maurits">Maurits</option>
-                <option value="Titia">Titia</option>
-              </select>
-            </div>
+            <div class="glass card">
+              <h3>Nieuwe taak</h3>
+              <label for="taskTitle">Titel</label>
+              <input id="taskTitle" placeholder="Bijv. Bloemen halen of afspraak bellen">
 
-            <div style="margin-top:12px;">
-              <label for="taskCategory">Categorie</label>
-              <select id="taskCategory">
-                <option value="Boodschappen">Boodschappen</option>
-                <option value="Huis">Huis</option>
-                <option value="Werk">Werk</option>
-                <option value="Privé">Privé</option>
-                <option value="Romantisch">Romantisch</option>
-                <option value="Kinderen">Kinderen</option>
-                <option value="Overig">Overig</option>
-              </select>
-            </div>
+              <div style="margin-top:12px;">
+                <label for="taskNotes">Notities</label>
+                <textarea id="taskNotes" placeholder="Extra details, merk, winkel, tijdstip, context..."></textarea>
+              </div>
 
-            <div style="margin-top:12px;">
-              <label for="taskPriority">Prioriteit</label>
-              <select id="taskPriority">
-                <option value="Normaal">Normaal</option>
-                <option value="Hoog">Hoog</option>
-                <option value="Laag">Laag</option>
-              </select>
-            </div>
+              <div style="margin-top:12px;">
+                <label for="taskOwner">Voor wie?</label>
+                <select id="taskOwner">
+                  <option value="Maurits">Maurits</option>
+                  <option value="Titia">Titia</option>
+                </select>
+              </div>
 
-            <div style="margin-top:12px;">
-              <label for="taskDeadline">Deadline</label>
-              <input id="taskDeadline" type="date" />
-            </div>
+              <div style="margin-top:12px;">
+                <label for="taskCategory">Categorie</label>
+                <select id="taskCategory">
+                  <option value="Boodschappen">Boodschappen</option>
+                  <option value="Huis">Huis</option>
+                  <option value="Werk">Werk</option>
+                  <option value="Privé">Privé</option>
+                  <option value="Romantisch">Romantisch</option>
+                  <option value="Overig">Overig</option>
+                </select>
+              </div>
 
-            <button id="addTaskBtn" class="btn-accent" style="margin-top:14px;" type="button">Taak toevoegen</button>
+              <div style="margin-top:12px;">
+                <label for="taskPriority">Prioriteit</label>
+                <select id="taskPriority">
+                  <option value="Normaal">Normaal</option>
+                  <option value="Hoog">Hoog</option>
+                  <option value="Laag">Laag</option>
+                </select>
+              </div>
 
-            <div class="heart-note">
-              Tip: zet hier ook lieve kleine acties in, zoals “kaartje schrijven”, “favoriete snack meenemen” of “even samen wandelen”.
-            </div>
+              <div style="margin-top:12px;">
+                <label for="taskDeadline">Deadline</label>
+                <input id="taskDeadline" type="date">
+              </div>
 
-            <div class="footnote">
-              Deze versie werkt als één gezamenlijke lijst voor Maurits en Titia.
+              <button id="addTaskBtn" class="btn-accent" style="margin-top:14px;" type="button">Taak toevoegen</button>
             </div>
           </div>
 
-          <div class="glass panel">
-            <h2>💎 Jullie taken</h2>
-
-            <div class="toolbar">
+          <div class="glass card">
+            <h3>Taken</h3>
+            <div class="task-toolbar">
               <select id="statusFilter">
                 <option value="all">Alle statussen</option>
                 <option value="open">Alleen open</option>
                 <option value="done">Alleen klaar</option>
               </select>
-
               <select id="ownerFilter">
                 <option value="all">Iedereen</option>
                 <option value="Maurits">Maurits</option>
                 <option value="Titia">Titia</option>
               </select>
-
               <select id="categoryFilter">
                 <option value="all">Alle categorieën</option>
                 <option value="Boodschappen">Boodschappen</option>
@@ -688,15 +384,31 @@
                 <option value="Werk">Werk</option>
                 <option value="Privé">Privé</option>
                 <option value="Romantisch">Romantisch</option>
-                <option value="Kinderen">Kinderen</option>
                 <option value="Overig">Overig</option>
               </select>
-
-              <input id="searchInput" placeholder="Zoek taak..." />
+              <input id="searchInput" placeholder="Zoek taak...">
             </div>
-
             <div id="taskList" class="task-list"></div>
           </div>
+
+          <div class="glass card">
+            <h3>Chat samen</h3>
+            <div id="chatFeed" class="chat-feed"></div>
+            <div class="chat-form" style="margin-top:12px;">
+              <textarea id="chatInput" placeholder="Stuur iets liefs, praktischs of een reminder..."></textarea>
+              <button id="sendChatBtn" class="btn-primary" type="button">Verstuur bericht</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="taskModal" class="task-modal hidden">
+        <div class="glass card task-modal-card">
+          <div class="topbar" style="margin-bottom:14px;">
+            <h3 style="margin:0;">Taakdetails</h3>
+            <button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button>
+          </div>
+          <div id="taskModalBody"></div>
         </div>
       </div>
     </div>
@@ -705,364 +417,338 @@
       const SUPABASE_URL = "https://eviycjtoduiwoiyqvayt.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_Ct64PzgdZq8k7iVbM6vGpw_gdAsWNGo";
       const HOUSEHOLD = "maurits-titia-home";
-
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const authView = document.getElementById("authView");
-      const appView = document.getElementById("appView");
-      const authMsg = document.getElementById("authMsg");
-      const tabLogin = document.getElementById("tabLogin");
-      const tabSignup = document.getElementById("tabSignup");
-      const authActionBtn = document.getElementById("authActionBtn");
-      const signupNameWrap = document.getElementById("signupNameWrap");
-      const nameEl = document.getElementById("name");
-      const emailEl = document.getElementById("email");
-      const passwordEl = document.getElementById("password");
+      const authView = document.getElementById('authView');
+      const appView = document.getElementById('appView');
+      const authMsg = document.getElementById('authMsg');
+      const tabLogin = document.getElementById('tabLogin');
+      const tabSignup = document.getElementById('tabSignup');
+      const authActionBtn = document.getElementById('authActionBtn');
+      const signupNameWrap = document.getElementById('signupNameWrap');
+      const nameEl = document.getElementById('name');
+      const emailEl = document.getElementById('email');
+      const passwordEl = document.getElementById('password');
+      const currentUserBadge = document.getElementById('currentUserBadge');
 
-      const currentUserBadge = document.getElementById("currentUserBadge");
-      const taskTitle = document.getElementById("taskTitle");
-      const taskNotes = document.getElementById("taskNotes");
-      const taskOwner = document.getElementById("taskOwner");
-      const taskCategory = document.getElementById("taskCategory");
-      const taskPriority = document.getElementById("taskPriority");
-      const taskDeadline = document.getElementById("taskDeadline");
+      const taskTitle = document.getElementById('taskTitle');
+      const taskNotes = document.getElementById('taskNotes');
+      const taskOwner = document.getElementById('taskOwner');
+      const taskCategory = document.getElementById('taskCategory');
+      const taskPriority = document.getElementById('taskPriority');
+      const taskDeadline = document.getElementById('taskDeadline');
+      const statusFilter = document.getElementById('statusFilter');
+      const ownerFilter = document.getElementById('ownerFilter');
+      const categoryFilter = document.getElementById('categoryFilter');
+      const searchInput = document.getElementById('searchInput');
+      const taskList = document.getElementById('taskList');
+      const focusToday = document.getElementById('focusToday');
+      const smartSuggestion = document.getElementById('smartSuggestion');
+      const loveNote = document.getElementById('loveNote');
+      const pillMauritsCount = document.getElementById('pillMauritsCount');
+      const pillTitiaCount = document.getElementById('pillTitiaCount');
+      const statTotal = document.getElementById('statTotal');
+      const statOpen = document.getElementById('statOpen');
+      const statDone = document.getElementById('statDone');
+      const statMaurits = document.getElementById('statMaurits');
+      const statTitia = document.getElementById('statTitia');
+      const personMaurits = document.getElementById('personMaurits');
+      const personTitia = document.getElementById('personTitia');
+      const showEveryoneBtn = document.getElementById('showEveryoneBtn');
+      const chatFeed = document.getElementById('chatFeed');
+      const chatInput = document.getElementById('chatInput');
+      const taskModal = document.getElementById('taskModal');
+      const taskModalBody = document.getElementById('taskModalBody');
 
-      const statusFilter = document.getElementById("statusFilter");
-      const ownerFilter = document.getElementById("ownerFilter");
-      const categoryFilter = document.getElementById("categoryFilter");
-      const searchInput = document.getElementById("searchInput");
-      const taskList = document.getElementById("taskList");
-
-      const statTotal = document.getElementById("statTotal");
-      const statOpen = document.getElementById("statOpen");
-      const statDone = document.getElementById("statDone");
-      const statMaurits = document.getElementById("statMaurits");
-      const statTitia = document.getElementById("statTitia");
-
-      const focusToday = document.getElementById("focusToday");
-      const smartSuggestion = document.getElementById("smartSuggestion");
-      const loveNote = document.getElementById("loveNote");
-
-      let authMode = "login";
+      let authMode = 'login';
       let currentUser = null;
       let tasks = [];
+      let messages = [];
+      let personView = 'all';
 
       const loveNotes = [
-        "Jullie hoeven niet alles perfect te doen. Samen is al sterk genoeg.",
-        "Kleine aandacht is vaak het grootste cadeau.",
-        "Een gedeelde lijst is stiekem ook een gedeeld team.",
-        "Liefde zit soms in iets kleins: meenemen, onthouden, regelen.",
-        "Jullie bouwen samen rust, niet alleen planning."
+        'Samen plannen is ook samen zorgen voor rust.',
+        'Een klein berichtje of taakje kan een groot verschil maken.',
+        'Jullie bouwen niet alleen een lijst, maar ook lucht in jullie dag.',
+        'Liefde zit soms in boodschappen, onthouden en regelen.',
+        'Het mooiste team is er één dat zacht én slim samenwerkt.'
       ];
 
-      function setAuthMode(mode) {
-        authMode = mode;
-        const isLogin = mode === "login";
-        tabLogin.classList.toggle("active", isLogin);
-        tabSignup.classList.toggle("active", !isLogin);
-        signupNameWrap.classList.toggle("hidden", isLogin);
-        authActionBtn.textContent = isLogin ? "Inloggen" : "Account maken";
-        authMsg.textContent = "";
-      }
-
-      function showAuth() {
-        authView.classList.remove("hidden");
-        appView.classList.add("hidden");
-      }
-
-      function showApp() {
-        authView.classList.add("hidden");
-        appView.classList.remove("hidden");
-      }
-
       function safeText(value) {
-        return (value || "").replace(/[&<>"']/g, function (m) {
-          return ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;"
-          })[m];
+        return (value || '').replace(/[&<>"']/g, function(m) {
+          return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[m];
         });
       }
 
-      function formatDate(value) {
-        if (!value) return "";
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return value;
-        return d.toLocaleDateString("nl-NL");
+      function setAuthMode(mode) {
+        authMode = mode;
+        const isLogin = mode === 'login';
+        tabLogin.classList.toggle('active', isLogin);
+        tabSignup.classList.toggle('active', !isLogin);
+        signupNameWrap.classList.toggle('hidden', isLogin);
+        authActionBtn.textContent = isLogin ? 'Inloggen' : 'Account maken';
+        authMsg.textContent = '';
       }
 
-      function todayISO() {
-        const d = new Date();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-        return `${d.getFullYear()}-${month}-${day}`;
-      }
+      function showAuth() { authView.classList.remove('hidden'); appView.classList.add('hidden'); }
+      function showApp() { authView.classList.add('hidden'); appView.classList.remove('hidden'); }
+      function todayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+      function formatDate(value) { if (!value) return ''; const d = new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString('nl-NL'); }
+      function getDisplayName() { return currentUser?.user_metadata?.name || currentUser?.email || 'Gebruiker'; }
+      function ownerClass(owner) { return owner === 'Maurits' ? 'owner-m' : 'owner-t'; }
+      function priorityClass(p) { if (p === 'Hoog') return 'priority-high'; if (p === 'Laag') return 'priority-low'; return 'priority-normal'; }
+      function chatMine(name) { return name === getDisplayName(); }
 
-      function getDisplayName() {
-        if (!currentUser) return "";
-        return currentUser.user_metadata?.name || currentUser.email || "Gebruiker";
-      }
-
-      function priorityClass(priority) {
-        if (priority === "Hoog") return "priority-high";
-        if (priority === "Laag") return "priority-low";
-        return "priority-normal";
+      function setPersonView(value) {
+        personView = value;
+        personMaurits.classList.toggle('active', value === 'Maurits');
+        personTitia.classList.toggle('active', value === 'Titia');
+        if (value !== 'all') ownerFilter.value = value;
+        if (value === 'all') ownerFilter.value = 'all';
+        renderTasks();
       }
 
       function renderStats() {
         statTotal.textContent = tasks.length;
         statDone.textContent = tasks.filter(t => t.done).length;
         statOpen.textContent = tasks.filter(t => !t.done).length;
-        statMaurits.textContent = tasks.filter(t => t.owner === "Maurits").length;
-        statTitia.textContent = tasks.filter(t => t.owner === "Titia").length;
+        statMaurits.textContent = tasks.filter(t => t.owner === 'Maurits').length;
+        statTitia.textContent = tasks.filter(t => t.owner === 'Titia').length;
+        pillMauritsCount.textContent = `${tasks.filter(t => t.owner === 'Maurits' && !t.done).length} open`;
+        pillTitiaCount.textContent = `${tasks.filter(t => t.owner === 'Titia' && !t.done).length} open`;
       }
 
       function renderInsights() {
         const today = todayISO();
-        const urgent = tasks.filter(t => !t.done && (t.priority === "Hoog" || t.deadline === today));
-        const nextFocus = urgent.slice(0, 3).map(t => t.title);
+        const urgent = tasks.filter(t => !t.done && (t.priority === 'Hoog' || t.deadline === today)).slice(0,3);
+        focusToday.textContent = urgent.length ? urgent.map(t => t.title).join(' • ') : 'Geen urgente taken. Mooie dag om klein te beginnen.';
 
-        focusToday.textContent = nextFocus.length
-          ? nextFocus.join(" • ")
-          : "Geen urgente taken vandaag. Misschien een mooi moment voor iets liefs of rustigs.";
+        const openM = tasks.filter(t => !t.done && t.owner === 'Maurits').length;
+        const openT = tasks.filter(t => !t.done && t.owner === 'Titia').length;
+        const romantic = tasks.filter(t => !t.done && t.category === 'Romantisch').length;
 
-        const romanticCount = tasks.filter(t => t.category === "Romantisch" && !t.done).length;
-        const homeCount = tasks.filter(t => t.category === "Huis" && !t.done).length;
-        const groceriesCount = tasks.filter(t => t.category === "Boodschappen" && !t.done).length;
-
-        if (romanticCount > 0) {
-          smartSuggestion.textContent = "Jullie hebben romantische taken openstaan. Plan er vandaag eentje in voor extra punten.";
-        } else if (homeCount >= 3) {
-          smartSuggestion.textContent = "Er staan best wat huistaken open. Misschien slim om die samen in één blokje weg te werken.";
-        } else if (groceriesCount >= 2) {
-          smartSuggestion.textContent = "Bundel de boodschappen in één rit. Dat scheelt tijd én hoofdruimte.";
-        } else if (tasks.filter(t => !t.done && t.owner === "Titia").length > tasks.filter(t => !t.done && t.owner === "Maurits").length + 1) {
-          smartSuggestion.textContent = "Titia heeft nu iets meer open taken. Maurits kan misschien één ding overnemen.";
-        } else if (tasks.filter(t => !t.done && t.owner === "Maurits").length > tasks.filter(t => !t.done && t.owner === "Titia").length + 1) {
-          smartSuggestion.textContent = "Maurits heeft nu iets meer open taken. Titia kan misschien één ding overnemen.";
-        } else {
-          smartSuggestion.textContent = "Jullie zitten best in balans. Voeg deadlines toe voor nog meer rust en overzicht.";
-        }
+        if (romantic > 0) smartSuggestion.textContent = 'Er staat iets romantisch open. Perfect moment om een glimlach te scoren.';
+        else if (Math.abs(openM - openT) >= 2) smartSuggestion.textContent = openM > openT ? 'Maurits heeft nu meer openstaan. Misschien kan Titia iets overnemen.' : 'Titia heeft nu meer openstaan. Misschien kan Maurits iets overnemen.';
+        else smartSuggestion.textContent = 'Jullie zitten best in balans. Klik op een taak voor detail en werk slim per persoon.';
 
         loveNote.textContent = loveNotes[tasks.length % loveNotes.length];
       }
 
       function getFilteredTasks() {
-        const status = statusFilter.value;
-        const owner = ownerFilter.value;
-        const category = categoryFilter.value;
+        const s = statusFilter.value;
+        const o = ownerFilter.value;
+        const c = categoryFilter.value;
         const q = searchInput.value.trim().toLowerCase();
 
         return tasks.filter(task => {
-          const statusOk =
-            status === "all" ||
-            (status === "open" && !task.done) ||
-            (status === "done" && task.done);
-
-          const ownerOk = owner === "all" || task.owner === owner;
-          const categoryOk = category === "all" || task.category === category;
-          const searchOk =
-            !q ||
-            (task.title || "").toLowerCase().includes(q) ||
-            (task.notes || "").toLowerCase().includes(q);
-
+          const statusOk = s === 'all' || (s === 'open' && !task.done) || (s === 'done' && task.done);
+          const ownerOk = (o === 'all' && personView === 'all') ? true : task.owner === (personView !== 'all' ? personView : o);
+          const categoryOk = c === 'all' || task.category === c;
+          const searchOk = !q || (task.title || '').toLowerCase().includes(q) || (task.notes || '').toLowerCase().includes(q);
           return statusOk && ownerOk && categoryOk && searchOk;
         });
       }
 
-      function renderTasks() {
+      function openTaskModal(taskId) {
+        const task = tasks.find(t => String(t.id) === String(taskId));
+        if (!task) return;
+        taskModalBody.innerHTML = `
+          <div style="display:grid; gap:14px;">
+            <div>
+              <div class="task-title ${task.done ? 'done' : ''}">${safeText(task.title)}</div>
+              <div class="task-notes">${safeText(task.notes || 'Geen extra notities toegevoegd.')}</div>
+            </div>
+            <div class="chips">
+              <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
+              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
+              <div class="chip category">${safeText(task.category || 'Overig')}</div>
+              <div class="chip ${priorityClass(task.priority || 'Normaal')}">${safeText(task.priority || 'Normaal')}</div>
+            </div>
+            <div class="detail-grid">
+              <div class="detail-box"><div class="detail-label">Deadline</div><div class="detail-value">${task.deadline ? safeText(formatDate(task.deadline)) : 'Geen deadline'}</div></div>
+              <div class="detail-box"><div class="detail-label">Gemaakt op</div><div class="detail-value">${task.created_at ? safeText(new Date(task.created_at).toLocaleString('nl-NL')) : 'Onbekend'}</div></div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn-soft btn-mini" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Heropenen' : 'Afronden'}</button>
+              <button class="btn-danger btn-mini" onclick="window.deleteTaskFromModal('${task.id}')" type="button">Verwijderen</button>
+            </div>
+          </div>
+        `;
+        taskModal.classList.remove('hidden');
+      }
+
+      async function renderTasks() {
         renderStats();
         renderInsights();
-
         const filtered = getFilteredTasks();
-
         if (!filtered.length) {
-          taskList.innerHTML = `<div class="empty">Geen taken gevonden. Tijd om iets moois of praktischs toe te voegen.</div>`;
+          taskList.innerHTML = `<div class="empty">Geen taken in deze weergave. Klik op Maurits, Titia of toon alles.</div>`;
           return;
         }
 
         taskList.innerHTML = filtered.map(task => `
-          <div class="task">
+          <div class="task-card" data-task-id="${task.id}">
             <div class="task-top">
-              <button class="check ${task.done ? "done" : ""}" data-action="toggle" data-id="${task.id}" type="button" aria-label="Taak afronden"></button>
+              <button class="check ${task.done ? 'done' : ''}" data-action="toggle" data-id="${task.id}" type="button"></button>
               <div style="flex:1;">
-                <div class="task-title ${task.done ? "done" : ""}">${safeText(task.title)}</div>
-                ${task.notes ? `<div class="task-notes">${safeText(task.notes)}</div>` : ""}
+                <div class="task-title ${task.done ? 'done' : ''}">${safeText(task.title)}</div>
+                ${task.notes ? `<div class="task-notes">${safeText(task.notes)}</div>` : ''}
               </div>
             </div>
-
             <div class="chips">
-              <div class="chip ${task.owner === "Maurits" ? "maurits" : "titia"}">${safeText(task.owner || "")}</div>
-              <div class="chip ${task.done ? "done" : "open"}">${task.done ? "Afgerond" : "Open"}</div>
-              ${task.category ? `<div class="chip category">${safeText(task.category)}</div>` : ""}
-              ${task.priority ? `<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>` : ""}
-              ${task.deadline ? `<div class="chip deadline">Deadline: ${safeText(formatDate(task.deadline))}</div>` : ""}
+              <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
+              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
+              ${task.category ? `<div class="chip category">${safeText(task.category)}</div>` : ''}
+              ${task.priority ? `<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>` : ''}
+              ${task.deadline ? `<div class="chip deadline">${safeText(formatDate(task.deadline))}</div>` : ''}
             </div>
-
             <div class="task-actions">
-              <button class="btn-soft" data-action="toggle" data-id="${task.id}" type="button">${task.done ? "Heropenen" : "Afronden"}</button>
-              <button class="btn-danger" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button>
+              <button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Heropenen' : 'Afronden'}</button>
+              <button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button>
+              <button class="btn-danger btn-mini" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button>
             </div>
           </div>
-        `).join("");
+        `).join('');
 
-        document.querySelectorAll("[data-action='toggle']").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            const id = Number(btn.dataset.id);
-            const task = tasks.find(t => t.id === id);
+        document.querySelectorAll('[data-action="toggle"]').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const task = tasks.find(t => String(t.id) === String(btn.dataset.id));
             if (!task) return;
-
-            const { error } = await client
-              .from("tasks")
-              .update({ done: !task.done })
-              .eq("id", id);
-
-            if (error) {
-              alert(error.message);
-              return;
-            }
-
-            await loadTasks();
+            const { error } = await client.from('tasks').update({ done: !task.done }).eq('id', task.id);
+            if (!error) await loadTasks();
           });
         });
 
-        document.querySelectorAll("[data-action='delete']").forEach(btn => {
-          btn.addEventListener("click", async () => {
-            const id = Number(btn.dataset.id);
-            const { error } = await client
-              .from("tasks")
-              .delete()
-              .eq("id", id);
-
-            if (error) {
-              alert(error.message);
-              return;
-            }
-
-            await loadTasks();
+        document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const { error } = await client.from('tasks').delete().eq('id', btn.dataset.id);
+            if (!error) await loadTasks();
           });
+        });
+
+        document.querySelectorAll('[data-action="open"]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openTaskModal(btn.dataset.id);
+          });
+        });
+
+        document.querySelectorAll('.task-card').forEach(card => {
+          card.addEventListener('click', () => openTaskModal(card.dataset.taskId));
         });
       }
 
       async function loadTasks() {
         if (!currentUser) return;
+        const { data, error } = await client.from('tasks').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending: false });
+        if (error) { taskList.innerHTML = `<div class="empty">Kon taken niet laden.</div>`; return; }
+        tasks = data || [];
+        await renderTasks();
+      }
 
-        const { data, error } = await client
-          .from("tasks")
-          .select("*")
-          .eq("household", HOUSEHOLD)
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          taskList.innerHTML = `<div class="empty">Kon taken niet laden.</div>`;
+      async function loadMessages() {
+        if (!currentUser) return;
+        const { data, error } = await client.from('messages').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending: true });
+        if (error) { chatFeed.innerHTML = `<div class="empty">Kon chat niet laden.</div>`; return; }
+        messages = data || [];
+        if (!messages.length) {
+          chatFeed.innerHTML = `<div class="empty">Nog geen berichten. Stuur iets liefs of praktischs.</div>`;
           return;
         }
-
-        tasks = data || [];
-        renderTasks();
+        chatFeed.innerHTML = messages.map(msg => `
+          <div class="chat-msg ${chatMine(msg.sender_name) ? 'mine' : ''}">
+            <div class="chat-meta">${safeText(msg.sender_name || 'Onbekend')} • ${safeText(new Date(msg.created_at).toLocaleString('nl-NL'))}</div>
+            <div class="chat-text">${safeText(msg.body)}</div>
+          </div>
+        `).join('');
+        chatFeed.scrollTop = chatFeed.scrollHeight;
       }
 
       async function handleAuthAction() {
-        authMsg.classList.remove("error");
-        authMsg.textContent = "Bezig...";
-
+        authMsg.classList.remove('error');
+        authMsg.textContent = 'Bezig...';
         const email = emailEl.value.trim();
         const password = passwordEl.value.trim();
         const name = nameEl.value;
 
         if (!email || !password) {
-          authMsg.textContent = "Vul e-mailadres en wachtwoord in.";
-          authMsg.classList.add("error");
+          authMsg.textContent = 'Vul e-mailadres en wachtwoord in.';
+          authMsg.classList.add('error');
           return;
         }
 
-        if (authMode === "signup" && !name) {
-          authMsg.textContent = "Kies Maurits of Titia.";
-          authMsg.classList.add("error");
-          return;
-        }
-
-        if (authMode === "signup") {
-          const { error } = await client.auth.signUp({
-            email,
-            password,
-            options: { data: { name } }
-          });
-
-          if (error) {
-            authMsg.textContent = error.message;
-            authMsg.classList.add("error");
+        if (authMode === 'signup') {
+          if (!name) {
+            authMsg.textContent = 'Kies Maurits of Titia.';
+            authMsg.classList.add('error');
             return;
           }
-
-          authMsg.textContent = "Account gemaakt. Je kunt nu inloggen.";
-          setAuthMode("login");
+          const { error } = await client.auth.signUp({ email, password, options: { data: { name } } });
+          if (error) {
+            authMsg.textContent = error.message;
+            authMsg.classList.add('error');
+            return;
+          }
+          authMsg.textContent = 'Account gemaakt. Je kunt nu inloggen.';
+          setAuthMode('login');
           return;
         }
 
-        const { data, error } = await client.auth.signInWithPassword({
-          email,
-          password
-        });
-
+        const { data, error } = await client.auth.signInWithPassword({ email, password });
         if (error) {
           authMsg.textContent = error.message;
-          authMsg.classList.add("error");
+          authMsg.classList.add('error');
           return;
         }
-
         currentUser = data.user;
         currentUserBadge.textContent = getDisplayName();
         showApp();
-        await loadTasks();
+        await Promise.all([loadTasks(), loadMessages()]);
       }
 
       async function addTask() {
-        const title = taskTitle.value.trim();
-        const notes = taskNotes.value.trim();
-        const owner = taskOwner.value;
-        const category = taskCategory.value;
-        const priority = taskPriority.value;
-        const deadline = taskDeadline.value || null;
-
-        if (!title || !currentUser) return;
-
-        const { error } = await client
-          .from("tasks")
-          .insert({
-            user_id: currentUser.id,
-            household: HOUSEHOLD,
-            title,
-            notes,
-            owner,
-            category,
-            priority,
-            deadline,
-            done: false
-          });
-
-        if (error) {
-          alert(error.message);
-          return;
-        }
-
-        taskTitle.value = "";
-        taskNotes.value = "";
-        taskOwner.value = "Maurits";
-        taskCategory.value = "Boodschappen";
-        taskPriority.value = "Normaal";
-        taskDeadline.value = "";
-
+        if (!currentUser || !taskTitle.value.trim()) return;
+        const { error } = await client.from('tasks').insert({
+          user_id: currentUser.id,
+          household: HOUSEHOLD,
+          title: taskTitle.value.trim(),
+          notes: taskNotes.value.trim(),
+          owner: taskOwner.value,
+          category: taskCategory.value,
+          priority: taskPriority.value,
+          deadline: taskDeadline.value || null,
+          done: false
+        });
+        if (error) return alert(error.message);
+        taskTitle.value = '';
+        taskNotes.value = '';
+        taskOwner.value = 'Maurits';
+        taskCategory.value = 'Boodschappen';
+        taskPriority.value = 'Normaal';
+        taskDeadline.value = '';
         await loadTasks();
+      }
+
+      async function sendMessage() {
+        if (!currentUser || !chatInput.value.trim()) return;
+        const { error } = await client.from('messages').insert({
+          household: HOUSEHOLD,
+          sender_id: currentUser.id,
+          sender_name: getDisplayName(),
+          body: chatInput.value.trim()
+        });
+        if (error) return alert(error.message);
+        chatInput.value = '';
+        await loadMessages();
       }
 
       async function logout() {
         await client.auth.signOut();
         currentUser = null;
         tasks = [];
+        messages = [];
         showAuth();
       }
 
@@ -1072,23 +758,76 @@
           currentUser = data.session.user;
           currentUserBadge.textContent = getDisplayName();
           showApp();
-          await loadTasks();
+          await Promise.all([loadTasks(), loadMessages()]);
         } else {
           showAuth();
         }
       }
 
-      tabLogin.addEventListener("click", () => setAuthMode("login"));
-      tabSignup.addEventListener("click", () => setAuthMode("signup"));
-      authActionBtn.addEventListener("click", handleAuthAction);
-      document.getElementById("addTaskBtn").addEventListener("click", addTask);
-      document.getElementById("logoutBtn").addEventListener("click", logout);
-      statusFilter.addEventListener("change", renderTasks);
-      ownerFilter.addEventListener("change", renderTasks);
-      categoryFilter.addEventListener("change", renderTasks);
-      searchInput.addEventListener("input", renderTasks);
+      function setupRealtime() {
+        client.channel('tasks-live')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => loadTasks())
+          .subscribe();
+        client.channel('messages-live')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => loadMessages())
+          .subscribe();
+      }
+
+      window.toggleTaskFromModal = async function(id) {
+        const task = tasks.find(t => String(t.id) === String(id));
+        if (!task) return;
+        const { error } = await client.from('tasks').update({ done: !task.done }).eq('id', id);
+        if (!error) { taskModal.classList.add('hidden'); await loadTasks(); }
+      }
+
+      window.deleteTaskFromModal = async function(id) {
+        const { error } = await client.from('tasks').delete().eq('id', id);
+        if (!error) { taskModal.classList.add('hidden'); await loadTasks(); }
+      }
+
+      tabLogin.addEventListener('click', () => setAuthMode('login'));
+      tabSignup.addEventListener('click', () => setAuthMode('signup'));
+      authActionBtn.addEventListener('click', handleAuthAction);
+      document.getElementById('logoutBtn').addEventListener('click', logout);
+      document.getElementById('addTaskBtn').addEventListener('click', addTask);
+      document.getElementById('sendChatBtn').addEventListener('click', sendMessage);
+      statusFilter.addEventListener('change', renderTasks);
+      ownerFilter.addEventListener('change', () => { personView = 'all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active'); renderTasks(); });
+      categoryFilter.addEventListener('change', renderTasks);
+      searchInput.addEventListener('input', renderTasks);
+      personMaurits.addEventListener('click', () => setPersonView('Maurits'));
+      personTitia.addEventListener('click', () => setPersonView('Titia'));
+      showEveryoneBtn.addEventListener('click', () => setPersonView('all'));
+      document.getElementById('closeTaskModalBtn').addEventListener('click', () => taskModal.classList.add('hidden'));
+      taskModal.addEventListener('click', (e) => { if (e.target === taskModal) taskModal.classList.add('hidden'); });
 
       restoreSession();
+      setupRealtime();
     </script>
+
+    <!--
+    SUPABASE SQL
+
+    alter table public.tasks
+    add column if not exists notes text,
+    add column if not exists owner text default 'Maurits',
+    add column if not exists done boolean default false,
+    add column if not exists category text default 'Overig',
+    add column if not exists deadline date,
+    add column if not exists priority text default 'Normaal',
+    add column if not exists household text default 'maurits-titia-home',
+    add column if not exists created_at timestamptz default now();
+
+    create table if not exists public.messages (
+      id bigint generated always as identity primary key,
+      household text not null default 'maurits-titia-home',
+      sender_id uuid,
+      sender_name text,
+      body text not null,
+      created_at timestamptz default now()
+    );
+
+    NOTIFY pgrst, 'reload schema';
+    -->
   </body>
 </html>
