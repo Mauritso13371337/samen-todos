@@ -3,113 +3,944 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Samen To-Do</title>
+    <title>Maurits & Titia — Samen Slim</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
+      :root {
+        --bg1: #f9fbff;
+        --bg2: #eef4ff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --line: rgba(148, 163, 184, 0.25);
+        --card: rgba(255, 255, 255, 0.78);
+        --card-strong: rgba(255, 255, 255, 0.92);
+        --shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+        --radius: 26px;
+        --accent: #5b5cf0;
+        --accent-2: #8b5cf6;
+        --success: #16a34a;
+        --warning: #f59e0b;
+        --danger: #dc2626;
+        --pink: #ec4899;
+        --blue-soft: #dbeafe;
+        --pink-soft: #fce7f3;
+        --green-soft: #dcfce7;
+        --gold-soft: #fef3c7;
+      }
+
+      * { box-sizing: border-box; }
+
       body {
-        font-family: Arial, sans-serif;
         margin: 0;
-        background: #f8fafc;
-        color: #0f172a;
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15), transparent 26%),
+          radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.14), transparent 22%),
+          radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.09), transparent 24%),
+          linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+        min-height: 100vh;
       }
-      .wrap {
-        max-width: 760px;
+
+      .page {
+        max-width: 1180px;
         margin: 0 auto;
+        padding: 18px;
+      }
+
+      .glass {
+        background: var(--card);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255,255,255,0.7);
+        box-shadow: var(--shadow);
+        border-radius: var(--radius);
+      }
+
+      .hidden { display: none !important; }
+
+      .auth-wrap {
+        max-width: 520px;
+        margin: 30px auto;
+      }
+
+      .hero {
+        overflow: hidden;
+        position: relative;
         padding: 24px;
+        margin-bottom: 18px;
       }
-      .card {
-        background: white;
-        border-radius: 16px;
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(91,92,240,0.18), transparent 65%);
+        border-radius: 999px;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        left: -60px;
+        bottom: -60px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(236,72,153,0.14), transparent 65%);
+        border-radius: 999px;
+      }
+
+      .hero-top {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 18px;
+      }
+
+      .title {
+        margin: 0;
+        font-size: 40px;
+        line-height: 0.98;
+        letter-spacing: -0.05em;
+        font-weight: 900;
+      }
+
+      .title .gradient {
+        background: linear-gradient(135deg, #4338ca 0%, #7c3aed 45%, #ec4899 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .subtitle {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 15px;
+        max-width: 650px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .hero-illustration {
+        border-radius: 24px;
+        background:
+          linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.4)),
+          linear-gradient(135deg, #dbeafe, #fce7f3);
+        border: 1px solid rgba(255,255,255,0.7);
+        min-height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 16px;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
       }
-      input, button {
+
+      .hero-illustration svg {
         width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid #cbd5e1;
-        box-sizing: border-box;
-        margin-top: 8px;
+        max-width: 380px;
+        height: auto;
       }
-      button {
-        background: black;
-        color: white;
-        border: none;
+
+      .auth-card, .panel, .stat, .mini-card {
+        padding: 18px;
+      }
+
+      .auth-card h2, .panel h2 {
+        margin: 0 0 14px;
+        font-size: 20px;
+        letter-spacing: -0.03em;
+      }
+
+      .segmented {
+        display: flex;
+        gap: 8px;
+        background: #eef2f7;
+        padding: 6px;
+        border-radius: 16px;
+        margin-bottom: 16px;
+      }
+
+      .segmented button {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        color: #475569;
+        padding: 11px 12px;
+        font-weight: 800;
         cursor: pointer;
       }
-      .task {
+
+      .segmented button.active {
+        background: white;
+        color: #111827;
+        box-shadow: 0 4px 18px rgba(15,23,42,0.08);
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+
+      input, select, textarea, button {
+        width: 100%;
+        font: inherit;
+        border-radius: 16px;
+        padding: 13px 14px;
+        outline: none;
+      }
+
+      input, select, textarea {
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.95);
+        color: var(--text);
+      }
+
+      input:focus, select:focus, textarea:focus {
+        border-color: rgba(91,92,240,0.6);
+        box-shadow: 0 0 0 4px rgba(91,92,240,0.12);
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+        font-weight: 800;
+        transition: transform .16s ease, opacity .16s ease;
+      }
+
+      button:hover { transform: translateY(-1px); }
+      button:active { transform: translateY(0); }
+
+      .btn-primary {
+        color: white;
+        background: linear-gradient(135deg, #111827 0%, #334155 100%);
+      }
+
+      .btn-accent {
+        color: white;
+        background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 60%, #ec4899 100%);
+      }
+
+      .btn-soft {
+        background: #f8fafc;
+        color: var(--text);
+        border: 1px solid var(--line);
+      }
+
+      .btn-danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .message {
+        margin-top: 12px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .error { color: #b91c1c; }
+
+      .app-shell {
+        display: grid;
+        gap: 16px;
+      }
+
+      .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .topbar-right {
+        display: flex;
         gap: 10px;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 12px;
-        margin-top: 10px;
+        align-items: center;
+        flex-wrap: wrap;
       }
-      .small {
+
+      .badge-user {
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #eef2ff, #fce7f3);
+        color: #3730a3;
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        line-height: 1;
+        font-weight: 900;
+        margin-top: 8px;
+        letter-spacing: -0.04em;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 390px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .panel h2 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .smart-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+
+      .mini-card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .mini-text {
+        color: var(--muted);
         font-size: 14px;
-        color: #475569;
-        margin-top: 10px;
+        line-height: 1.45;
       }
-      .hidden {
-        display: none;
+
+      .toolbar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .task-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .task {
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: var(--card-strong);
+        padding: 15px;
+      }
+
+      .task-top {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .check {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        border-radius: 999px;
+        border: 2px solid #cbd5e1;
+        background: white;
+        position: relative;
+        margin-top: 2px;
+        cursor: pointer;
+      }
+
+      .check.done {
+        border-color: var(--success);
+        background: var(--success);
+      }
+
+      .check.done::after {
+        content: "✓";
+        color: white;
+        position: absolute;
+        top: -1px;
+        left: 5px;
+        font-size: 15px;
+      }
+
+      .task-title {
+        font-size: 18px;
+        font-weight: 850;
+        letter-spacing: -0.02em;
+      }
+
+      .task-title.done {
+        color: #94a3b8;
+        text-decoration: line-through;
+      }
+
+      .task-notes {
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        font-size: 12px;
+        font-weight: 800;
+        border-radius: 999px;
+        padding: 7px 11px;
+      }
+
+      .chip.maurits { background: var(--blue-soft); color: #1d4ed8; }
+      .chip.titia { background: var(--pink-soft); color: #be185d; }
+      .chip.done { background: var(--green-soft); color: #166534; }
+      .chip.open { background: var(--gold-soft); color: #92400e; }
+      .chip.category { background: #f1f5f9; color: #334155; }
+      .chip.priority-high { background: #fee2e2; color: #b91c1c; }
+      .chip.priority-normal { background: #fef3c7; color: #92400e; }
+      .chip.priority-low { background: #e0f2fe; color: #0369a1; }
+      .chip.deadline { background: #ede9fe; color: #6d28d9; }
+
+      .task-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      .task-actions button {
+        width: auto;
+        padding: 11px 14px;
+        border-radius: 14px;
+      }
+
+      .empty {
+        border-radius: 18px;
+        border: 1px dashed #cbd5e1;
+        padding: 34px 18px;
+        text-align: center;
+        color: var(--muted);
+        background: rgba(255,255,255,0.6);
+      }
+
+      .heart-note {
+        margin-top: 14px;
+        border-radius: 18px;
+        padding: 14px;
+        background: linear-gradient(135deg, rgba(236,72,153,0.09), rgba(91,92,240,0.09));
+        color: #4c1d95;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .footnote {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 12px;
+      }
+
+      @media (max-width: 1020px) {
+        .hero-grid { grid-template-columns: 1fr; }
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .layout { grid-template-columns: 1fr; }
+        .smart-cards { grid-template-columns: 1fr; }
+        .toolbar { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      @media (max-width: 640px) {
+        .page { padding: 14px; }
+        .title { font-size: 31px; }
+        .toolbar { grid-template-columns: 1fr; }
+        .stats { grid-template-columns: 1fr 1fr; }
       }
     </style>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   </head>
   <body>
-    <div class="wrap">
-      <div class="card">
-        <h1>Samen To-Do</h1>
-        <div class="small">Voor jou en je vrouw</div>
+    <div class="page">
+      <div id="authView" class="auth-wrap">
+        <div class="glass hero">
+          <div class="hero-top hero-grid">
+            <div>
+              <h1 class="title">
+                Voor <span class="gradient">Maurits & Titia</span><br />
+                samen slimmer.
+              </h1>
+              <div class="subtitle">
+                Jullie persoonlijke to-do app: warm, slim, stijlvol en gemaakt om samen het leven net wat lichter te maken.
+              </div>
+            </div>
+            <div class="hero-illustration">
+              <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="1">
+                    <stop offset="0%" stop-color="#818cf8"/>
+                    <stop offset="100%" stop-color="#ec4899"/>
+                  </linearGradient>
+                </defs>
+                <rect x="72" y="42" rx="26" ry="26" width="276" height="172" fill="white" opacity="0.78"/>
+                <rect x="96" y="72" rx="12" ry="12" width="108" height="18" fill="#dbeafe"/>
+                <rect x="96" y="104" rx="12" ry="12" width="210" height="16" fill="#e2e8f0"/>
+                <rect x="96" y="132" rx="12" ry="12" width="184" height="16" fill="#fce7f3"/>
+                <rect x="96" y="160" rx="12" ry="12" width="156" height="16" fill="#dcfce7"/>
+                <circle cx="326" cy="76" r="30" fill="url(#g1)" opacity="0.9"/>
+                <path d="M317 76c0-5 4-9 9-9 4 0 7 2 9 5 2-3 5-5 9-5 5 0 9 4 9 9 0 11-18 20-18 20s-18-9-18-20z" fill="white"/>
+                <circle cx="120" cy="236" r="24" fill="#dbeafe"/>
+                <circle cx="170" cy="236" r="24" fill="#fce7f3"/>
+                <path d="M126 232h38" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
+                <path d="M234 228c10-14 28-18 42-9" stroke="#818cf8" stroke-width="8" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass auth-card">
+          <div class="segmented">
+            <button id="tabLogin" class="active" type="button">Inloggen</button>
+            <button id="tabSignup" type="button">Account maken</button>
+          </div>
+
+          <div id="signupNameWrap" class="hidden">
+            <label for="name">Naam</label>
+            <select id="name">
+              <option value="">Kies je naam</option>
+              <option value="Maurits">Maurits</option>
+              <option value="Titia">Titia</option>
+            </select>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label for="email">E-mailadres</label>
+            <input id="email" type="email" placeholder="naam@email.com" />
+          </div>
+
+          <div style="margin-top:12px;">
+            <label for="password">Wachtwoord</label>
+            <input id="password" type="password" placeholder="Minimaal 6 tekens" />
+          </div>
+
+          <button id="authActionBtn" class="btn-accent" style="margin-top:14px;" type="button">Inloggen</button>
+          <div id="authMsg" class="message"></div>
+        </div>
       </div>
 
-      <div id="authCard" class="card">
-        <h2>Inloggen / registreren</h2>
-        <input id="email" type="email" placeholder="E-mailadres" />
-        <input id="password" type="password" placeholder="Wachtwoord" />
-        <button id="signupBtn" type="button">Account maken</button>
-        <button id="loginBtn" type="button">Inloggen</button>
-        <div id="authMsg" class="small"></div>
-      </div>
+      <div id="appView" class="hidden app-shell">
+        <div class="glass hero">
+          <div class="topbar">
+            <div>
+              <h1 class="title">
+                Maurits <span class="gradient">&</span> Titia
+              </h1>
+              <div class="subtitle">
+                Jullie gedeelde thuis-dashboard. Slim plannen, taken verdelen en elkaar subtiel helpen.
+              </div>
+            </div>
+            <div class="topbar-right">
+              <div id="currentUserBadge" class="badge-user"></div>
+              <button id="logoutBtn" class="btn-soft" type="button" style="width:auto;">Uitloggen</button>
+            </div>
+          </div>
+        </div>
 
-      <div id="appCard" class="card hidden">
-        <h2>Nieuwe taak</h2>
-        <input id="taskInput" placeholder="Bijv. boodschappen doen" />
-        <button id="addTaskBtn" type="button">Taak toevoegen</button>
+        <div class="stats">
+          <div class="glass stat">
+            <div class="stat-label">Totaal</div>
+            <div id="statTotal" class="stat-value">0</div>
+          </div>
+          <div class="glass stat">
+            <div class="stat-label">Open</div>
+            <div id="statOpen" class="stat-value">0</div>
+          </div>
+          <div class="glass stat">
+            <div class="stat-label">Klaar</div>
+            <div id="statDone" class="stat-value">0</div>
+          </div>
+          <div class="glass stat">
+            <div class="stat-label">Maurits</div>
+            <div id="statMaurits" class="stat-value">0</div>
+          </div>
+          <div class="glass stat">
+            <div class="stat-label">Titia</div>
+            <div id="statTitia" class="stat-value">0</div>
+          </div>
+        </div>
 
-        <h2 style="margin-top: 20px;">Taken</h2>
-        <div id="taskList"></div>
+        <div class="smart-cards">
+          <div class="glass mini-card">
+            <h3>Focus van vandaag</h3>
+            <div id="focusToday" class="mini-text">Nog geen focuspunten.</div>
+          </div>
+          <div class="glass mini-card">
+            <h3>Slimme suggestie</h3>
+            <div id="smartSuggestion" class="mini-text">Voeg een paar taken toe en ik geef jullie slimme suggesties.</div>
+          </div>
+          <div class="glass mini-card">
+            <h3>Kleine liefdevolle noot</h3>
+            <div id="loveNote" class="mini-text">Samen kleine dingen doen is ook samen bouwen.</div>
+          </div>
+        </div>
 
-        <button id="logoutBtn" type="button" style="margin-top: 20px;">Uitloggen</button>
+        <div class="layout">
+          <div class="glass panel">
+            <h2>✨ Nieuwe taak</h2>
+
+            <label for="taskTitle">Titel</label>
+            <input id="taskTitle" placeholder="Bijv. Bloemen halen, boodschappen, afspraak plannen..." />
+
+            <div style="margin-top:12px;">
+              <label for="taskNotes">Notities</label>
+              <textarea id="taskNotes" placeholder="Extra details, winkel, tijdstip, merk, locatie..."></textarea>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label for="taskOwner">Voor wie?</label>
+              <select id="taskOwner">
+                <option value="Maurits">Maurits</option>
+                <option value="Titia">Titia</option>
+              </select>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label for="taskCategory">Categorie</label>
+              <select id="taskCategory">
+                <option value="Boodschappen">Boodschappen</option>
+                <option value="Huis">Huis</option>
+                <option value="Werk">Werk</option>
+                <option value="Privé">Privé</option>
+                <option value="Romantisch">Romantisch</option>
+                <option value="Kinderen">Kinderen</option>
+                <option value="Overig">Overig</option>
+              </select>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label for="taskPriority">Prioriteit</label>
+              <select id="taskPriority">
+                <option value="Normaal">Normaal</option>
+                <option value="Hoog">Hoog</option>
+                <option value="Laag">Laag</option>
+              </select>
+            </div>
+
+            <div style="margin-top:12px;">
+              <label for="taskDeadline">Deadline</label>
+              <input id="taskDeadline" type="date" />
+            </div>
+
+            <button id="addTaskBtn" class="btn-accent" style="margin-top:14px;" type="button">Taak toevoegen</button>
+
+            <div class="heart-note">
+              Tip: zet hier ook lieve kleine acties in, zoals “kaartje schrijven”, “favoriete snack meenemen” of “even samen wandelen”.
+            </div>
+
+            <div class="footnote">
+              Deze versie werkt als één gezamenlijke lijst voor Maurits en Titia.
+            </div>
+          </div>
+
+          <div class="glass panel">
+            <h2>💎 Jullie taken</h2>
+
+            <div class="toolbar">
+              <select id="statusFilter">
+                <option value="all">Alle statussen</option>
+                <option value="open">Alleen open</option>
+                <option value="done">Alleen klaar</option>
+              </select>
+
+              <select id="ownerFilter">
+                <option value="all">Iedereen</option>
+                <option value="Maurits">Maurits</option>
+                <option value="Titia">Titia</option>
+              </select>
+
+              <select id="categoryFilter">
+                <option value="all">Alle categorieën</option>
+                <option value="Boodschappen">Boodschappen</option>
+                <option value="Huis">Huis</option>
+                <option value="Werk">Werk</option>
+                <option value="Privé">Privé</option>
+                <option value="Romantisch">Romantisch</option>
+                <option value="Kinderen">Kinderen</option>
+                <option value="Overig">Overig</option>
+              </select>
+
+              <input id="searchInput" placeholder="Zoek taak..." />
+            </div>
+
+            <div id="taskList" class="task-list"></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <script>
       const SUPABASE_URL = "https://eviycjtoduiwoiyqvayt.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_Ct64PzgdZq8k7iVbM6vGpw_gdAsWNGo";
+      const HOUSEHOLD = "maurits-titia-home";
 
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      const authCard = document.getElementById("authCard");
-      const appCard = document.getElementById("appCard");
+      const authView = document.getElementById("authView");
+      const appView = document.getElementById("appView");
       const authMsg = document.getElementById("authMsg");
+      const tabLogin = document.getElementById("tabLogin");
+      const tabSignup = document.getElementById("tabSignup");
+      const authActionBtn = document.getElementById("authActionBtn");
+      const signupNameWrap = document.getElementById("signupNameWrap");
+      const nameEl = document.getElementById("name");
       const emailEl = document.getElementById("email");
       const passwordEl = document.getElementById("password");
-      const taskInput = document.getElementById("taskInput");
+
+      const currentUserBadge = document.getElementById("currentUserBadge");
+      const taskTitle = document.getElementById("taskTitle");
+      const taskNotes = document.getElementById("taskNotes");
+      const taskOwner = document.getElementById("taskOwner");
+      const taskCategory = document.getElementById("taskCategory");
+      const taskPriority = document.getElementById("taskPriority");
+      const taskDeadline = document.getElementById("taskDeadline");
+
+      const statusFilter = document.getElementById("statusFilter");
+      const ownerFilter = document.getElementById("ownerFilter");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const searchInput = document.getElementById("searchInput");
       const taskList = document.getElementById("taskList");
 
+      const statTotal = document.getElementById("statTotal");
+      const statOpen = document.getElementById("statOpen");
+      const statDone = document.getElementById("statDone");
+      const statMaurits = document.getElementById("statMaurits");
+      const statTitia = document.getElementById("statTitia");
+
+      const focusToday = document.getElementById("focusToday");
+      const smartSuggestion = document.getElementById("smartSuggestion");
+      const loveNote = document.getElementById("loveNote");
+
+      let authMode = "login";
       let currentUser = null;
+      let tasks = [];
+
+      const loveNotes = [
+        "Jullie hoeven niet alles perfect te doen. Samen is al sterk genoeg.",
+        "Kleine aandacht is vaak het grootste cadeau.",
+        "Een gedeelde lijst is stiekem ook een gedeeld team.",
+        "Liefde zit soms in iets kleins: meenemen, onthouden, regelen.",
+        "Jullie bouwen samen rust, niet alleen planning."
+      ];
+
+      function setAuthMode(mode) {
+        authMode = mode;
+        const isLogin = mode === "login";
+        tabLogin.classList.toggle("active", isLogin);
+        tabSignup.classList.toggle("active", !isLogin);
+        signupNameWrap.classList.toggle("hidden", isLogin);
+        authActionBtn.textContent = isLogin ? "Inloggen" : "Account maken";
+        authMsg.textContent = "";
+      }
 
       function showAuth() {
-        authCard.classList.remove("hidden");
-        appCard.classList.add("hidden");
+        authView.classList.remove("hidden");
+        appView.classList.add("hidden");
       }
 
       function showApp() {
-        authCard.classList.add("hidden");
-        appCard.classList.remove("hidden");
+        authView.classList.add("hidden");
+        appView.classList.remove("hidden");
+      }
+
+      function safeText(value) {
+        return (value || "").replace(/[&<>"']/g, function (m) {
+          return ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+          })[m];
+        });
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return value;
+        return d.toLocaleDateString("nl-NL");
+      }
+
+      function todayISO() {
+        const d = new Date();
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        return `${d.getFullYear()}-${month}-${day}`;
+      }
+
+      function getDisplayName() {
+        if (!currentUser) return "";
+        return currentUser.user_metadata?.name || currentUser.email || "Gebruiker";
+      }
+
+      function priorityClass(priority) {
+        if (priority === "Hoog") return "priority-high";
+        if (priority === "Laag") return "priority-low";
+        return "priority-normal";
+      }
+
+      function renderStats() {
+        statTotal.textContent = tasks.length;
+        statDone.textContent = tasks.filter(t => t.done).length;
+        statOpen.textContent = tasks.filter(t => !t.done).length;
+        statMaurits.textContent = tasks.filter(t => t.owner === "Maurits").length;
+        statTitia.textContent = tasks.filter(t => t.owner === "Titia").length;
+      }
+
+      function renderInsights() {
+        const today = todayISO();
+        const urgent = tasks.filter(t => !t.done && (t.priority === "Hoog" || t.deadline === today));
+        const nextFocus = urgent.slice(0, 3).map(t => t.title);
+
+        focusToday.textContent = nextFocus.length
+          ? nextFocus.join(" • ")
+          : "Geen urgente taken vandaag. Misschien een mooi moment voor iets liefs of rustigs.";
+
+        const romanticCount = tasks.filter(t => t.category === "Romantisch" && !t.done).length;
+        const homeCount = tasks.filter(t => t.category === "Huis" && !t.done).length;
+        const groceriesCount = tasks.filter(t => t.category === "Boodschappen" && !t.done).length;
+
+        if (romanticCount > 0) {
+          smartSuggestion.textContent = "Jullie hebben romantische taken openstaan. Plan er vandaag eentje in voor extra punten.";
+        } else if (homeCount >= 3) {
+          smartSuggestion.textContent = "Er staan best wat huistaken open. Misschien slim om die samen in één blokje weg te werken.";
+        } else if (groceriesCount >= 2) {
+          smartSuggestion.textContent = "Bundel de boodschappen in één rit. Dat scheelt tijd én hoofdruimte.";
+        } else if (tasks.filter(t => !t.done && t.owner === "Titia").length > tasks.filter(t => !t.done && t.owner === "Maurits").length + 1) {
+          smartSuggestion.textContent = "Titia heeft nu iets meer open taken. Maurits kan misschien één ding overnemen.";
+        } else if (tasks.filter(t => !t.done && t.owner === "Maurits").length > tasks.filter(t => !t.done && t.owner === "Titia").length + 1) {
+          smartSuggestion.textContent = "Maurits heeft nu iets meer open taken. Titia kan misschien één ding overnemen.";
+        } else {
+          smartSuggestion.textContent = "Jullie zitten best in balans. Voeg deadlines toe voor nog meer rust en overzicht.";
+        }
+
+        loveNote.textContent = loveNotes[tasks.length % loveNotes.length];
+      }
+
+      function getFilteredTasks() {
+        const status = statusFilter.value;
+        const owner = ownerFilter.value;
+        const category = categoryFilter.value;
+        const q = searchInput.value.trim().toLowerCase();
+
+        return tasks.filter(task => {
+          const statusOk =
+            status === "all" ||
+            (status === "open" && !task.done) ||
+            (status === "done" && task.done);
+
+          const ownerOk = owner === "all" || task.owner === owner;
+          const categoryOk = category === "all" || task.category === category;
+          const searchOk =
+            !q ||
+            (task.title || "").toLowerCase().includes(q) ||
+            (task.notes || "").toLowerCase().includes(q);
+
+          return statusOk && ownerOk && categoryOk && searchOk;
+        });
+      }
+
+      function renderTasks() {
+        renderStats();
+        renderInsights();
+
+        const filtered = getFilteredTasks();
+
+        if (!filtered.length) {
+          taskList.innerHTML = `<div class="empty">Geen taken gevonden. Tijd om iets moois of praktischs toe te voegen.</div>`;
+          return;
+        }
+
+        taskList.innerHTML = filtered.map(task => `
+          <div class="task">
+            <div class="task-top">
+              <button class="check ${task.done ? "done" : ""}" data-action="toggle" data-id="${task.id}" type="button" aria-label="Taak afronden"></button>
+              <div style="flex:1;">
+                <div class="task-title ${task.done ? "done" : ""}">${safeText(task.title)}</div>
+                ${task.notes ? `<div class="task-notes">${safeText(task.notes)}</div>` : ""}
+              </div>
+            </div>
+
+            <div class="chips">
+              <div class="chip ${task.owner === "Maurits" ? "maurits" : "titia"}">${safeText(task.owner || "")}</div>
+              <div class="chip ${task.done ? "done" : "open"}">${task.done ? "Afgerond" : "Open"}</div>
+              ${task.category ? `<div class="chip category">${safeText(task.category)}</div>` : ""}
+              ${task.priority ? `<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>` : ""}
+              ${task.deadline ? `<div class="chip deadline">Deadline: ${safeText(formatDate(task.deadline))}</div>` : ""}
+            </div>
+
+            <div class="task-actions">
+              <button class="btn-soft" data-action="toggle" data-id="${task.id}" type="button">${task.done ? "Heropenen" : "Afronden"}</button>
+              <button class="btn-danger" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button>
+            </div>
+          </div>
+        `).join("");
+
+        document.querySelectorAll("[data-action='toggle']").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = Number(btn.dataset.id);
+            const task = tasks.find(t => t.id === id);
+            if (!task) return;
+
+            const { error } = await client
+              .from("tasks")
+              .update({ done: !task.done })
+              .eq("id", id);
+
+            if (error) {
+              alert(error.message);
+              return;
+            }
+
+            await loadTasks();
+          });
+        });
+
+        document.querySelectorAll("[data-action='delete']").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const id = Number(btn.dataset.id);
+            const { error } = await client
+              .from("tasks")
+              .delete()
+              .eq("id", id);
+
+            if (error) {
+              alert(error.message);
+              return;
+            }
+
+            await loadTasks();
+          });
+        });
       }
 
       async function loadTasks() {
@@ -118,67 +949,53 @@
         const { data, error } = await client
           .from("tasks")
           .select("*")
-          .eq("user_id", currentUser.id)
-          .order("id", { ascending: false });
+          .eq("household", HOUSEHOLD)
+          .order("created_at", { ascending: false });
 
         if (error) {
-          taskList.innerHTML = "<div class='small'>Kon taken niet laden.</div>";
+          taskList.innerHTML = `<div class="empty">Kon taken niet laden.</div>`;
           return;
         }
 
-        if (!data || data.length === 0) {
-          taskList.innerHTML = "<div class='small'>Nog geen taken.</div>";
-          return;
-        }
-
-        taskList.innerHTML = "";
-
-        data.forEach((task) => {
-          const div = document.createElement("div");
-          div.className = "task";
-
-          const left = document.createElement("div");
-          left.textContent = task.title;
-
-          const delBtn = document.createElement("button");
-          delBtn.textContent = "Verwijderen";
-          delBtn.style.width = "auto";
-          delBtn.onclick = async () => {
-            await client.from("tasks").delete().eq("id", task.id);
-            loadTasks();
-          };
-
-          div.appendChild(left);
-          div.appendChild(delBtn);
-          taskList.appendChild(div);
-        });
+        tasks = data || [];
+        renderTasks();
       }
 
-      document.getElementById("signupBtn").addEventListener("click", async () => {
+      async function handleAuthAction() {
+        authMsg.classList.remove("error");
         authMsg.textContent = "Bezig...";
+
         const email = emailEl.value.trim();
         const password = passwordEl.value.trim();
+        const name = nameEl.value;
 
         if (!email || !password) {
           authMsg.textContent = "Vul e-mailadres en wachtwoord in.";
+          authMsg.classList.add("error");
           return;
         }
 
-        const { error } = await client.auth.signUp({
-          email,
-          password
-        });
+        if (authMode === "signup" && !name) {
+          authMsg.textContent = "Kies Maurits of Titia.";
+          authMsg.classList.add("error");
+          return;
+        }
 
-        authMsg.textContent = error ? error.message : "Account gemaakt. Probeer nu in te loggen.";
-      });
+        if (authMode === "signup") {
+          const { error } = await client.auth.signUp({
+            email,
+            password,
+            options: { data: { name } }
+          });
 
-      document.getElementById("loginBtn").addEventListener("click", async () => {
-        authMsg.textContent = "Bezig...";
-        const email = emailEl.value.trim();
-        const password = passwordEl.value.trim();
+          if (error) {
+            authMsg.textContent = error.message;
+            authMsg.classList.add("error");
+            return;
+          }
 
-        if (!email || !password) {
-          authMsg.textContent = "Vul e-mailadres en wachtwoord in.";
+          authMsg.textContent = "Account gemaakt. Je kunt nu inloggen.";
+          setAuthMode("login");
           return;
         }
 
@@ -189,50 +1006,83 @@
 
         if (error) {
           authMsg.textContent = error.message;
+          authMsg.classList.add("error");
           return;
         }
 
         currentUser = data.user;
-        authMsg.textContent = "Ingelogd.";
+        currentUserBadge.textContent = getDisplayName();
         showApp();
-        loadTasks();
-      });
+        await loadTasks();
+      }
 
-      document.getElementById("addTaskBtn").addEventListener("click", async () => {
-        const title = taskInput.value.trim();
+      async function addTask() {
+        const title = taskTitle.value.trim();
+        const notes = taskNotes.value.trim();
+        const owner = taskOwner.value;
+        const category = taskCategory.value;
+        const priority = taskPriority.value;
+        const deadline = taskDeadline.value || null;
+
         if (!title || !currentUser) return;
 
-        const { error } = await client.from("tasks").insert({
-          title,
-          user_id: currentUser.id
-        });
+        const { error } = await client
+          .from("tasks")
+          .insert({
+            user_id: currentUser.id,
+            household: HOUSEHOLD,
+            title,
+            notes,
+            owner,
+            category,
+            priority,
+            deadline,
+            done: false
+          });
 
         if (error) {
-          authMsg.textContent = error.message;
+          alert(error.message);
           return;
         }
 
-        taskInput.value = "";
-        loadTasks();
-      });
+        taskTitle.value = "";
+        taskNotes.value = "";
+        taskOwner.value = "Maurits";
+        taskCategory.value = "Boodschappen";
+        taskPriority.value = "Normaal";
+        taskDeadline.value = "";
 
-      document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await loadTasks();
+      }
+
+      async function logout() {
         await client.auth.signOut();
         currentUser = null;
+        tasks = [];
         showAuth();
-        authMsg.textContent = "Uitgelogd.";
-      });
+      }
 
       async function restoreSession() {
         const { data } = await client.auth.getSession();
         if (data?.session?.user) {
           currentUser = data.session.user;
+          currentUserBadge.textContent = getDisplayName();
           showApp();
-          loadTasks();
+          await loadTasks();
         } else {
           showAuth();
         }
       }
+
+      tabLogin.addEventListener("click", () => setAuthMode("login"));
+      tabSignup.addEventListener("click", () => setAuthMode("signup"));
+      authActionBtn.addEventListener("click", handleAuthAction);
+      document.getElementById("addTaskBtn").addEventListener("click", addTask);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+      statusFilter.addEventListener("change", renderTasks);
+      ownerFilter.addEventListener("change", renderTasks);
+      categoryFilter.addEventListener("change", renderTasks);
+      searchInput.addEventListener("input", renderTasks);
 
       restoreSession();
     </script>
