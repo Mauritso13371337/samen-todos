@@ -3,466 +3,138 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Maurits & Titia — Maison</title>
+    <title>Maurits & Titia — Samen Taken</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <link rel="apple-touch-icon" href="https://samen-todos.vercel.app/ChatGPT%20Image%20Mar%2030,%202026,%2010_43_34%20PM.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Maurits & Titia">
+    <meta name="apple-mobile-web-app-title" content="Samen Taken">
     <meta name="theme-color" content="#0b1020">
     <style>
       :root {
-        --bg: #f6f3ee;
-        --bg-2: #fcfaf7;
-        --ink: #151822;
-        --muted: #6c7282;
-        --line: rgba(21,24,34,.08);
-        --card: rgba(255,255,255,.76);
-        --card-strong: rgba(255,255,255,.96);
-        --shadow: 0 30px 80px rgba(25, 28, 40, .10);
+        --bg: #121723;
+        --bg-2: #0d1119;
+        --ink: #f6f1e8;
+        --muted: #c7bda9;
+        --line: rgba(226,201,141,.14);
+        --card: rgba(20, 25, 38, .72);
+        --card-strong: rgba(23, 29, 43, .96);
+        --shadow: 0 30px 80px rgba(0, 0, 0, .28);
         --gold: #b68a3c;
         --gold-2: #e2c98d;
-        --navy: #12192d;
         --rose: #d89aa2;
-        --rose-soft: #f8e8eb;
-        --blue-soft: #e7eefc;
-        --green-soft: #e5f5ec;
-        --amber-soft: #fff1d6;
-        --purple-soft: #efeaff;
-        --danger-soft: #fde8e8;
+        --rose-soft: rgba(216,154,162,.16);
+        --blue-soft: rgba(107,140,213,.18);
+        --green-soft: rgba(62,167,116,.18);
+        --amber-soft: rgba(234,178,55,.16);
+        --purple-soft: rgba(138,115,215,.18);
+        --danger-soft: rgba(220,38,38,.16);
         --radius-xl: 32px;
         --radius-lg: 24px;
-        --radius-md: 18px;
       }
-
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-      html, body { min-height: 100%; }
       body {
         margin: 0;
         color: var(--ink);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(182,138,60,.12), transparent 24%),
-          radial-gradient(circle at top right, rgba(216,154,162,.14), transparent 18%),
-          linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+          radial-gradient(circle at top left, rgba(182,138,60,.10), transparent 24%),
+          radial-gradient(circle at top right, rgba(216,154,162,.12), transparent 18%),
+          linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       }
-
       .hidden { display: none !important; }
       .shell { max-width: 1380px; margin: 0 auto; padding: 18px; }
       .glass {
         background: var(--card);
         backdrop-filter: blur(16px);
-        border: 1px solid rgba(255,255,255,.76);
+        border: 1px solid rgba(255,255,255,.06);
         box-shadow: var(--shadow);
         border-radius: var(--radius-xl);
       }
-
       .auth-wrap { max-width: 600px; margin: 28px auto; }
-      .hero {
-        padding: 28px;
-        overflow: hidden;
-        position: relative;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        width: 320px;
-        height: 320px;
-        right: -110px;
-        top: -130px;
-        background: radial-gradient(circle, rgba(182,138,60,.18), transparent 64%);
-        border-radius: 999px;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        width: 260px;
-        height: 260px;
-        left: -80px;
-        bottom: -120px;
-        background: radial-gradient(circle, rgba(216,154,162,.16), transparent 64%);
-        border-radius: 999px;
-      }
-      .hero-grid {
-        position: relative;
-        z-index: 1;
-        display: grid;
-        grid-template-columns: 1.1fr .9fr;
-        gap: 22px;
-        align-items: center;
-      }
-      .eyebrow {
-        display: inline-flex;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.7);
-        color: var(--gold);
-        font-size: 12px;
-        letter-spacing: .12em;
-        text-transform: uppercase;
-        font-weight: 800;
-        border: 1px solid rgba(182,138,60,.12);
-      }
-      .title {
-        margin: 14px 0 0;
-        font-size: 48px;
-        line-height: .94;
-        letter-spacing: -.06em;
-        font-weight: 900;
-      }
-      .lux {
-        background: linear-gradient(135deg, #71531d 0%, #c8a45a 48%, #8e6930 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-      .subtitle {
-        margin-top: 14px;
-        color: var(--muted);
-        font-size: 15px;
-        max-width: 640px;
-        line-height: 1.55;
-      }
-      .art {
-        min-height: 260px;
-        padding: 18px;
-        border-radius: 28px;
-        background: linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,248,236,.72));
-        border: 1px solid rgba(255,255,255,.84);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .art svg { width: 100%; max-width: 410px; height: auto; }
-
-      .card { padding: 22px; }
-      .card h2, .card h3 { margin: 0 0 14px; letter-spacing: -.04em; }
-      .card h2 { font-size: 24px; }
-      .card h3 { font-size: 19px; }
-      .segmented {
-        display: flex;
-        gap: 8px;
-        padding: 6px;
-        background: rgba(17,25,45,.06);
-        border-radius: 18px;
-        margin-bottom: 16px;
-      }
-      .segmented button {
-        width: 100%;
-        border: 0;
-        border-radius: 14px;
-        background: transparent;
-        color: var(--muted);
-        padding: 12px;
-        font-weight: 800;
-        cursor: pointer;
-      }
-      .segmented button.active {
-        background: white;
-        color: var(--ink);
-        box-shadow: 0 8px 22px rgba(21,24,34,.06);
-      }
-
-      label {
-        display: block;
-        margin-bottom: 7px;
-        font-size: 13px;
-        color: var(--muted);
-        font-weight: 700;
-      }
-      input, textarea, select, button {
-        width: 100%;
-        font: inherit;
-        padding: 14px 15px;
-        border-radius: 18px;
-        outline: none;
-      }
-      input, textarea, select {
-        background: rgba(255,255,255,.92);
-        border: 1px solid var(--line);
-        color: var(--ink);
-      }
-      input:focus, textarea:focus, select:focus {
-        border-color: rgba(182,138,60,.45);
-        box-shadow: 0 0 0 4px rgba(182,138,60,.09);
-      }
-      textarea { min-height: 104px; resize: vertical; }
-      button {
-        border: 0;
-        cursor: pointer;
-        font-weight: 800;
-        transition: transform .16s ease, opacity .16s ease, box-shadow .16s ease;
-      }
-      button:hover { transform: translateY(-1px); }
-      button:active { transform: translateY(0); }
-      .btn-primary {
-        background: linear-gradient(135deg, #12192d 0%, #28304f 100%);
-        color: white;
-      }
-      .btn-gold {
-        background: linear-gradient(135deg, #8e6930 0%, #c7a35b 50%, #9a7338 100%);
-        color: white;
-        box-shadow: 0 10px 24px rgba(182,138,60,.22);
-      }
-      .btn-soft {
-        background: rgba(255,255,255,.78);
-        border: 1px solid var(--line);
-        color: var(--ink);
-      }
-      .btn-danger {
-        background: var(--danger-soft);
-        color: #a12b2b;
-      }
-      .btn-mini {
-        width: auto;
-        padding: 11px 13px;
-        border-radius: 14px;
-      }
-      .msg { margin-top: 12px; color: var(--muted); font-size: 14px; }
-      .error { color: #b91c1c; }
-
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-      .badge-user {
-        padding: 10px 14px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 900;
-        color: #6e511e;
-        background: linear-gradient(135deg, #fff8ea, #f7ebd0);
-        border: 1px solid rgba(182,138,60,.14);
-      }
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 14px;
-        margin-top: 16px;
-      }
-      .stat { padding: 20px; }
-      .stat-label { font-size: 13px; color: var(--muted); }
-      .stat-value {
-        margin-top: 8px;
-        font-size: 34px;
-        line-height: 1;
-        font-weight: 900;
-        letter-spacing: -.05em;
-      }
-
-      .story-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-top: 16px;
-      }
-      .story-text { color: var(--muted); font-size: 14px; line-height: 1.55; }
-
-      .layout {
-        display: grid;
-        grid-template-columns: 340px 1fr 330px;
-        gap: 16px;
-        align-items: start;
-        margin-top: 16px;
-      }
-
-      .profile-stack { display: grid; gap: 14px; }
-      .person-card {
-        display: grid;
-        grid-template-columns: 78px 1fr;
-        gap: 14px;
-        align-items: center;
-        padding: 14px;
-        border-radius: 24px;
-        border: 1px solid transparent;
-        background: rgba(255,255,255,.68);
-        cursor: pointer;
-        user-select: none;
-        touch-action: manipulation;
-        transition: transform .14s ease, border-color .14s ease, box-shadow .14s ease;
-      }
-      .person-card.active {
-        border-color: rgba(182,138,60,.28);
-        box-shadow: inset 0 0 0 1px rgba(182,138,60,.08);
-        background: rgba(255,255,255,.92);
-      }
-      .person-card:active { transform: scale(.995); }
-      .avatar {
-        width: 78px;
-        height: 78px;
-        border-radius: 22px;
-        object-fit: cover;
-        display: block;
-        background: linear-gradient(135deg, #dbeafe, #fce7f3);
-      }
-      .person-name { font-size: 19px; font-weight: 900; letter-spacing: -.03em; }
-      .person-role { color: var(--muted); font-size: 13px; margin-top: 4px; }
-      .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-      .pill {
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 800;
-      }
-      .pill.m { background: var(--blue-soft); color: #1d4ed8; }
-      .pill.t { background: var(--rose-soft); color: #be185d; }
-      .pill.n { background: #f1f5f9; color: #334155; }
-
-      .task-toolbar {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-      .task-list { display: grid; gap: 12px; }
-      .task-card {
-        border-radius: 26px;
-        border: 1px solid var(--line);
-        background: var(--card-strong);
-        padding: 16px;
-        cursor: pointer;
-        transition: transform .14s ease, box-shadow .14s ease;
-      }
-      .task-card:hover { transform: translateY(-1px); box-shadow: 0 18px 38px rgba(21,24,34,.08); }
-      .task-top { display: flex; gap: 12px; align-items: flex-start; }
-      .check {
-        width: 26px;
-        height: 26px;
-        min-width: 26px;
-        border-radius: 999px;
-        border: 2px solid #cdd4df;
-        background: white;
-        position: relative;
-        margin-top: 2px;
-        cursor: pointer;
-      }
-      .check.done { background: #1f9d62; border-color: #1f9d62; }
-      .check.done::after {
-        content: "✓";
-        color: white;
-        position: absolute;
-        left: 6px;
-        top: -1px;
-        font-size: 15px;
-      }
-      .task-title {
-        font-size: 19px;
-        font-weight: 900;
-        letter-spacing: -.03em;
-      }
-      .task-title.done { color: #98a1b0; text-decoration: line-through; }
-      .task-notes {
-        margin-top: 7px;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.55;
-      }
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-      .chip {
-        padding: 7px 11px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 800;
-      }
-      .owner-m { background: var(--blue-soft); color: #1d4ed8; }
-      .owner-t { background: var(--rose-soft); color: #be185d; }
-      .open { background: var(--amber-soft); color: #995f00; }
-      .done { background: var(--green-soft); color: #166534; }
-      .category { background: #f3f4f6; color: #374151; }
-      .priority-high { background: var(--danger-soft); color: #b91c1c; }
-      .priority-normal { background: var(--purple-soft); color: #6d28d9; }
-      .priority-low { background: #e0f2fe; color: #0369a1; }
-      .deadline { background: #fff7ed; color: #c2410c; }
-      .task-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .empty {
-        border-radius: 22px;
-        border: 1px dashed #d5d9e1;
-        padding: 34px 18px;
-        text-align: center;
-        color: var(--muted);
-        background: rgba(255,255,255,.55);
-      }
-
-      .chat-feed {
-        max-height: 480px;
-        overflow: auto;
-        display: grid;
-        gap: 10px;
-        padding-right: 4px;
-      }
-      .chat-msg {
-        padding: 12px 14px;
-        border-radius: 20px;
-        background: rgba(255,255,255,.92);
-        border: 1px solid var(--line);
-      }
-      .chat-msg.mine { background: linear-gradient(135deg, #fff8ea, #fff1d7); }
-      .chat-meta {
-        font-size: 12px;
-        color: var(--muted);
-        margin-bottom: 4px;
-        font-weight: 800;
-      }
-      .chat-text {
-        font-size: 14px;
-        line-height: 1.5;
-      }
-
-      .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(17,25,45,.34);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 18px;
-        z-index: 60;
-      }
-      .modal-card {
-        width: min(820px, 100%);
-        max-height: 90vh;
-        overflow: auto;
-      }
-      .detail-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .detail-box {
-        padding: 14px;
-        border-radius: 18px;
-        background: rgba(248,250,252,.96);
-        border: 1px solid var(--line);
-      }
-      .detail-label { font-size: 12px; color: var(--muted); font-weight: 800; }
-      .detail-value { margin-top: 6px; font-size: 15px; line-height: 1.5; }
-
-      @media (max-width: 1180px) {
-        .hero-grid, .layout, .story-row { grid-template-columns: 1fr; }
-      }
-      @media (max-width: 920px) {
-        .stats, .task-toolbar { grid-template-columns: repeat(2, 1fr); }
-      }
-      @media (max-width: 680px) {
-        .shell { padding: 12px; }
-        .title { font-size: 34px; }
-        .stats, .task-toolbar, .detail-grid { grid-template-columns: 1fr; }
-        .card { padding: 18px; }
-        .person-card { grid-template-columns: 68px 1fr; }
-        .avatar { width: 68px; height: 68px; }
-      }
+      .hero { padding: 28px; overflow: hidden; position: relative; }
+      .hero::before { content:""; position:absolute; width:320px; height:320px; right:-110px; top:-130px; background:radial-gradient(circle, rgba(182,138,60,.18), transparent 64%); border-radius:999px; }
+      .hero::after { content:""; position:absolute; width:260px; height:260px; left:-80px; bottom:-120px; background:radial-gradient(circle, rgba(216,154,162,.16), transparent 64%); border-radius:999px; }
+      .hero-grid { position: relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; gap:22px; align-items:center; }
+      .eyebrow { display:inline-flex; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.06); color:var(--gold-2); font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; border:1px solid var(--line); }
+      .title { margin:14px 0 0; font-size:48px; line-height:.94; letter-spacing:-.06em; font-weight:900; }
+      .lux { background: linear-gradient(135deg, #71531d 0%, #e2c98d 48%, #8e6930 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+      .subtitle { margin-top:14px; color:var(--muted); font-size:15px; max-width:640px; line-height:1.55; }
+      .art { min-height:260px; padding:18px; border-radius:28px; background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,248,236,.04)); border:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; }
+      .art svg { width:100%; max-width:410px; height:auto; }
+      .card { padding:22px; }
+      .card h2,.card h3 { margin:0 0 14px; letter-spacing:-.04em; }
+      .card h3 { font-size:19px; }
+      .segmented { display:flex; gap:8px; padding:6px; background:rgba(255,255,255,.04); border-radius:18px; margin-bottom:16px; }
+      .segmented button { width:100%; border:0; border-radius:14px; background:transparent; color:var(--muted); padding:12px; font-weight:800; cursor:pointer; }
+      .segmented button.active { background:rgba(255,255,255,.08); color:var(--ink); }
+      label { display:block; margin-bottom:7px; font-size:13px; color:var(--muted); font-weight:700; }
+      input, textarea, select, button { width:100%; font:inherit; padding:14px 15px; border-radius:18px; outline:none; }
+      input, textarea, select { background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--ink); }
+      textarea { min-height:104px; resize:vertical; }
+      button { border:0; cursor:pointer; font-weight:800; transition:transform .16s ease; }
+      button:hover { transform:translateY(-1px); }
+      .btn-primary { background:linear-gradient(135deg,#12192d 0%,#28304f 100%); color:white; }
+      .btn-gold { background:linear-gradient(135deg,#8e6930 0%,#c7a35b 50%,#9a7338 100%); color:white; box-shadow:0 10px 24px rgba(182,138,60,.22); }
+      .btn-soft { background:rgba(255,255,255,.06); border:1px solid var(--line); color:var(--ink); }
+      .btn-mini { width:auto; padding:11px 13px; border-radius:14px; }
+      .msg { margin-top:12px; color:var(--muted); font-size:14px; }
+      .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+      .badge-user { padding:10px 14px; border-radius:999px; font-size:13px; font-weight:900; color:#6e511e; background:linear-gradient(135deg,#fff8ea,#f7ebd0); border:1px solid rgba(182,138,60,.14); }
+      .stats { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:16px; }
+      .stat { padding:20px; }
+      .stat-label { font-size:13px; color:var(--muted); }
+      .stat-value { margin-top:8px; font-size:34px; line-height:1; font-weight:900; letter-spacing:-.05em; }
+      .story-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+      .story-text { color:var(--muted); font-size:14px; line-height:1.55; }
+      .layout { display:grid; grid-template-columns:340px 1fr 330px; gap:16px; align-items:start; margin-top:16px; }
+      .profile-stack { display:grid; gap:14px; }
+      .person-card { display:grid; grid-template-columns:78px 1fr; gap:14px; align-items:center; padding:14px; border-radius:24px; border:1px solid transparent; background:rgba(255,255,255,.04); cursor:pointer; user-select:none; touch-action:manipulation; }
+      .person-card.active { border-color:rgba(182,138,60,.28); box-shadow:inset 0 0 0 1px rgba(182,138,60,.08); background:rgba(255,255,255,.09); }
+      .avatar { width:78px; height:78px; border-radius:22px; object-fit:cover; display:block; }
+      .person-name { font-size:19px; font-weight:900; letter-spacing:-.03em; }
+      .person-role { color:var(--muted); font-size:13px; margin-top:4px; }
+      .pill-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+      .pill { padding:6px 10px; border-radius:999px; font-size:12px; font-weight:800; }
+      .pill.m { background:var(--blue-soft); color:#8db4ff; }
+      .pill.t { background:var(--rose-soft); color:#ffb4c7; }
+      .pill.n { background:rgba(255,255,255,.06); color:var(--muted); }
+      .task-toolbar { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+      .task-list { display:grid; gap:12px; }
+      .task-card { border-radius:26px; border:1px solid var(--line); background:linear-gradient(180deg, rgba(22,28,42,.96), rgba(17,22,34,.96)); padding:16px; cursor:pointer; }
+      .task-top { display:flex; gap:12px; align-items:flex-start; }
+      .check { width:26px; height:26px; min-width:26px; border-radius:999px; border:2px solid #6b7280; background:transparent; position:relative; margin-top:2px; cursor:pointer; }
+      .check.done { background:#1f9d62; border-color:#1f9d62; }
+      .check.done::after { content:"✓"; color:white; position:absolute; left:6px; top:-1px; font-size:15px; }
+      .task-title { font-size:19px; font-weight:900; letter-spacing:-.03em; }
+      .task-title.done { color:#8791a4; text-decoration:line-through; }
+      .task-notes { margin-top:7px; color:var(--muted); font-size:14px; line-height:1.55; }
+      .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+      .chip { padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800; }
+      .owner-m { background:var(--blue-soft); color:#8db4ff; }
+      .owner-t { background:var(--rose-soft); color:#ffb4c7; }
+      .open { background:var(--amber-soft); color:#f3c46c; }
+      .done { background:var(--green-soft); color:#7ee0ab; }
+      .category { background:rgba(255,255,255,.06); color:#d6dde9; }
+      .priority-high { background:var(--danger-soft); color:#ff9b9b; }
+      .priority-normal { background:var(--purple-soft); color:#c7b4ff; }
+      .priority-low { background:rgba(87,163,222,.16); color:#98dbff; }
+      .deadline { background:rgba(182,138,60,.16); color:#f4d596; }
+      .task-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+      .empty { border-radius:22px; border:1px dashed #3a4258; padding:34px 18px; text-align:center; color:var(--muted); background:rgba(255,255,255,.03); }
+      .chat-feed { max-height:480px; overflow:auto; display:grid; gap:10px; padding-right:4px; }
+      .chat-msg { padding:12px 14px; border-radius:20px; background:rgba(255,255,255,.05); border:1px solid var(--line); }
+      .chat-msg.mine { background:linear-gradient(135deg, rgba(182,138,60,.18), rgba(142,105,48,.14)); }
+      .chat-meta { font-size:12px; color:var(--muted); margin-bottom:4px; font-weight:800; }
+      .chat-text { font-size:14px; line-height:1.5; }
+      .modal { position:fixed; inset:0; background:rgba(17,25,45,.42); display:flex; align-items:center; justify-content:center; padding:18px; z-index:60; }
+      .modal-card { width:min(820px,100%); max-height:90vh; overflow:auto; }
+      .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+      .detail-box { padding:14px; border-radius:18px; background:rgba(255,255,255,.04); border:1px solid var(--line); }
+      .detail-label { font-size:12px; color:var(--muted); font-weight:800; }
+      .detail-value { margin-top:6px; font-size:15px; line-height:1.5; }
+      @media (max-width:1180px){ .hero-grid,.layout,.story-row{grid-template-columns:1fr;} }
+      @media (max-width:920px){ .stats,.task-toolbar{grid-template-columns:repeat(2,1fr);} }
+      @media (max-width:680px){ .shell{padding:12px;} .title{font-size:34px;} .stats,.task-toolbar,.detail-grid{grid-template-columns:1fr;} .card{padding:18px;} .person-card{grid-template-columns:68px 1fr;} .avatar{width:68px;height:68px;} }
     </style>
   </head>
   <body>
@@ -475,74 +147,29 @@
               <h1 class="title">Jullie app, maar dan <span class="lux">echt prachtig</span>.</h1>
               <div class="subtitle">Voor Maurits en Titia: een stijlvolle gezamenlijke ruimte met persoonlijke profielen, klikbare taken, eigen taaknotities en een zachte chat voor thuis.</div>
             </div>
-            <div class="art">
-              <svg viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <defs>
-                  <linearGradient id="g" x1="0" x2="1">
-                    <stop offset="0%" stop-color="#b68a3c"/>
-                    <stop offset="100%" stop-color="#e2c98d"/>
-                  </linearGradient>
-                </defs>
-                <rect x="56" y="36" width="308" height="196" rx="28" fill="white" opacity=".85"/>
-                <rect x="82" y="64" width="126" height="18" rx="10" fill="#fff1d6"/>
-                <rect x="82" y="98" width="220" height="16" rx="10" fill="#eceff5"/>
-                <rect x="82" y="126" width="174" height="16" rx="10" fill="#f8e8eb"/>
-                <rect x="82" y="154" width="150" height="16" rx="10" fill="#e7eefc"/>
-                <circle cx="315" cy="82" r="31" fill="url(#g)"/>
-                <path d="M304 82c0-5 4-9 9-9 4 0 7 2 10 5 2-3 5-5 10-5 5 0 9 4 9 9 0 12-19 21-19 21s-19-9-19-21z" fill="white"/>
-                <circle cx="118" cy="238" r="22" fill="#e7eefc"/>
-                <circle cx="168" cy="238" r="22" fill="#f8e8eb"/>
-                <path d="M124 235h38" stroke="#7f8796" stroke-width="7" stroke-linecap="round"/>
-              </svg>
-            </div>
+            <div class="art"></div>
           </div>
         </div>
-
         <div class="glass card">
-          <div class="segmented">
-            <button id="tabLogin" class="active" type="button">Inloggen</button>
-            <button id="tabSignup" type="button">Account maken</button>
-          </div>
-
-          <div id="signupNameWrap" class="hidden">
-            <label for="name">Naam</label>
-            <select id="name">
-              <option value="">Kies je naam</option>
-              <option value="Maurits">Maurits</option>
-              <option value="Titia">Titia</option>
-            </select>
-          </div>
-
-          <div style="margin-top:12px;">
-            <label for="email">E-mailadres</label>
-            <input id="email" type="email" placeholder="naam@email.com">
-          </div>
-
-          <div style="margin-top:12px;">
-            <label for="password">Wachtwoord</label>
-            <input id="password" type="password" placeholder="Minimaal 6 tekens">
-          </div>
-
+          <div class="segmented"><button id="tabLogin" class="active" type="button">Inloggen</button><button id="tabSignup" type="button">Account maken</button></div>
+          <div id="signupNameWrap" class="hidden"><label for="name">Naam</label><select id="name"><option value="">Kies je naam</option><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select></div>
+          <div style="margin-top:12px;"><label for="email">E-mailadres</label><input id="email" type="email" placeholder="naam@email.com"></div>
+          <div style="margin-top:12px;"><label for="password">Wachtwoord</label><input id="password" type="password" placeholder="Minimaal 6 tekens"></div>
           <button id="authActionBtn" class="btn-gold" style="margin-top:14px;" type="button">Inloggen</button>
           <div id="authMsg" class="msg"></div>
         </div>
       </div>
-
       <div id="appView" class="hidden">
         <div class="glass hero">
           <div class="topbar">
             <div>
               <div class="eyebrow">Maurits & Titia</div>
-              <h1 class="title">Rust, schoonheid en overzicht.</h1>
-              <div class="subtitle">Klik een profiel voor alleen die persoon, tik op een taak voor details, en stuur elkaar lieve of praktische berichten.</div>
+              <h1 class="title">Samen taken, chat en overzicht.</h1>
+              <div class="subtitle">Jullie gedeelde app voor taken, persoonlijke notities per taak en snel overzicht voor Maurits en Titia.</div>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-              <div id="currentUserBadge" class="badge-user"></div>
-              <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
-            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;"><div id="currentUserBadge" class="badge-user"></div><button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button></div>
           </div>
         </div>
-
         <div class="stats">
           <div class="glass stat"><div class="stat-label">Totaal</div><div id="statTotal" class="stat-value">0</div></div>
           <div class="glass stat"><div class="stat-label">Open</div><div id="statOpen" class="stat-value">0</div></div>
@@ -550,581 +177,87 @@
           <div class="glass stat"><div class="stat-label">Maurits</div><div id="statMaurits" class="stat-value">0</div></div>
           <div class="glass stat"><div class="stat-label">Titia</div><div id="statTitia" class="stat-value">0</div></div>
         </div>
-
         <div class="story-row">
           <div class="glass card"><h3>Focus van vandaag</h3><div id="focusToday" class="story-text">Nog geen focuspunten.</div></div>
           <div class="glass card"><h3>Slimme suggestie</h3><div id="smartSuggestion" class="story-text">Voeg taken toe voor slimme hints.</div></div>
           <div class="glass card"><h3>Kleine noot</h3><div id="loveNote" class="story-text">Samen kleine dingen regelen is ook zorg voor elkaar.</div></div>
         </div>
-
         <div class="layout">
           <div class="profile-stack">
             <div class="glass card">
               <h3>Jullie twee</h3>
-              <div id="personMaurits" class="person-card active" data-person="Maurits" role="button" tabindex="0">
-                <img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80" alt="Maurits">
-                <div>
-                  <div class="person-name">Maurits</div>
-                  <div class="person-role">Toon alleen Maurits zijn taken</div>
-                  <div class="pill-row">
-                    <span class="pill m">Profiel</span>
-                    <span id="pillMauritsCount" class="pill n">0 open</span>
-                  </div>
-                </div>
-              </div>
-
-              <div id="personTitia" class="person-card" data-person="Titia" role="button" tabindex="0">
-                <img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Titia">
-                <div>
-                  <div class="person-name">Titia</div>
-                  <div class="person-role">Toon alleen Titia haar taken</div>
-                  <div class="pill-row">
-                    <span class="pill t">Profiel</span>
-                    <span id="pillTitiaCount" class="pill n">0 open</span>
-                  </div>
-                </div>
-              </div>
-
+              <div id="personMaurits" class="person-card active" data-person="Maurits" role="button" tabindex="0"><img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80" alt="Maurits"><div><div class="person-name">Maurits</div><div class="person-role">Toon alleen Maurits zijn taken</div><div class="pill-row"><span class="pill m">Profiel</span><span id="pillMauritsCount" class="pill n">0 open</span></div></div></div>
+              <div id="personTitia" class="person-card" data-person="Titia" role="button" tabindex="0"><img class="avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Titia"><div><div class="person-name">Titia</div><div class="person-role">Toon alleen Titia haar taken</div><div class="pill-row"><span class="pill t">Profiel</span><span id="pillTitiaCount" class="pill n">0 open</span></div></div></div>
               <button id="showEveryoneBtn" class="btn-soft" style="margin-top:12px;" type="button">Toon alles weer</button>
             </div>
-
             <div class="glass card">
               <h3>Nieuwe taak</h3>
-              <label for="taskTitle">Titel</label>
-              <input id="taskTitle" placeholder="Bijv. bloemen halen, afspraak bellen, iets liefs meenemen">
-
-              <div style="margin-top:12px;">
-                <label for="taskNotes">Algemene notities</label>
-                <textarea id="taskNotes" placeholder="Extra details, context, winkel, tijdstip..."></textarea>
-              </div>
-
-              <div style="margin-top:12px;">
-                <label for="taskPersonalNote">Persoonlijk bericht bij deze taak</label>
-                <textarea id="taskPersonalNote" placeholder="Bijv. 'Neem vooral jouw favoriete mee ❤️' of 'Niet vergeten even te bellen na lunch'"></textarea>
-              </div>
-
-              <div style="margin-top:12px;">
-                <label for="taskOwner">Voor wie?</label>
-                <select id="taskOwner">
-                  <option value="Maurits">Maurits</option>
-                  <option value="Titia">Titia</option>
-                </select>
-              </div>
-
-              <div style="margin-top:12px;">
-                <label for="taskCategory">Categorie</label>
-                <select id="taskCategory">
-                  <option value="Boodschappen">Boodschappen</option>
-                  <option value="Huis">Huis</option>
-                  <option value="Werk">Werk</option>
-                  <option value="Privé">Privé</option>
-                  <option value="Romantisch">Romantisch</option>
-                  <option value="Overig">Overig</option>
-                </select>
-              </div>
-
-              <div style="margin-top:12px;">
-                <label for="taskPriority">Prioriteit</label>
-                <select id="taskPriority">
-                  <option value="Normaal">Normaal</option>
-                  <option value="Hoog">Hoog</option>
-                  <option value="Laag">Laag</option>
-                </select>
-              </div>
-
-              <div style="margin-top:12px;">
-                <label for="taskDeadline">Deadline</label>
-                <input id="taskDeadline" type="date">
-              </div>
-
+              <label for="taskTitle">Titel</label><input id="taskTitle" placeholder="Bijv. bloemen halen, afspraak bellen, iets liefs meenemen">
+              <div style="margin-top:12px;"><label for="taskNotes">Algemene notities</label><textarea id="taskNotes" placeholder="Extra details, context, winkel, tijdstip..."></textarea></div>
+              <div style="margin-top:12px;"><label for="taskPersonalNote">Persoonlijk bericht bij deze taak</label><textarea id="taskPersonalNote" placeholder="Bijv. 'Ik ben ermee bezig' of iets liefs erbij"></textarea></div>
+              <div style="margin-top:12px;"><label for="taskOwner">Voor wie?</label><select id="taskOwner"><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select></div>
+              <div style="margin-top:12px;"><label for="taskCategory">Categorie</label><select id="taskCategory"><option value="Boodschappen">Boodschappen</option><option value="Huis">Huis</option><option value="Werk">Werk</option><option value="Privé">Privé</option><option value="Romantisch">Romantisch</option><option value="Overig">Overig</option></select></div>
+              <div style="margin-top:12px;"><label for="taskPriority">Prioriteit</label><select id="taskPriority"><option value="Normaal">Normaal</option><option value="Hoog">Hoog</option><option value="Laag">Laag</option></select></div>
+              <div style="margin-top:12px;"><label for="taskDeadline">Deadline</label><input id="taskDeadline" type="date"></div>
               <button id="addTaskBtn" class="btn-gold" style="margin-top:14px;" type="button">Taak toevoegen</button>
             </div>
           </div>
-
           <div class="glass card">
-            <h3>Overzicht</h3>
-            <div class="task-toolbar">
-              <select id="statusFilter">
-                <option value="all">Alle statussen</option>
-                <option value="open">Alleen open</option>
-                <option value="done">Alleen klaar</option>
-              </select>
-              <select id="ownerFilter">
-                <option value="all">Iedereen</option>
-                <option value="Maurits">Maurits</option>
-                <option value="Titia">Titia</option>
-              </select>
-              <select id="categoryFilter">
-                <option value="all">Alle categorieën</option>
-                <option value="Boodschappen">Boodschappen</option>
-                <option value="Huis">Huis</option>
-                <option value="Werk">Werk</option>
-                <option value="Privé">Privé</option>
-                <option value="Romantisch">Romantisch</option>
-                <option value="Overig">Overig</option>
-              </select>
-              <input id="searchInput" placeholder="Zoek taak...">
-            </div>
+            <h3>Jullie taken</h3>
+            <div class="task-toolbar"><select id="statusFilter"><option value="all">Alle statussen</option><option value="open">Alleen open</option><option value="done">Alleen klaar</option></select><select id="ownerFilter"><option value="all">Iedereen</option><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select><select id="categoryFilter"><option value="all">Alle categorieën</option><option value="Boodschappen">Boodschappen</option><option value="Huis">Huis</option><option value="Werk">Werk</option><option value="Privé">Privé</option><option value="Romantisch">Romantisch</option><option value="Overig">Overig</option></select><input id="searchInput" placeholder="Zoek taak..."></div>
             <div id="taskList" class="task-list"></div>
           </div>
-
           <div class="glass card">
             <h3>Chat samen</h3>
             <div id="chatFeed" class="chat-feed"></div>
-            <div style="display:grid; gap:10px; margin-top:12px;">
-              <textarea id="chatInput" placeholder="Stuur iets liefs, praktischs of een kleine reminder..."></textarea>
-              <button id="sendChatBtn" class="btn-primary" type="button">Bericht versturen</button>
-            </div>
+            <div style="display:grid; gap:10px; margin-top:12px;"><textarea id="chatInput" placeholder="Stuur iets liefs, praktischs of een kleine reminder..."></textarea><button id="sendChatBtn" class="btn-primary" type="button">Bericht versturen</button></div>
           </div>
         </div>
       </div>
-
-      <div id="taskModal" class="modal hidden">
-        <div class="glass card modal-card">
-          <div class="topbar" style="margin-bottom:14px;">
-            <h3 style="margin:0;">Taakdetails</h3>
-            <button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button>
-          </div>
-          <div id="taskModalBody"></div>
-        </div>
-      </div>
+      <div id="taskModal" class="modal hidden"><div class="glass card modal-card"><div class="topbar" style="margin-bottom:14px;"><h3 style="margin:0;">Taakdetails</h3><button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button></div><div id="taskModalBody"></div></div></div>
     </div>
-
     <script>
       const SUPABASE_URL = "https://eviycjtoduiwoiyqvayt.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_Ct64PzgdZq8k7iVbM6vGpw_gdAsWNGo";
       const HOUSEHOLD = "maurits-titia-home";
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-      const authView = document.getElementById('authView');
-      const appView = document.getElementById('appView');
-      const authMsg = document.getElementById('authMsg');
-      const tabLogin = document.getElementById('tabLogin');
-      const tabSignup = document.getElementById('tabSignup');
-      const authActionBtn = document.getElementById('authActionBtn');
-      const signupNameWrap = document.getElementById('signupNameWrap');
-      const nameEl = document.getElementById('name');
-      const emailEl = document.getElementById('email');
-      const passwordEl = document.getElementById('password');
-      const currentUserBadge = document.getElementById('currentUserBadge');
-
-      const taskTitle = document.getElementById('taskTitle');
-      const taskNotes = document.getElementById('taskNotes');
-      const taskPersonalNote = document.getElementById('taskPersonalNote');
-      const taskOwner = document.getElementById('taskOwner');
-      const taskCategory = document.getElementById('taskCategory');
-      const taskPriority = document.getElementById('taskPriority');
-      const taskDeadline = document.getElementById('taskDeadline');
-      const taskList = document.getElementById('taskList');
-      const statusFilter = document.getElementById('statusFilter');
-      const ownerFilter = document.getElementById('ownerFilter');
-      const categoryFilter = document.getElementById('categoryFilter');
-      const searchInput = document.getElementById('searchInput');
-      const focusToday = document.getElementById('focusToday');
-      const smartSuggestion = document.getElementById('smartSuggestion');
-      const loveNote = document.getElementById('loveNote');
-      const pillMauritsCount = document.getElementById('pillMauritsCount');
-      const pillTitiaCount = document.getElementById('pillTitiaCount');
-      const statTotal = document.getElementById('statTotal');
-      const statOpen = document.getElementById('statOpen');
-      const statDone = document.getElementById('statDone');
-      const statMaurits = document.getElementById('statMaurits');
-      const statTitia = document.getElementById('statTitia');
-      const personMaurits = document.getElementById('personMaurits');
-      const personTitia = document.getElementById('personTitia');
-      const showEveryoneBtn = document.getElementById('showEveryoneBtn');
-      const chatFeed = document.getElementById('chatFeed');
-      const chatInput = document.getElementById('chatInput');
-      const taskModal = document.getElementById('taskModal');
-      const taskModalBody = document.getElementById('taskModalBody');
-
-      let authMode = 'login';
-      let currentUser = null;
-      let tasks = [];
-      let messages = [];
-      let personView = 'all';
-
-      const loveNotes = [
-        'Het hoeft niet perfect. Samen overzicht hebben is al luxe.',
-        'Een mooie dag ontstaat vaak uit kleine zachte aandacht.',
-        'Jullie lijst is stiekem ook een liefdesbrief aan de rust thuis.',
-        'Praktisch én warm kan prima samen bestaan.',
-        'Goed geregeld voelt vaak ook gewoon lief.'
-      ];
-
-      function safeText(value) {
-        return (value || '').replace(/[&<>"']/g, function(m) {
-          return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[m];
-        });
-      }
-
-      function setAuthMode(mode) {
-        authMode = mode;
-        const isLogin = mode === 'login';
-        tabLogin.classList.toggle('active', isLogin);
-        tabSignup.classList.toggle('active', !isLogin);
-        signupNameWrap.classList.toggle('hidden', isLogin);
-        authActionBtn.textContent = isLogin ? 'Inloggen' : 'Account maken';
-        authMsg.textContent = '';
-      }
-
-      function showAuth() { authView.classList.remove('hidden'); appView.classList.add('hidden'); }
-      function showApp() { authView.classList.add('hidden'); appView.classList.remove('hidden'); }
-      function todayISO() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-      function formatDate(value) { if (!value) return ''; const d = new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString('nl-NL'); }
-      function getDisplayName() { return currentUser?.user_metadata?.name || currentUser?.email || 'Gebruiker'; }
-      function ownerClass(owner) { return owner === 'Maurits' ? 'owner-m' : 'owner-t'; }
-      function priorityClass(priority) { if (priority === 'Hoog') return 'priority-high'; if (priority === 'Laag') return 'priority-low'; return 'priority-normal'; }
-      function chatMine(name) { return name === getDisplayName(); }
-
-      function setPersonView(value) {
-        personView = value;
-        personMaurits.classList.toggle('active', value === 'Maurits');
-        personTitia.classList.toggle('active', value === 'Titia');
-        ownerFilter.value = value === 'all' ? 'all' : value;
-        renderTasks();
-      }
-
-      function bindProfileTap(el, value) {
-        ['click','touchend'].forEach(evt => {
-          el.addEventListener(evt, (e) => {
-            e.preventDefault();
-            setPersonView(value);
-          }, { passive: false });
-        });
-        el.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setPersonView(value);
-          }
-        });
-      }
-
-      function renderStats() {
-        statTotal.textContent = tasks.length;
-        statOpen.textContent = tasks.filter(t => !t.done).length;
-        statDone.textContent = tasks.filter(t => t.done).length;
-        statMaurits.textContent = tasks.filter(t => t.owner === 'Maurits').length;
-        statTitia.textContent = tasks.filter(t => t.owner === 'Titia').length;
-        pillMauritsCount.textContent = `${tasks.filter(t => t.owner === 'Maurits' && !t.done).length} open`;
-        pillTitiaCount.textContent = `${tasks.filter(t => t.owner === 'Titia' && !t.done).length} open`;
-      }
-
-      function renderInsights() {
-        const today = todayISO();
-        const urgent = tasks.filter(t => !t.done && (t.priority === 'Hoog' || t.deadline === today)).slice(0,3);
-        focusToday.textContent = urgent.length ? urgent.map(t => t.title).join(' • ') : 'Geen urgente punten vandaag. Mooi moment voor rust of iets liefs.';
-
-        const openM = tasks.filter(t => !t.done && t.owner === 'Maurits').length;
-        const openT = tasks.filter(t => !t.done && t.owner === 'Titia').length;
-        const romantic = tasks.filter(t => !t.done && t.category === 'Romantisch').length;
-        if (romantic > 0) smartSuggestion.textContent = 'Er staat iets romantisch open. Mooie kans om extra indruk te maken.';
-        else if (Math.abs(openM - openT) >= 2) smartSuggestion.textContent = openM > openT ? 'Maurits heeft nu meer openstaan. Misschien kan Titia iets overnemen.' : 'Titia heeft nu meer openstaan. Misschien kan Maurits iets overnemen.';
-        else smartSuggestion.textContent = 'De balans ziet er goed uit. Tik op een profiel voor een helder persoonlijk overzicht.';
-
-        loveNote.textContent = loveNotes[tasks.length % loveNotes.length];
-      }
-
-      function getFilteredTasks() {
-        const s = statusFilter.value;
-        const o = ownerFilter.value;
-        const c = categoryFilter.value;
-        const q = searchInput.value.trim().toLowerCase();
-
-        return tasks.filter(task => {
-          const statusOk = s === 'all' || (s === 'open' && !task.done) || (s === 'done' && task.done);
-          const ownerTarget = personView !== 'all' ? personView : o;
-          const ownerOk = ownerTarget === 'all' || task.owner === ownerTarget;
-          const categoryOk = c === 'all' || task.category === c;
-          const searchOk = !q || (task.title || '').toLowerCase().includes(q) || (task.notes || '').toLowerCase().includes(q) || (task.personal_note || '').toLowerCase().includes(q);
-          return statusOk && ownerOk && categoryOk && searchOk;
-        });
-      }
-
-      function openTaskModal(taskId) {
-        const task = tasks.find(t => String(t.id) === String(taskId));
-        if (!task) return;
-        taskModalBody.innerHTML = `
-          <div style="display:grid; gap:14px;">
-            <div>
-              <div class="task-title ${task.done ? 'done' : ''}">${safeText(task.title)}</div>
-              <div class="task-notes">${safeText(task.notes || 'Geen algemene notities toegevoegd.')}</div>
-            </div>
-            <div class="chips">
-              <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
-              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
-              <div class="chip category">${safeText(task.category || 'Overig')}</div>
-              <div class="chip ${priorityClass(task.priority || 'Normaal')}">${safeText(task.priority || 'Normaal')}</div>
-              ${task.deadline ? `<div class="chip deadline">Deadline: ${safeText(formatDate(task.deadline))}</div>` : ''}
-            </div>
-            <div class="detail-grid">
-              <div class="detail-box">
-                <div class="detail-label">Persoonlijk bericht bij deze taak</div>
-                <div class="detail-value">${safeText(task.personal_note || 'Geen persoonlijk bericht toegevoegd.')}</div>
-              </div>
-              <div class="detail-box">
-                <div class="detail-label">Aangemaakt op</div>
-                <div class="detail-value">${task.created_at ? safeText(new Date(task.created_at).toLocaleString('nl-NL')) : 'Onbekend'}</div>
-              </div>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="btn-soft btn-mini" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Heropenen' : 'Afronden'}</button>
-              <button class="btn-danger btn-mini" onclick="window.deleteTaskFromModal('${task.id}')" type="button">Verwijderen</button>
-            </div>
-          </div>
-        `;
-        taskModal.classList.remove('hidden');
-      }
-
-      function renderTasks() {
-        renderStats();
-        renderInsights();
-        const filtered = getFilteredTasks();
-        if (!filtered.length) {
-          taskList.innerHTML = `<div class="empty">Geen taken in deze weergave. Tik op Maurits, Titia of toon alles.</div>`;
-          return;
-        }
-
-        taskList.innerHTML = filtered.map(task => `
-          <div class="task-card" data-task-id="${task.id}">
-            <div class="task-top">
-              <button class="check ${task.done ? 'done' : ''}" data-action="toggle" data-id="${task.id}" type="button"></button>
-              <div style="flex:1;">
-                <div class="task-title ${task.done ? 'done' : ''}">${safeText(task.title)}</div>
-                ${task.notes ? `<div class="task-notes">${safeText(task.notes)}</div>` : ''}
-                ${task.personal_note ? `<div class="task-notes" style="margin-top:8px; color:#8b5a1e;"><strong>Persoonlijk:</strong> ${safeText(task.personal_note)}</div>` : ''}
-              </div>
-            </div>
-            <div class="chips">
-              <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
-              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
-              ${task.category ? `<div class="chip category">${safeText(task.category)}</div>` : ''}
-              ${task.priority ? `<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>` : ''}
-              ${task.deadline ? `<div class="chip deadline">${safeText(formatDate(task.deadline))}</div>` : ''}
-            </div>
-            <div class="task-actions">
-              <button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Heropenen' : 'Afronden'}</button>
-              <button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button>
-              <button class="btn-danger btn-mini" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button>
-            </div>
-          </div>
-        `).join('');
-
-        document.querySelectorAll('[data-action="toggle"]').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const task = tasks.find(t => String(t.id) === String(btn.dataset.id));
-            if (!task) return;
-            const { error } = await client.from('tasks').update({ done: !task.done }).eq('id', task.id);
-            if (!error) await loadTasks();
-          });
-        });
-
-        document.querySelectorAll('[data-action="delete"]').forEach(btn => {
-          btn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            const { error } = await client.from('tasks').delete().eq('id', btn.dataset.id);
-            if (!error) await loadTasks();
-          });
-        });
-
-        document.querySelectorAll('[data-action="open"]').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openTaskModal(btn.dataset.id);
-          });
-        });
-
-        document.querySelectorAll('.task-card').forEach(card => {
-          card.addEventListener('click', () => openTaskModal(card.dataset.taskId));
-        });
-      }
-
-      async function loadTasks() {
-        if (!currentUser) return;
-        const { data, error } = await client.from('tasks').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending: false });
-        if (error) {
-          taskList.innerHTML = `<div class="empty">Kon taken niet laden.</div>`;
-          return;
-        }
-        tasks = data || [];
-        renderTasks();
-      }
-
-      async function loadMessages() {
-        if (!currentUser) return;
-        const { data, error } = await client.from('messages').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending: true });
-        if (error) {
-          chatFeed.innerHTML = `<div class="empty">Kon chat niet laden.</div>`;
-          return;
-        }
-        messages = data || [];
-        if (!messages.length) {
-          chatFeed.innerHTML = `<div class="empty">Nog geen berichten. Stuur iets liefs of praktischs.</div>`;
-          return;
-        }
-        chatFeed.innerHTML = messages.map(msg => `
-          <div class="chat-msg ${chatMine(msg.sender_name) ? 'mine' : ''}">
-            <div class="chat-meta">${safeText(msg.sender_name || 'Onbekend')} • ${safeText(new Date(msg.created_at).toLocaleString('nl-NL'))}</div>
-            <div class="chat-text">${safeText(msg.body)}</div>
-          </div>
-        `).join('');
-        chatFeed.scrollTop = chatFeed.scrollHeight;
-      }
-
-      async function handleAuthAction() {
-        authMsg.classList.remove('error');
-        authMsg.textContent = 'Bezig...';
-        const email = emailEl.value.trim();
-        const password = passwordEl.value.trim();
-        const name = nameEl.value;
-
-        if (!email || !password) {
-          authMsg.textContent = 'Vul e-mailadres en wachtwoord in.';
-          authMsg.classList.add('error');
-          return;
-        }
-
-        if (authMode === 'signup') {
-          if (!name) {
-            authMsg.textContent = 'Kies Maurits of Titia.';
-            authMsg.classList.add('error');
-            return;
-          }
-          const { error } = await client.auth.signUp({ email, password, options: { data: { name } } });
-          if (error) {
-            authMsg.textContent = error.message;
-            authMsg.classList.add('error');
-            return;
-          }
-          authMsg.textContent = 'Account gemaakt. Je kunt nu inloggen.';
-          setAuthMode('login');
-          return;
-        }
-
-        const { data, error } = await client.auth.signInWithPassword({ email, password });
-        if (error) {
-          authMsg.textContent = error.message;
-          authMsg.classList.add('error');
-          return;
-        }
-        currentUser = data.user;
-        currentUserBadge.textContent = getDisplayName();
-        showApp();
-        await Promise.all([loadTasks(), loadMessages()]);
-      }
-
-      async function addTask() {
-        if (!currentUser || !taskTitle.value.trim()) return;
-        const { error } = await client.from('tasks').insert({
-          user_id: currentUser.id,
-          household: HOUSEHOLD,
-          title: taskTitle.value.trim(),
-          notes: taskNotes.value.trim(),
-          personal_note: taskPersonalNote.value.trim(),
-          owner: taskOwner.value,
-          category: taskCategory.value,
-          priority: taskPriority.value,
-          deadline: taskDeadline.value || null,
-          done: false
-        });
-        if (error) return alert(error.message);
-        taskTitle.value = '';
-        taskNotes.value = '';
-        taskPersonalNote.value = '';
-        taskOwner.value = 'Maurits';
-        taskCategory.value = 'Boodschappen';
-        taskPriority.value = 'Normaal';
-        taskDeadline.value = '';
-        await loadTasks();
-      }
-
-      async function sendMessage() {
-        if (!currentUser || !chatInput.value.trim()) return;
-        const { error } = await client.from('messages').insert({
-          household: HOUSEHOLD,
-          sender_id: currentUser.id,
-          sender_name: getDisplayName(),
-          body: chatInput.value.trim()
-        });
-        if (error) return alert(error.message);
-        chatInput.value = '';
-        await loadMessages();
-      }
-
-      async function logout() {
-        await client.auth.signOut();
-        currentUser = null;
-        tasks = [];
-        messages = [];
-        showAuth();
-      }
-
-      async function restoreSession() {
-        const { data } = await client.auth.getSession();
-        if (data?.session?.user) {
-          currentUser = data.session.user;
-          currentUserBadge.textContent = getDisplayName();
-          showApp();
-          await Promise.all([loadTasks(), loadMessages()]);
-        } else {
-          showAuth();
-        }
-      }
-
-      function setupRealtime() {
-        client.channel('tasks-live-pretty')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => loadTasks())
-          .subscribe();
-        client.channel('messages-live-pretty')
-          .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => loadMessages())
-          .subscribe();
-      }
-
-      window.toggleTaskFromModal = async function(id) {
-        const task = tasks.find(t => String(t.id) === String(id));
-        if (!task) return;
-        const { error } = await client.from('tasks').update({ done: !task.done }).eq('id', id);
-        if (!error) {
-          taskModal.classList.add('hidden');
-          await loadTasks();
-        }
-      }
-
-      window.deleteTaskFromModal = async function(id) {
-        const { error } = await client.from('tasks').delete().eq('id', id);
-        if (!error) {
-          taskModal.classList.add('hidden');
-          await loadTasks();
-        }
-      }
-
-      tabLogin.addEventListener('click', () => setAuthMode('login'));
-      tabSignup.addEventListener('click', () => setAuthMode('signup'));
-      authActionBtn.addEventListener('click', handleAuthAction);
-      document.getElementById('logoutBtn').addEventListener('click', logout);
-      document.getElementById('addTaskBtn').addEventListener('click', addTask);
-      document.getElementById('sendChatBtn').addEventListener('click', sendMessage);
-      statusFilter.addEventListener('change', renderTasks);
-      ownerFilter.addEventListener('change', () => { personView = 'all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active'); renderTasks(); });
-      categoryFilter.addEventListener('change', renderTasks);
-      searchInput.addEventListener('input', renderTasks);
-      bindProfileTap(personMaurits, 'Maurits');
-      bindProfileTap(personTitia, 'Titia');
-      showEveryoneBtn.addEventListener('click', () => setPersonView('all'));
-      document.getElementById('closeTaskModalBtn').addEventListener('click', () => taskModal.classList.add('hidden'));
-      taskModal.addEventListener('click', (e) => { if (e.target === taskModal) taskModal.classList.add('hidden'); });
-
-      restoreSession();
-      setupRealtime();
+      const authView = document.getElementById('authView'), appView = document.getElementById('appView'), authMsg = document.getElementById('authMsg'), tabLogin = document.getElementById('tabLogin'), tabSignup = document.getElementById('tabSignup'), authActionBtn = document.getElementById('authActionBtn'), signupNameWrap = document.getElementById('signupNameWrap'), nameEl = document.getElementById('name'), emailEl = document.getElementById('email'), passwordEl = document.getElementById('password'), currentUserBadge = document.getElementById('currentUserBadge');
+      const taskTitle = document.getElementById('taskTitle'), taskNotes = document.getElementById('taskNotes'), taskPersonalNote = document.getElementById('taskPersonalNote'), taskOwner = document.getElementById('taskOwner'), taskCategory = document.getElementById('taskCategory'), taskPriority = document.getElementById('taskPriority'), taskDeadline = document.getElementById('taskDeadline'), taskList = document.getElementById('taskList'), statusFilter = document.getElementById('statusFilter'), ownerFilter = document.getElementById('ownerFilter'), categoryFilter = document.getElementById('categoryFilter'), searchInput = document.getElementById('searchInput'), focusToday = document.getElementById('focusToday'), smartSuggestion = document.getElementById('smartSuggestion'), loveNote = document.getElementById('loveNote'), pillMauritsCount = document.getElementById('pillMauritsCount'), pillTitiaCount = document.getElementById('pillTitiaCount'), statTotal = document.getElementById('statTotal'), statOpen = document.getElementById('statOpen'), statDone = document.getElementById('statDone'), statMaurits = document.getElementById('statMaurits'), statTitia = document.getElementById('statTitia'), personMaurits = document.getElementById('personMaurits'), personTitia = document.getElementById('personTitia'), showEveryoneBtn = document.getElementById('showEveryoneBtn'), chatFeed = document.getElementById('chatFeed'), chatInput = document.getElementById('chatInput'), taskModal = document.getElementById('taskModal'), taskModalBody = document.getElementById('taskModalBody');
+      let authMode='login', currentUser=null, tasks=[], messages=[], personView='all';
+      const loveNotes=['Het hoeft niet perfect. Samen overzicht hebben is al luxe.','Een mooie dag ontstaat vaak uit kleine zachte aandacht.','Jullie lijst is stiekem ook een liefdesbrief aan de rust thuis.','Praktisch én warm kan prima samen bestaan.','Goed geregeld voelt vaak ook gewoon lief.'];
+      function safeText(v){return (v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+      function setAuthMode(mode){authMode=mode; const isLogin=mode==='login'; tabLogin.classList.toggle('active',isLogin); tabSignup.classList.toggle('active',!isLogin); signupNameWrap.classList.toggle('hidden',isLogin); authActionBtn.textContent=isLogin?'Inloggen':'Account maken'; authMsg.textContent='';}
+      function showAuth(){authView.classList.remove('hidden'); appView.classList.add('hidden');}
+      function showApp(){authView.classList.add('hidden'); appView.classList.remove('hidden');}
+      function todayISO(){const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+      function formatDate(v){if(!v) return ''; const d=new Date(v); return Number.isNaN(d.getTime())?v:d.toLocaleDateString('nl-NL');}
+      function getDisplayName(){return currentUser?.user_metadata?.name || currentUser?.email || 'Gebruiker';}
+      function ownerClass(o){return o==='Maurits'?'owner-m':'owner-t';}
+      function priorityClass(p){if(p==='Hoog') return 'priority-high'; if(p==='Laag') return 'priority-low'; return 'priority-normal';}
+      function chatMine(n){return n===getDisplayName();}
+      function setPersonView(v){personView=v; personMaurits.classList.toggle('active',v==='Maurits'); personTitia.classList.toggle('active',v==='Titia'); ownerFilter.value=v==='all'?'all':v; renderTasks();}
+      function bindProfileTap(el,value){['click','touchend'].forEach(evt=>el.addEventListener(evt,e=>{e.preventDefault(); setPersonView(value);},{passive:false})); el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault(); setPersonView(value);}});}
+      function renderStats(){statTotal.textContent=tasks.length; statOpen.textContent=tasks.filter(t=>!t.done).length; statDone.textContent=tasks.filter(t=>t.done).length; statMaurits.textContent=tasks.filter(t=>t.owner==='Maurits').length; statTitia.textContent=tasks.filter(t=>t.owner==='Titia').length; pillMauritsCount.textContent=`${tasks.filter(t=>t.owner==='Maurits'&&!t.done).length} open`; pillTitiaCount.textContent=`${tasks.filter(t=>t.owner==='Titia'&&!t.done).length} open`;}
+      function renderInsights(){const today=todayISO(); const urgent=tasks.filter(t=>!t.done&&(t.priority==='Hoog'||t.deadline===today)).slice(0,3); focusToday.textContent=urgent.length?urgent.map(t=>t.title).join(' • '):'Geen urgente punten vandaag. Mooi moment voor rust of iets liefs.'; const openM=tasks.filter(t=>!t.done&&t.owner==='Maurits').length, openT=tasks.filter(t=>!t.done&&t.owner==='Titia').length, romantic=tasks.filter(t=>!t.done&&t.category==='Romantisch').length; if(romantic>0) smartSuggestion.textContent='Er staat iets romantisch open. Mooie kans om extra indruk te maken.'; else if(Math.abs(openM-openT)>=2) smartSuggestion.textContent=openM>openT?'Maurits heeft nu meer openstaan. Misschien kan Titia iets overnemen.':'Titia heeft nu meer openstaan. Misschien kan Maurits iets overnemen.'; else smartSuggestion.textContent='De balans ziet er goed uit. Tik op een profiel voor een helder persoonlijk overzicht.'; loveNote.textContent=loveNotes[tasks.length%loveNotes.length];}
+      function getFilteredTasks(){const s=statusFilter.value,o=ownerFilter.value,c=categoryFilter.value,q=searchInput.value.trim().toLowerCase(); return tasks.filter(task=>{const statusOk=s==='all'||(s==='open'&&!task.done)||(s==='done'&&task.done); const ownerTarget=personView!=='all'?personView:o; const ownerOk=ownerTarget==='all'||task.owner===ownerTarget; const categoryOk=c==='all'||task.category===c; const searchOk=!q||(task.title||'').toLowerCase().includes(q)||(task.notes||'').toLowerCase().includes(q)||(task.personal_note||'').toLowerCase().includes(q); return statusOk&&ownerOk&&categoryOk&&searchOk;});}
+      function openTaskModal(taskId){const task=tasks.find(t=>String(t.id)===String(taskId)); if(!task) return; taskModalBody.innerHTML=`<div style="display:grid; gap:14px;"><div><div class="task-title ${task.done?'done':''}">${safeText(task.title)}</div><div class="task-notes">${safeText(task.notes||'Geen algemene notities toegevoegd.')}</div></div><div class="chips"><div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div><div class="chip ${task.done?'done':'open'}">${task.done?'Afgerond':'Open'}</div><div class="chip category">${safeText(task.category||'Overig')}</div><div class="chip ${priorityClass(task.priority||'Normaal')}">${safeText(task.priority||'Normaal')}</div>${task.deadline?`<div class="chip deadline">Deadline: ${safeText(formatDate(task.deadline))}</div>`:''}</div><div class="detail-grid"><div class="detail-box"><div class="detail-label">Bericht bij deze taak</div><div class="detail-value">${safeText(task.personal_note||'Nog geen bericht toegevoegd.')}</div></div><div class="detail-box"><div class="detail-label">Aangemaakt op</div><div class="detail-value">${task.created_at?safeText(new Date(task.created_at).toLocaleString('nl-NL')):'Onbekend'}</div></div></div><div style="display:flex; gap:10px; flex-wrap:wrap;"><button class="btn-soft btn-mini" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done?'Heropenen':'Afronden'}</button><button class="btn-gold btn-mini" onclick="window.addTaskMessageFromModal('${task.id}')" type="button">Bericht bij taak</button></div></div>`; taskModal.classList.remove('hidden');}
+      function renderTasks(){renderStats(); renderInsights(); const filtered=getFilteredTasks(); if(!filtered.length){taskList.innerHTML=`<div class="empty">Geen taken in deze weergave. Tik op Maurits, Titia of toon alles.</div>`; return;} taskList.innerHTML=filtered.map(task=>`<div class="task-card" data-task-id="${task.id}"><div class="task-top"><button class="check ${task.done?'done':''}" data-action="toggle" data-id="${task.id}" type="button"></button><div style="flex:1;"><div class="task-title ${task.done?'done':''}">${safeText(task.title)}</div>${task.notes?`<div class="task-notes">${safeText(task.notes)}</div>`:''}${task.personal_note?`<div class="task-notes" style="margin-top:8px; color:#f4d596;"><strong>Bericht:</strong> ${safeText(task.personal_note)}</div>`:''}</div></div><div class="chips"><div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div><div class="chip ${task.done?'done':'open'}">${task.done?'Afgerond':'Open'}</div>${task.category?`<div class="chip category">${safeText(task.category)}</div>`:''}${task.priority?`<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>`:''}${task.deadline?`<div class="chip deadline">${safeText(formatDate(task.deadline))}</div>`:''}</div><div class="task-actions"><button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done?'Heropenen':'Afronden'}</button><button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button><button class="btn-gold btn-mini" data-action="note" data-id="${task.id}" type="button">Bericht bij taak</button></div></div>`).join(''); document.querySelectorAll('[data-action="toggle"]').forEach(btn=>btn.addEventListener('click',async e=>{e.stopPropagation(); const task=tasks.find(t=>String(t.id)===String(btn.dataset.id)); if(!task) return; const {error}=await client.from('tasks').update({done:!task.done}).eq('id',task.id); if(!error) await loadTasks();})); document.querySelectorAll('[data-action="open"]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation(); openTaskModal(btn.dataset.id);})); document.querySelectorAll('[data-action="note"]').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation(); const task=tasks.find(t=>String(t.id)===String(btn.dataset.id)); if(!task) return; const note=prompt('Bericht bij deze taak', task.personal_note||''); if(note===null) return; updateTaskNote(task.id,note);})); document.querySelectorAll('.task-card').forEach(card=>card.addEventListener('click',()=>openTaskModal(card.dataset.taskId)));}
+      async function loadTasks(){if(!currentUser) return; const {data,error}=await client.from('tasks').select('*').eq('household',HOUSEHOLD).order('created_at',{ascending:false}); if(error){taskList.innerHTML=`<div class="empty">Kon taken niet laden.</div>`; return;} tasks=data||[]; renderTasks();}
+      async function loadMessages(){if(!currentUser) return; const {data,error}=await client.from('messages').select('*').eq('household',HOUSEHOLD).order('created_at',{ascending:true}); if(error){chatFeed.innerHTML=`<div class="empty">Kon chat niet laden.</div>`; return;} messages=data||[]; if(!messages.length){chatFeed.innerHTML=`<div class="empty">Nog geen berichten. Stuur iets liefs of praktischs.</div>`; return;} chatFeed.innerHTML=messages.map(msg=>`<div class="chat-msg ${chatMine(msg.sender_name)?'mine':''}"><div class="chat-meta">${safeText(msg.sender_name||'Onbekend')} • ${safeText(new Date(msg.created_at).toLocaleString('nl-NL'))}</div><div class="chat-text">${safeText(msg.body)}</div></div>`).join(''); chatFeed.scrollTop=chatFeed.scrollHeight;}
+      async function handleAuthAction(){authMsg.classList.remove('error'); authMsg.textContent='Bezig...'; const email=emailEl.value.trim(), password=passwordEl.value.trim(), name=nameEl.value; if(!email||!password){authMsg.textContent='Vul e-mailadres en wachtwoord in.'; return;} if(authMode==='signup'){ if(!name){authMsg.textContent='Kies Maurits of Titia.'; return;} const {error}=await client.auth.signUp({email,password,options:{data:{name}}}); if(error){authMsg.textContent=error.message; return;} authMsg.textContent='Account gemaakt. Je kunt nu inloggen.'; setAuthMode('login'); return;} const {data,error}=await client.auth.signInWithPassword({email,password}); if(error){authMsg.textContent=error.message; return;} currentUser=data.user; currentUserBadge.textContent=getDisplayName(); showApp(); await Promise.all([loadTasks(),loadMessages()]);}
+      async function addTask(){if(!currentUser||!taskTitle.value.trim()) return; const {error}=await client.from('tasks').insert({user_id:currentUser.id,household:HOUSEHOLD,title:taskTitle.value.trim(),notes:taskNotes.value.trim(),personal_note:taskPersonalNote.value.trim(),owner:taskOwner.value,category:taskCategory.value,priority:taskPriority.value,deadline:taskDeadline.value||null,done:false}); if(error) return alert(error.message); taskTitle.value=''; taskNotes.value=''; taskPersonalNote.value=''; taskOwner.value='Maurits'; taskCategory.value='Boodschappen'; taskPriority.value='Normaal'; taskDeadline.value=''; await loadTasks();}
+      async function updateTaskNote(id,note){const {error}=await client.from('tasks').update({personal_note:note}).eq('id',id); if(error) return alert(error.message); await loadTasks();}
+      async function sendMessage(){if(!currentUser||!chatInput.value.trim()) return; const {error}=await client.from('messages').insert({household:HOUSEHOLD,sender_id:currentUser.id,sender_name:getDisplayName(),body:chatInput.value.trim()}); if(error) return alert(error.message); chatInput.value=''; await loadMessages();}
+      async function logout(){await client.auth.signOut(); currentUser=null; tasks=[]; messages=[]; showAuth();}
+      async function restoreSession(){const {data}=await client.auth.getSession(); if(data?.session?.user){currentUser=data.session.user; currentUserBadge.textContent=getDisplayName(); showApp(); await Promise.all([loadTasks(),loadMessages()]);} else showAuth();}
+      function setupRealtime(){client.channel('tasks-live-maison').on('postgres_changes',{event:'*',schema:'public',table:'tasks'},()=>loadTasks()).subscribe(); client.channel('messages-live-maison').on('postgres_changes',{event:'*',schema:'public',table:'messages'},()=>loadMessages()).subscribe();}
+      window.toggleTaskFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const {error}=await client.from('tasks').update({done:!task.done}).eq('id',id); if(!error){taskModal.classList.add('hidden'); await loadTasks();}};
+      window.addTaskMessageFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const note=prompt('Bericht bij deze taak', task.personal_note||''); if(note===null) return; await updateTaskNote(id,note); taskModal.classList.add('hidden');};
+      tabLogin.addEventListener('click',()=>setAuthMode('login')); tabSignup.addEventListener('click',()=>setAuthMode('signup')); authActionBtn.addEventListener('click',handleAuthAction); document.getElementById('logoutBtn').addEventListener('click',logout); document.getElementById('addTaskBtn').addEventListener('click',addTask); document.getElementById('sendChatBtn').addEventListener('click',sendMessage); statusFilter.addEventListener('change',renderTasks); ownerFilter.addEventListener('change',()=>{personView='all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active'); renderTasks();}); categoryFilter.addEventListener('change',renderTasks); searchInput.addEventListener('input',renderTasks); bindProfileTap(personMaurits,'Maurits'); bindProfileTap(personTitia,'Titia'); showEveryoneBtn.addEventListener('click',()=>setPersonView('all')); document.getElementById('closeTaskModalBtn').addEventListener('click',()=>taskModal.classList.add('hidden')); taskModal.addEventListener('click',e=>{if(e.target===taskModal) taskModal.classList.add('hidden');}); restoreSession(); setupRealtime();
     </script>
-
     <!--
     EXTRA SUPABASE SQL
-
-    alter table public.tasks
-    add column if not exists personal_note text;
-
+    alter table public.tasks add column if not exists personal_note text;
     create table if not exists public.messages (
       id bigint generated always as identity primary key,
       household text not null default 'maurits-titia-home',
@@ -1133,7 +266,6 @@
       body text not null,
       created_at timestamptz default now()
     );
-
     NOTIFY pgrst, 'reload schema';
     -->
   </body>
