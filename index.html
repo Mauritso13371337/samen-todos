@@ -189,7 +189,12 @@
               <div class="subtitle">Compact op mobiel, sneller bij de taken, en met duidelijke persoonlijke notities.</div>
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-              <button id="enablePushBtn" class="btn-soft btn-mini" type="button">Meldingen aan</button><div id="currentUserBadge" class="badge-user"></div><button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button></div>
+              <button id="enablePushBtn" class="btn-soft btn-mini" type="button">Meldingen aan</button>
+              <button id="pingMauritsBtn" class="btn-gold btn-mini" type="button">Roep Maurits</button>
+              <button id="pingTitiaBtn" class="btn-gold btn-mini" type="button">Roep Titia</button>
+              <div id="currentUserBadge" class="badge-user"></div>
+              <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
+            </div>
           </div>
         </div>
 
@@ -266,13 +271,72 @@
       const SUPABASE_URL = "https://eviycjtoduiwoiyqvayt.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_Ct64PzgdZq8k7iVbM6vGpw_gdAsWNGo";
       const HOUSEHOLD = "maurits-titia-home";
+      const VAPID_PUBLIC_KEY = "BP5hcMuNOdUzG_83l-Kphxpv8whjIzRd4rE4QeTCQ4GE9fAWKMhmBOB3Cb2Mc8DOxqPvgQmLN56hE3eEr3JpVow";
+      const PUSH_FUNCTION_URL = "https://eviycjtoduiwoiyqvayt.supabase.co/functions/v1/send-push";
+
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const authView = document.getElementById('authView'), appView = document.getElementById('appView'), authMsg = document.getElementById('authMsg'), tabLogin = document.getElementById('tabLogin'), tabSignup = document.getElementById('tabSignup'), authActionBtn = document.getElementById('authActionBtn'), signupNameWrap = document.getElementById('signupNameWrap'), nameEl = document.getElementById('name'), emailEl = document.getElementById('email'), passwordEl = document.getElementById('password'), currentUserBadge = document.getElementById('currentUserBadge'), enablePushBtn = document.getElementById('enablePushBtn');
-      const taskTitle = document.getElementById('taskTitle'), taskNotes = document.getElementById('taskNotes'), taskPersonalNote = document.getElementById('taskPersonalNote'), taskOwner = document.getElementById('taskOwner'), taskCategory = document.getElementById('taskCategory'), taskPriority = document.getElementById('taskPriority'), taskDeadline = document.getElementById('taskDeadline'), taskList = document.getElementById('taskList'), statusFilter = document.getElementById('statusFilter'), ownerFilter = document.getElementById('ownerFilter'), categoryFilter = document.getElementById('categoryFilter'), searchInput = document.getElementById('searchInput'), focusToday = document.getElementById('focusToday'), smartSuggestion = document.getElementById('smartSuggestion'), loveNote = document.getElementById('loveNote'), pillMauritsCount = document.getElementById('pillMauritsCount'), pillTitiaCount = document.getElementById('pillTitiaCount'), statTotal = document.getElementById('statTotal'), statOpen = document.getElementById('statOpen'), statDone = document.getElementById('statDone'), statMaurits = document.getElementById('statMaurits'), statTitia = document.getElementById('statTitia'), personMaurits = document.getElementById('personMaurits'), personTitia = document.getElementById('personTitia'), showEveryoneBtn = document.getElementById('showEveryoneBtn'), chatFeed = document.getElementById('chatFeed'), chatInput = document.getElementById('chatInput'), taskModal = document.getElementById('taskModal'), taskModalBody = document.getElementById('taskModalBody'), composerDetails = document.getElementById('composerDetails'), composerHint = document.getElementById('composerHint'), tasksPanel = document.getElementById('tasksPanel'), composerPanelWrap = document.getElementById('composerPanelWrap'), chatPanel = document.getElementById('chatPanel');
+
+      const authView = document.getElementById('authView'),
+        appView = document.getElementById('appView'),
+        authMsg = document.getElementById('authMsg'),
+        tabLogin = document.getElementById('tabLogin'),
+        tabSignup = document.getElementById('tabSignup'),
+        authActionBtn = document.getElementById('authActionBtn'),
+        signupNameWrap = document.getElementById('signupNameWrap'),
+        nameEl = document.getElementById('name'),
+        emailEl = document.getElementById('email'),
+        passwordEl = document.getElementById('password'),
+        currentUserBadge = document.getElementById('currentUserBadge'),
+        enablePushBtn = document.getElementById('enablePushBtn'),
+        pingMauritsBtn = document.getElementById('pingMauritsBtn'),
+        pingTitiaBtn = document.getElementById('pingTitiaBtn');
+
+      const taskTitle = document.getElementById('taskTitle'),
+        taskNotes = document.getElementById('taskNotes'),
+        taskPersonalNote = document.getElementById('taskPersonalNote'),
+        taskOwner = document.getElementById('taskOwner'),
+        taskCategory = document.getElementById('taskCategory'),
+        taskPriority = document.getElementById('taskPriority'),
+        taskDeadline = document.getElementById('taskDeadline'),
+        taskList = document.getElementById('taskList'),
+        statusFilter = document.getElementById('statusFilter'),
+        ownerFilter = document.getElementById('ownerFilter'),
+        categoryFilter = document.getElementById('categoryFilter'),
+        searchInput = document.getElementById('searchInput'),
+        focusToday = document.getElementById('focusToday'),
+        smartSuggestion = document.getElementById('smartSuggestion'),
+        loveNote = document.getElementById('loveNote'),
+        pillMauritsCount = document.getElementById('pillMauritsCount'),
+        pillTitiaCount = document.getElementById('pillTitiaCount'),
+        statTotal = document.getElementById('statTotal'),
+        statOpen = document.getElementById('statOpen'),
+        statDone = document.getElementById('statDone'),
+        statMaurits = document.getElementById('statMaurits'),
+        statTitia = document.getElementById('statTitia'),
+        personMaurits = document.getElementById('personMaurits'),
+        personTitia = document.getElementById('personTitia'),
+        showEveryoneBtn = document.getElementById('showEveryoneBtn'),
+        chatFeed = document.getElementById('chatFeed'),
+        chatInput = document.getElementById('chatInput'),
+        taskModal = document.getElementById('taskModal'),
+        taskModalBody = document.getElementById('taskModalBody'),
+        composerDetails = document.getElementById('composerDetails'),
+        composerHint = document.getElementById('composerHint'),
+        tasksPanel = document.getElementById('tasksPanel'),
+        composerPanelWrap = document.getElementById('composerPanelWrap'),
+        chatPanel = document.getElementById('chatPanel');
+
       let authMode='login', currentUser=null, tasks=[], messages=[], personView='all';
-     const VAPID_PUBLIC_KEY = 'BP5hcMuNOdUzG_83l-Kphxpv8whjIzRd4rE4QeTCQ4GE9fAWKMhmBOB3Cb2Mc8DOxqPvgQmLN56hE3eEr3JpVow';
-      const loveNotes=['Het hoeft niet perfect. Samen overzicht hebben is al luxe.','Een mooie dag ontstaat vaak uit kleine zachte aandacht.','Jullie lijst is stiekem ook een liefdesbrief aan de rust thuis.','Praktisch én warm kan prima samen bestaan.','Goed geregeld voelt vaak ook gewoon lief.'];
-      function safeText(v){return (v||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+
+      const loveNotes = [
+        'Het hoeft niet perfect. Samen overzicht hebben is al luxe.',
+        'Een mooie dag ontstaat vaak uit kleine zachte aandacht.',
+        'Jullie lijst is stiekem ook een liefdesbrief aan de rust thuis.',
+        'Praktisch én warm kan prima samen bestaan.',
+        'Goed geregeld voelt vaak ook gewoon lief.'
+      ];
+
+      function safeText(v){return (v||'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]));}
       function setAuthMode(mode){authMode=mode; const isLogin=mode==='login'; tabLogin.classList.toggle('active',isLogin); tabSignup.classList.toggle('active',!isLogin); signupNameWrap.classList.toggle('hidden',isLogin); authActionBtn.textContent=isLogin?'Inloggen':'Account maken'; authMsg.textContent='';}
       function showAuth(){authView.classList.remove('hidden'); appView.classList.add('hidden');}
       function showApp(){authView.classList.add('hidden'); appView.classList.remove('hidden'); if(window.innerWidth <= 680) composerDetails.open = false; updateComposerHint(); setMobileTab('tasks');}
@@ -307,6 +371,7 @@
       async function logout(){await client.auth.signOut(); currentUser=null; tasks=[]; messages=[]; showAuth();}
       async function restoreSession(){const {data}=await client.auth.getSession(); if(data?.session?.user){currentUser=data.session.user; currentUserBadge.textContent=getDisplayName(); showApp(); await Promise.all([loadTasks(),loadMessages()]);} else showAuth();}
       function setupRealtime(){client.channel('tasks-live-compact').on('postgres_changes',{event:'*',schema:'public',table:'tasks'},()=>loadTasks()).subscribe(); client.channel('messages-live-compact').on('postgres_changes',{event:'*',schema:'public',table:'messages'},()=>loadMessages()).subscribe();}
+
       function urlBase64ToUint8Array(base64String){
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -315,6 +380,7 @@
         for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
         return outputArray;
       }
+
       async function enablePush(){
         if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
           alert('Push wordt op dit apparaat of in deze modus niet ondersteund.');
@@ -328,17 +394,26 @@
           alert('De push-sleutel staat nog niet ingevuld.');
           return;
         }
+
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
           alert('Meldingen zijn niet toegestaan.');
           return;
         }
+
         const registration = await navigator.serviceWorker.register('/sw.js');
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-        });
+
+        let subscription = await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+        }
+
         const payload = subscription.toJSON();
+
         const { error } = await client.from('push_subscriptions').upsert({
           household: HOUSEHOLD,
           user_id: currentUser.id,
@@ -347,45 +422,68 @@
           p256dh: payload.keys?.p256dh || null,
           auth: payload.keys?.auth || null
         }, { onConflict: 'endpoint' });
+
         if (error) {
           alert(error.message);
           return;
         }
+
         alert('Meldingen staan aan op dit apparaat.');
       }
+
+      async function sendPushTo(targetName) {
+        const res = await fetch(PUSH_FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            targetName,
+            title: 'Samen Taken',
+            message: `${getDisplayName()} roept je`
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          alert(data.error || 'Push versturen mislukt.');
+          return;
+        }
+
+        alert(`Melding verstuurd naar ${targetName}`);
+      }
+
       window.toggleTaskFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const {error}=await client.from('tasks').update({done:!task.done}).eq('id',id); if(!error){taskModal.classList.add('hidden'); await loadTasks();}};
       window.addTaskMessageFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const note=prompt('Bericht bij deze taak', task.personal_note||''); if(note===null) return; await updateTaskNote(id,note); taskModal.classList.add('hidden');};
-      tabLogin.addEventListener('click',()=>setAuthMode('login')); tabSignup.addEventListener('click',()=>setAuthMode('signup')); authActionBtn.addEventListener('click',handleAuthAction); document.getElementById('logoutBtn').addEventListener('click',logout); document.getElementById('addTaskBtn').addEventListener('click',addTask); document.getElementById('sendChatBtn').addEventListener('click',sendMessage); statusFilter.addEventListener('change',renderTasks); ownerFilter.addEventListener('change',()=>{personView='all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active'); renderTasks();}); categoryFilter.addEventListener('change',renderTasks); searchInput.addEventListener('input',renderTasks); personMaurits.addEventListener('click',()=>setPersonView('Maurits')); personTitia.addEventListener('click',()=>setPersonView('Titia')); showEveryoneBtn.addEventListener('click',()=>setPersonView('all')); document.querySelectorAll('.stat').forEach(el=>el.addEventListener('click',()=>applyStatFilter(el.dataset.stat))); document.getElementById('closeTaskModalBtn').addEventListener('click',()=>taskModal.classList.add('hidden')); taskModal.addEventListener('click',e=>{if(e.target===taskModal) taskModal.classList.add('hidden');}); composerDetails.addEventListener('toggle', updateComposerHint); document.querySelectorAll('.mobile-tab').forEach(btn=>btn.addEventListener('click',()=>setMobileTab(btn.dataset.tab)));
+
+      tabLogin.addEventListener('click',()=>setAuthMode('login'));
+      tabSignup.addEventListener('click',()=>setAuthMode('signup'));
+      authActionBtn.addEventListener('click',handleAuthAction);
+      document.getElementById('logoutBtn').addEventListener('click',logout);
+      document.getElementById('addTaskBtn').addEventListener('click',addTask);
+      document.getElementById('sendChatBtn').addEventListener('click',sendMessage);
+      statusFilter.addEventListener('change',renderTasks);
+      ownerFilter.addEventListener('change',()=>{personView='all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active'); renderTasks();});
+      categoryFilter.addEventListener('change',renderTasks);
+      searchInput.addEventListener('input',renderTasks);
+      personMaurits.addEventListener('click',()=>setPersonView('Maurits'));
+      personTitia.addEventListener('click',()=>setPersonView('Titia'));
+      showEveryoneBtn.addEventListener('click',()=>setPersonView('all'));
+      document.querySelectorAll('.stat').forEach(el=>el.addEventListener('click',()=>applyStatFilter(el.dataset.stat)));
+      document.getElementById('closeTaskModalBtn').addEventListener('click',()=>taskModal.classList.add('hidden'));
+      taskModal.addEventListener('click',e=>{if(e.target===taskModal) taskModal.classList.add('hidden');});
+      composerDetails.addEventListener('toggle', updateComposerHint);
+      document.querySelectorAll('.mobile-tab').forEach(btn=>btn.addEventListener('click',()=>setMobileTab(btn.dataset.tab)));
       enablePushBtn.addEventListener('click', enablePush);
-      restoreSession(); setupRealtime(); updateComposerHint();
+      pingMauritsBtn.addEventListener('click', () => sendPushTo('Maurits'));
+      pingTitiaBtn.addEventListener('click', () => sendPushTo('Titia'));
+
+      restoreSession();
+      setupRealtime();
+      updateComposerHint();
     </script>
-
-    <!--
-    SUPABASE SQL
-    alter table public.tasks add column if not exists personal_note text;
-    alter table public.tasks add column if not exists personal_note_by text;
-
-    create table if not exists public.messages (
-      id bigint generated always as identity primary key,
-      household text not null default 'maurits-titia-home',
-      sender_id uuid,
-      sender_name text,
-      body text not null,
-      created_at timestamptz default now()
-    );
-
-    create table if not exists public.push_subscriptions (
-      id bigint generated always as identity primary key,
-      household text not null default 'maurits-titia-home',
-      user_id uuid,
-      user_name text,
-      endpoint text unique not null,
-      p256dh text,
-      auth text,
-      created_at timestamptz default now()
-    );
-
-    NOTIFY pgrst, 'reload schema';
-    -->
   </body>
 </html>
