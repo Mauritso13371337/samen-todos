@@ -430,30 +430,39 @@ const PUSH_FUNCTION_URL = "https://eviycjtoduiwoiyqvayt.supabase.co/functions/v1
         alert('Meldingen staan aan op dit apparaat.');
       }
 
-      async function sendPushTo(targetName) {
-        const res = await fetch(PUSH_FUNCTION_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            targetName,
-            title: 'Samen Taken',
-            message: `${getDisplayName()} roept je`
-          })
-        });
+async function sendPushTo(targetName) {
+  const { data: sessionData } = await client.auth.getSession();
+  const accessToken = sessionData?.session?.access_token;
 
-        const data = await res.json().catch(() => ({}));
+  if (!accessToken) {
+    alert('Niet ingelogd.');
+    return;
+  }
 
-        if (!res.ok) {
-          alert(data.error || 'Push versturen mislukt.');
-          return;
-        }
+  const res = await fetch(PUSH_FUNCTION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${accessToken}`
+    },
+    body: JSON.stringify({
+      targetName,
+      title: 'Samen Taken',
+      message: `${getDisplayName()} roept je`
+    })
+  });
 
-        alert(`Melding verstuurd naar ${targetName}`);
-      }
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    alert(data.error || 'Push versturen mislukt.');
+    console.log('Push fout:', data);
+    return;
+  }
+
+  alert(`Melding verstuurd naar ${targetName}`);
+}
 
       window.toggleTaskFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const {error}=await client.from('tasks').update({done:!task.done}).eq('id',id); if(!error){taskModal.classList.add('hidden'); await loadTasks();}};
       window.addTaskMessageFromModal=async function(id){const task=tasks.find(t=>String(t.id)===String(id)); if(!task) return; const note=prompt('Bericht bij deze taak', task.personal_note||''); if(note===null) return; await updateTaskNote(id,note); taskModal.classList.add('hidden');};
