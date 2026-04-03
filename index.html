@@ -117,11 +117,11 @@
       .mini-label { color:var(--muted); font-size:12px; font-weight:700; }
       .mini-value { margin-top:6px; font-size:20px; font-weight:900; line-height:1.15; }
 
-      .stats { display:grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap:10px; }
-      .stat { padding:14px; cursor:pointer; background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:22px; transition:transform .12s ease, background .12s ease; }
+      .stats { display:grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap:8px; }
+      .stat { padding:10px 12px; cursor:pointer; background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:18px; transition:transform .12s ease, background .12s ease; }
       .stat:hover { transform:translateY(-1px); background:rgba(255,255,255,.05); }
-      .stat-label { font-size:11px; color:var(--muted); }
-      .stat-value { margin-top:6px; font-size:22px; line-height:1; font-weight:900; letter-spacing:-.04em; }
+      .stat-label { font-size:10px; color:var(--muted); }
+      .stat-value { margin-top:5px; font-size:18px; line-height:1; font-weight:900; letter-spacing:-.04em; }
 
       .switcher { display:flex; gap:8px; overflow:auto; padding-bottom:2px; }
       .switch-chip { white-space:nowrap; width:auto; padding:10px 13px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.05); color:var(--text); font-weight:800; }
@@ -188,8 +188,9 @@
       .mobile-tab { flex:1; border:0; border-radius:16px; padding:10px 8px; background:transparent; color:var(--muted); font-size:12px; font-weight:800; }
       .mobile-tab.active { background:rgba(198,163,97,.18); color:#f4d596; }
 
-      @media (max-width: 1100px) { .hero-grid, .layout { grid-template-columns:1fr; } }
-      @media (max-width: 860px) { .stats { grid-template-columns: repeat(2,1fr); } .task-toolbar { grid-template-columns: repeat(2,1fr); } }
+      @media (max-width: 1100px) { .layout { grid-template-columns:1fr; } }
+      @media (max-width: 860px) { .stats { grid-template-columns: repeat(3,1fr); } .task-toolbar { grid-template-columns: repeat(2,1fr); } }
+      @media (max-width: 680px) { .stats { grid-template-columns: repeat(2,1fr); } }
       @media (max-width: 680px) {
         .shell { padding:10px 10px 94px; }
         .title { font-size:24px; }
@@ -220,34 +221,13 @@
       </div>
 
       <div id="appView" class="hidden app-grid">
-        <div class="hero-grid">
-          <div class="glass hero">
-            <div class="topbar">
-              <div>
-                <div class="eyebrow">Maurits & Titia</div>
-                <h1 class="title">Samen slim regelen.</h1>
-                <div class="subtitle">Mooier overzicht, duidelijke taken, en meldingen als de ander iets doet.</div>
-              </div>
-              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-                <div id="currentUserBadge" class="badge-user"></div>
-                <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
-              </div>
+        <div class="glass card">
+          <div class="topbar" style="margin-bottom:4px;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+              <div id="currentUserBadge" class="badge-user"></div>
+              <button id="enablePushBtn" class="btn-soft btn-mini" type="button">Meldingen aan</button>
             </div>
-          </div>
-
-          <div class="hero-side">
-            <div class="glass mini-panel">
-              <div class="mini-label">Meldingen</div>
-              <div class="mini-value">Blijf automatisch op de hoogte</div>
-              <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-                <button id="enablePushBtn" class="btn-gold btn-mini" type="button">Meldingen aan</button>
-                <span style="color:var(--muted); font-size:12px;">Per telefoon één keer activeren.</span>
-              </div>
-            </div>
-            <div class="glass mini-panel">
-              <div class="mini-label">Focus vandaag</div>
-              <div id="focusToday" class="mini-value">Nog geen focuspunten.</div>
-            </div>
+            <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
           </div>
         </div>
 
@@ -385,7 +365,7 @@
       function updateComposerHint(){composerHint.textContent = composerDetails.open ? 'Inklappen' : 'Openklappen';}
       function setMobileTab(tab){if(window.innerWidth > 680) return; mainPanel.classList.toggle('mobile-hidden', tab !== 'tasks'); sidePanel.classList.toggle('mobile-hidden', tab === 'tasks'); composerWrap.classList.toggle('mobile-hidden', tab !== 'new'); chatPanel.classList.toggle('mobile-hidden', tab !== 'chat'); document.querySelectorAll('.mobile-tab').forEach(btn=>btn.classList.toggle('active', btn.dataset.tab===tab));}
       function renderStats(){statTotal.textContent=tasks.length; statOpen.textContent=tasks.filter(t=>!t.done).length; statDone.textContent=tasks.filter(t=>t.done).length; statMaurits.textContent=tasks.filter(t=>t.owner==='Maurits').length; statTitia.textContent=tasks.filter(t=>t.owner==='Titia').length; pillMauritsCount.textContent=`${tasks.filter(t=>t.owner==='Maurits'&&!t.done).length} open`; pillTitiaCount.textContent=`${tasks.filter(t=>t.owner==='Titia'&&!t.done).length} open`; qaOpen.textContent=tasks.filter(t=>!t.done).length; qaDone.textContent=tasks.filter(t=>t.done).length; qaMaurits.textContent=tasks.filter(t=>!t.done&&t.owner==='Maurits').length; qaTitia.textContent=tasks.filter(t=>!t.done&&t.owner==='Titia').length;}
-      function renderInsights(){const today=todayISO(); const urgent=tasks.filter(t=>!t.done&&(t.priority==='Hoog'||t.deadline===today)).slice(0,2); focusToday.textContent=urgent.length?urgent.map(t=>t.title).join(' • '):'Nog geen focuspunten.'; const openM=tasks.filter(t=>!t.done&&t.owner==='Maurits').length, openT=tasks.filter(t=>!t.done&&t.owner==='Titia').length; if(Math.abs(openM-openT)>=2) smartSuggestion.textContent=openM>openT?'Maurits heeft nu duidelijk meer openstaan.':'Titia heeft nu duidelijk meer openstaan.'; else smartSuggestion.textContent='Mooi verdeeld en overzichtelijk.'; loveNote.textContent=loveNotes[tasks.length%loveNotes.length];}
+      function renderInsights(){const openM=tasks.filter(t=>!t.done&&t.owner==='Maurits').length, openT=tasks.filter(t=>!t.done&&t.owner==='Titia').length; if(Math.abs(openM-openT)>=2) smartSuggestion.textContent=openM>openT?'Maurits heeft nu duidelijk meer openstaan.':'Titia heeft nu duidelijk meer openstaan.'; else smartSuggestion.textContent='Mooi verdeeld en overzichtelijk.'; loveNote.textContent=loveNotes[tasks.length%loveNotes.length];}
       function getFilteredTasks(){const s=statusFilter.value,o=ownerFilter.value,c=categoryFilter.value,q=searchInput.value.trim().toLowerCase(); return tasks.filter(task=>{const statusOk=s==='all'||(s==='open'&&!task.done)||(s==='done'&&task.done); const ownerTarget=personView!=='all'?personView:o; const ownerOk=ownerTarget==='all'||task.owner===ownerTarget; const categoryOk=c==='all'||task.category===c; const searchOk=!q||(task.title||'').toLowerCase().includes(q)||(task.notes||'').toLowerCase().includes(q)||(task.personal_note||'').toLowerCase().includes(q)||(task.personal_note_by||'').toLowerCase().includes(q); return statusOk&&ownerOk&&categoryOk&&searchOk;});}
       function applyStatFilter(kind){if(kind==='all'){statusFilter.value='all'; ownerFilter.value='all'; personView='all'; personMaurits.classList.remove('active'); personTitia.classList.remove('active');} else if(kind==='open'||kind==='done'){statusFilter.value=kind;} else if(kind==='Maurits'||kind==='Titia'){setPersonView(kind); return;} renderTasks(); setMobileTab('tasks'); scrollToTasks();}
       function taskMarkup(task){return `<div class="task-card ${task.done?'done-card':''}" data-task-id="${task.id}"><div class="task-top"><button class="check ${task.done?'done':''}" data-action="toggle" data-id="${task.id}" type="button"></button><div style="flex:1;"><div class="task-title ${task.done?'done':''}">${safeText(task.title)}</div>${task.notes?`<div class="task-notes">${safeText(task.notes)}</div>`:''}${task.personal_note?`<div class="task-notes" style="margin-top:8px; color:#f4d596;"><strong>Bericht:</strong> ${safeText(task.personal_note)}${task.personal_note_by?` <span style="color:var(--muted)">— ${safeText(task.personal_note_by)}</span>`:''}</div>`:''}</div></div><div class="chips"><div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div><div class="chip ${task.done?'done':'open'}">${task.done?'Afgerond':'Open'}</div>${task.category?`<div class="chip category">${safeText(task.category)}</div>`:''}${task.priority?`<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>`:''}${task.deadline?`<div class="chip deadline">${safeText(formatDate(task.deadline))}</div>`:''}</div><div class="task-actions"><button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done?'Heropenen':'Afronden'}</button><button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button><button class="btn-soft btn-mini" data-action="note" data-id="${task.id}" type="button">Bericht</button><button class="btn-danger btn-mini" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button></div></div>`;}
