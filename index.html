@@ -8,13 +8,13 @@
     <link rel="apple-touch-icon" href="https://samen-todos.vercel.app/ChatGPT%20Image%20Mar%2030,%202026,%2010_43_34%20PM.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Samen Taken">
-    <meta name="theme-color" content="#0b1020">
+    <meta name="theme-color" content="#101828">
     <link rel="manifest" href="/manifest.webmanifest">
     <style>
       :root {
         --bg: #0d121d;
         --bg-2: #131b29;
-        --card: rgba(18, 25, 38, .82);
+        --card: rgba(18, 25, 38, .84);
         --line: rgba(255,255,255,.08);
         --line-gold: rgba(226,201,141,.18);
         --text: #f6f1e8;
@@ -34,12 +34,13 @@
 
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html { scroll-behavior: smooth; }
+
       body {
         margin: 0;
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(198,163,97,.12), transparent 22%),
+          radial-gradient(circle at top left, rgba(198,163,97,.14), transparent 22%),
           radial-gradient(circle at top right, rgba(216,154,162,.10), transparent 18%),
           linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       }
@@ -62,7 +63,12 @@
       }
 
       .auth-wrap { max-width: 560px; margin: 26px auto; }
-      .hero { padding: 18px; overflow: hidden; position: relative; }
+
+      .hero {
+        padding: 18px;
+        overflow: hidden;
+        position: relative;
+      }
 
       .eyebrow {
         display: inline-flex;
@@ -154,20 +160,21 @@
         border:0;
         cursor:pointer;
         font-weight:800;
-        transition: transform .15s ease, opacity .15s ease;
+        transition: transform .15s ease, opacity .15s ease, background .15s ease;
       }
 
       button:hover { transform: translateY(-1px); }
 
       .btn-primary {
-        background: linear-gradient(135deg,#1b2336 0%,#2b3751 100%);
+        background: linear-gradient(135deg,#24304a 0%,#36476a 100%);
         color:white;
+        box-shadow: 0 10px 24px rgba(39,52,82,.20);
       }
 
       .btn-gold {
         background: linear-gradient(135deg,#8d6931 0%,#c6a361 55%,#9f7a40 100%);
         color:white;
-        box-shadow: 0 10px 24px rgba(141,105,49,.20);
+        box-shadow: 0 10px 24px rgba(141,105,49,.22);
       }
 
       .btn-soft {
@@ -215,6 +222,7 @@
         background:linear-gradient(135deg,#fff8ea,#f5e5c0);
         border:1px solid rgba(198,163,97,.16);
         white-space:nowrap;
+        box-shadow: 0 8px 18px rgba(198,163,97,.14);
       }
 
       .stats {
@@ -226,15 +234,16 @@
       .stat {
         padding:8px 10px;
         cursor:pointer;
-        background:rgba(255,255,255,.03);
+        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
         border:1px solid var(--line);
-        border-radius:15px;
+        border-radius:16px;
         transition:transform .12s ease, background .12s ease;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
       }
 
       .stat:hover {
         transform:translateY(-1px);
-        background:rgba(255,255,255,.05);
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       }
 
       .stat-label {
@@ -311,7 +320,10 @@
         margin-bottom:10px;
       }
 
-      .task-split { display:grid; gap:10px; }
+      .task-split {
+        display:grid;
+        gap:10px;
+      }
 
       .task-section-title {
         margin:0 0 10px;
@@ -322,12 +334,16 @@
       .task-list { display:grid; gap:12px; }
 
       .task-card {
-        border-radius:22px;
-        border:1px solid rgba(255,255,255,.08);
-        background:linear-gradient(180deg, rgba(24,33,50,.98), rgba(15,21,33,.98));
+        border-radius:24px;
+        border:1px solid rgba(255,255,255,.09);
+        background:
+          radial-gradient(circle at top right, rgba(198,163,97,.16), transparent 28%),
+          linear-gradient(180deg, rgba(29,40,61,.98), rgba(16,22,34,.98));
         padding:14px;
         cursor:pointer;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.04),
+          0 14px 30px rgba(0,0,0,.18);
         position:relative;
         overflow:hidden;
       }
@@ -336,13 +352,51 @@
         content:'';
         position:absolute;
         inset:0;
-        background:linear-gradient(135deg, rgba(198,163,97,.08), transparent 34%);
+        background:linear-gradient(135deg, rgba(198,163,97,.10), transparent 34%);
+        pointer-events:none;
+      }
+
+      .task-card::after {
+        content:'';
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        height:1px;
+        background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
         pointer-events:none;
       }
 
       .task-card.done-card {
-        opacity:.84;
-        background:linear-gradient(180deg, rgba(20,28,43,.78), rgba(15,21,33,.78));
+        opacity:.88;
+        background:
+          radial-gradient(circle at top right, rgba(98,182,130,.10), transparent 28%),
+          linear-gradient(180deg, rgba(23,31,46,.82), rgba(15,21,33,.80));
+      }
+
+      .icon-delete {
+        position:absolute;
+        top:10px;
+        right:10px;
+        width:28px;
+        height:28px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.08);
+        background:rgba(12,17,27,.56);
+        color:#c8bfb0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:15px;
+        line-height:1;
+        cursor:pointer;
+        z-index:2;
+      }
+
+      .icon-delete:hover {
+        background:rgba(220,38,38,.16);
+        color:#ffb2b2;
+        border-color:rgba(220,38,38,.22);
       }
 
       .task-top {
@@ -446,9 +500,11 @@
       .quick-card {
         padding:14px;
         border-radius:22px;
-        background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
         border:1px solid var(--line);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.04),
+          0 10px 24px rgba(0,0,0,.10);
       }
 
       .quick-card-title {
@@ -472,9 +528,9 @@
       .chat-msg {
         padding:12px 13px;
         border-radius:18px;
-        background:rgba(255,255,255,.05);
+        background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03));
         border:1px solid var(--line);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
       }
 
       .chat-msg.mine {
@@ -701,7 +757,6 @@
                   <h4 class="task-section-title">Openstaand</h4>
                   <div id="openTaskList" class="task-list"></div>
                 </div>
-
                 <div>
                   <h4 class="task-section-title">Afgerond</h4>
                   <div id="doneTaskList" class="task-list"></div>
@@ -1091,9 +1146,11 @@
       function taskMarkup(task) {
         return `
           <div class="task-card ${task.done ? 'done-card' : ''}" data-task-id="${task.id}">
+            <button class="icon-delete" data-action="delete" data-id="${task.id}" type="button" aria-label="Verwijderen">×</button>
+
             <div class="task-top">
               <button class="check ${task.done ? 'done' : ''}" data-action="toggle" data-id="${task.id}" type="button"></button>
-              <div style="flex:1;">
+              <div style="flex:1; padding-right:30px;">
                 <div class="task-title ${task.done ? 'done' : ''}">${safeText(task.title)}</div>
                 ${task.notes ? `<div class="task-notes">${safeText(task.notes)}</div>` : ''}
                 ${task.personal_note ? `<div class="task-notes" style="margin-top:8px; color:#f4d596;"><strong>Bericht:</strong> ${safeText(task.personal_note)}${task.personal_note_by ? ` <span style="color:var(--muted)">— ${safeText(task.personal_note_by)}</span>` : ''}</div>` : ''}
@@ -1111,7 +1168,6 @@
               <button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Open' : 'Klaar'}</button>
               <button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button>
               <button class="btn-soft btn-mini" data-action="note" data-id="${task.id}" type="button">Bericht</button>
-              <button class="btn-danger btn-mini" data-action="delete" data-id="${task.id}" type="button">Verwijderen</button>
             </div>
           </div>
         `;
