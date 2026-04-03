@@ -12,36 +12,38 @@
     <link rel="manifest" href="/manifest.webmanifest">
     <style>
       :root {
-        --bg: #0d121d;
-        --bg-2: #131b29;
-        --card: rgba(18, 25, 38, .84);
+        --bg: #0b1020;
+        --bg-2: #131b2d;
+        --card: rgba(17, 24, 39, .84);
+        --card-strong: rgba(18, 26, 43, .96);
         --line: rgba(255,255,255,.08);
-        --line-gold: rgba(226,201,141,.18);
-        --text: #f6f1e8;
-        --muted: #bdb29c;
-        --gold: #c6a361;
-        --gold-2: #ead49d;
-        --blue-soft: rgba(107,140,213,.18);
-        --rose-soft: rgba(216,154,162,.16);
+        --line-soft: rgba(255,255,255,.05);
+        --gold: #c8a968;
+        --gold-2: #efd9a5;
+        --gold-soft: rgba(200,169,104,.18);
+        --text: #f8f3ea;
+        --muted: #bfb6a5;
+        --blue-soft: rgba(91,135,255,.18);
+        --rose-soft: rgba(255,129,177,.16);
         --green-soft: rgba(62,167,116,.18);
         --amber-soft: rgba(234,178,55,.16);
         --purple-soft: rgba(138,115,215,.18);
         --danger-soft: rgba(220,38,38,.16);
-        --shadow: 0 26px 60px rgba(0,0,0,.28);
-        --radius-xl: 30px;
+        --shadow: 0 24px 60px rgba(0,0,0,.34);
+        --radius-xl: 28px;
         --radius-lg: 22px;
+        --radius-md: 16px;
       }
 
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html { scroll-behavior: smooth; }
-
       body {
         margin: 0;
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at top left, rgba(198,163,97,.14), transparent 22%),
-          radial-gradient(circle at top right, rgba(216,154,162,.10), transparent 18%),
+          radial-gradient(circle at top left, rgba(200,169,104,.14), transparent 22%),
+          radial-gradient(circle at top right, rgba(123,92,255,.10), transparent 18%),
           linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
       }
 
@@ -51,7 +53,7 @@
       .shell {
         max-width: 1320px;
         margin: 0 auto;
-        padding: 10px 10px 90px;
+        padding: 10px 10px 92px;
       }
 
       .glass {
@@ -63,13 +65,7 @@
       }
 
       .auth-wrap { max-width: 560px; margin: 26px auto; }
-
-      .hero {
-        padding: 18px;
-        overflow: hidden;
-        position: relative;
-      }
-
+      .hero { padding: 18px; overflow: hidden; position: relative; }
       .eyebrow {
         display: inline-flex;
         padding: 7px 11px;
@@ -80,9 +76,8 @@
         letter-spacing: .12em;
         text-transform: uppercase;
         font-weight: 800;
-        border: 1px solid var(--line-gold);
+        border: 1px solid rgba(239,217,165,.16);
       }
-
       .title {
         margin: 10px 0 0;
         font-size: 30px;
@@ -90,21 +85,13 @@
         letter-spacing: -.05em;
         font-weight: 900;
       }
-
       .lux {
-        background: linear-gradient(135deg, #7b5b28 0%, #ead49d 55%, #9e7a40 100%);
+        background: linear-gradient(135deg, #8e6b33 0%, #efd9a5 55%, #aa8143 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
       }
-
-      .subtitle {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.45;
-      }
-
+      .subtitle { margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.45; }
       .card { padding: 12px; }
 
       .segmented {
@@ -115,7 +102,6 @@
         border-radius:18px;
         margin-bottom:16px;
       }
-
       .segmented button {
         width:100%;
         border:0;
@@ -126,93 +112,48 @@
         font-weight:800;
         cursor:pointer;
       }
-
       .segmented button.active {
         background:rgba(255,255,255,.08);
         color:var(--text);
       }
 
-      label {
-        display:block;
-        margin-bottom:7px;
-        font-size:13px;
-        color:var(--muted);
-        font-weight:700;
-      }
-
-      input, textarea, select, button {
-        width:100%;
-        font:inherit;
-        padding:13px 14px;
-        border-radius:16px;
-        outline:none;
-      }
-
+      label { display:block; margin-bottom:7px; font-size:13px; color:var(--muted); font-weight:700; }
+      input, textarea, select, button { width:100%; font:inherit; padding:13px 14px; border-radius:16px; outline:none; }
       input, textarea, select {
         background:rgba(255,255,255,.05);
         border:1px solid var(--line);
         color:var(--text);
       }
-
       textarea { min-height: 92px; resize: vertical; }
-
-      button {
-        border:0;
-        cursor:pointer;
-        font-weight:800;
-        transition: transform .15s ease, opacity .15s ease, background .15s ease;
-      }
-
+      button { border:0; cursor:pointer; font-weight:800; transition: transform .15s ease, opacity .15s ease, background .15s ease; }
       button:hover { transform: translateY(-1px); }
 
       .btn-primary {
-        background: linear-gradient(135deg,#24304a 0%,#36476a 100%);
+        background: linear-gradient(135deg,#2a3754 0%,#42557e 100%);
         color:white;
-        box-shadow: 0 10px 24px rgba(39,52,82,.20);
+        box-shadow: 0 12px 24px rgba(49,64,101,.24);
       }
-
       .btn-gold {
-        background: linear-gradient(135deg,#8d6931 0%,#c6a361 55%,#9f7a40 100%);
+        background: linear-gradient(135deg,#8d6931 0%,#c8a968 55%,#aa8143 100%);
         color:white;
-        box-shadow: 0 10px 24px rgba(141,105,49,.22);
+        box-shadow: 0 12px 26px rgba(141,105,49,.26);
       }
-
       .btn-soft {
-        background:rgba(255,255,255,.05);
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
         border:1px solid var(--line);
         color:var(--text);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
       }
-
       .btn-danger {
         background: rgba(220,38,38,.14);
-        border:1px solid rgba(220,38,38,.26);
+        border:1px solid rgba(220,38,38,.24);
         color:#ffb2b2;
       }
-
-      .btn-mini {
-        width:auto;
-        padding:8px 10px;
-        border-radius:12px;
-        font-size:12px;
-      }
-
-      .msg {
-        margin-top: 12px;
-        color: var(--muted);
-        font-size: 14px;
-      }
+      .btn-mini { width:auto; padding:8px 10px; border-radius:12px; font-size:12px; }
+      .msg { margin-top: 12px; color: var(--muted); font-size: 14px; }
 
       .app-grid { display:grid; gap:10px; }
-
-      .topbar {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:8px;
-        flex-wrap:nowrap;
-      }
-
+      .topbar { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:nowrap; }
       .badge-user {
         padding:8px 12px;
         border-radius:999px;
@@ -220,9 +161,9 @@
         font-weight:900;
         color:#6b4f1c;
         background:linear-gradient(135deg,#fff8ea,#f5e5c0);
-        border:1px solid rgba(198,163,97,.16);
+        border:1px solid rgba(200,169,104,.16);
         white-space:nowrap;
-        box-shadow: 0 8px 18px rgba(198,163,97,.14);
+        box-shadow: 0 8px 18px rgba(200,169,104,.14);
       }
 
       .stats {
@@ -230,42 +171,23 @@
         grid-template-columns: repeat(5, minmax(0,1fr));
         gap:6px;
       }
-
       .stat {
         padding:8px 10px;
         cursor:pointer;
-        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+        background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
         border:1px solid var(--line);
         border-radius:16px;
         transition:transform .12s ease, background .12s ease;
         box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
       }
-
       .stat:hover {
         transform:translateY(-1px);
-        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       }
+      .stat-label { font-size:9px; color:var(--muted); }
+      .stat-value { margin-top:4px; font-size:15px; line-height:1; font-weight:900; letter-spacing:-.03em; }
 
-      .stat-label {
-        font-size:9px;
-        color:var(--muted);
-      }
-
-      .stat-value {
-        margin-top:4px;
-        font-size:15px;
-        line-height:1;
-        font-weight:900;
-        letter-spacing:-.03em;
-      }
-
-      .switcher {
-        display:flex;
-        gap:8px;
-        overflow:auto;
-        padding-bottom:2px;
-      }
-
+      .switcher { display:flex; gap:8px; overflow:auto; padding-bottom:2px; }
       .switch-chip {
         white-space:nowrap;
         width:auto;
@@ -276,68 +198,29 @@
         color:var(--text);
         font-weight:800;
       }
-
       .switch-chip.active {
-        background:linear-gradient(135deg, rgba(198,163,97,.22), rgba(198,163,97,.12));
+        background:linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.12));
         color:#f6ddb0;
-        border-color:rgba(198,163,97,.24);
+        border-color:rgba(200,169,104,.24);
         box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
       }
 
-      .layout {
-        display:grid;
-        grid-template-columns: 1.15fr .85fr;
-        gap:14px;
-      }
-
+      .layout { display:grid; grid-template-columns: 1.15fr .85fr; gap:14px; }
       .stack { display:grid; gap:14px; }
 
-      .toolbar-row {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:8px;
-        flex-wrap:wrap;
-        margin-bottom:10px;
-      }
+      .toolbar-row { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+      .toolbar-title { margin:0; font-size:17px; letter-spacing:-.03em; font-weight:900; }
+      .toolbar-meta { color:var(--muted); font-size:12px; }
+      .task-toolbar { display:grid; grid-template-columns: 1fr 1fr 1.2fr; gap:8px; margin-bottom:10px; }
 
-      .toolbar-title {
-        margin:0;
-        font-size:17px;
-        letter-spacing:-.03em;
-        font-weight:900;
-      }
-
-      .toolbar-meta {
-        color:var(--muted);
-        font-size:12px;
-      }
-
-      .task-toolbar {
-        display:grid;
-        grid-template-columns: 1fr 1fr 1.2fr;
-        gap:8px;
-        margin-bottom:10px;
-      }
-
-      .task-split {
-        display:grid;
-        gap:10px;
-      }
-
-      .task-section-title {
-        margin:0 0 10px;
-        font-size:16px;
-        letter-spacing:-.02em;
-      }
-
+      .task-split { display:grid; gap:10px; }
+      .task-section-title { margin:0 0 10px; font-size:16px; letter-spacing:-.02em; }
       .task-list { display:grid; gap:12px; }
-
       .task-card {
         border-radius:24px;
         border:1px solid rgba(255,255,255,.09);
         background:
-          radial-gradient(circle at top right, rgba(198,163,97,.16), transparent 28%),
+          radial-gradient(circle at top right, rgba(200,169,104,.16), transparent 28%),
           linear-gradient(180deg, rgba(29,40,61,.98), rgba(16,22,34,.98));
         padding:14px;
         cursor:pointer;
@@ -347,15 +230,13 @@
         position:relative;
         overflow:hidden;
       }
-
       .task-card::before {
         content:'';
         position:absolute;
         inset:0;
-        background:linear-gradient(135deg, rgba(198,163,97,.10), transparent 34%);
+        background:linear-gradient(135deg, rgba(200,169,104,.10), transparent 34%);
         pointer-events:none;
       }
-
       .task-card::after {
         content:'';
         position:absolute;
@@ -366,14 +247,12 @@
         background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
         pointer-events:none;
       }
-
       .task-card.done-card {
         opacity:.88;
         background:
           radial-gradient(circle at top right, rgba(98,182,130,.10), transparent 28%),
           linear-gradient(180deg, rgba(23,31,46,.82), rgba(15,21,33,.80));
       }
-
       .icon-delete {
         position:absolute;
         top:10px;
@@ -392,80 +271,20 @@
         cursor:pointer;
         z-index:2;
       }
-
       .icon-delete:hover {
         background:rgba(220,38,38,.16);
         color:#ffb2b2;
         border-color:rgba(220,38,38,.22);
       }
-
-      .task-top {
-        display:flex;
-        gap:12px;
-        align-items:flex-start;
-      }
-
-      .check {
-        width:26px;
-        height:26px;
-        min-width:26px;
-        border-radius:999px;
-        border:2px solid #667086;
-        background:transparent;
-        position:relative;
-        margin-top:2px;
-        cursor:pointer;
-      }
-
-      .check.done {
-        background:#2da96d;
-        border-color:#2da96d;
-      }
-
-      .check.done::after {
-        content:"✓";
-        color:white;
-        position:absolute;
-        left:5px;
-        top:-1px;
-        font-size:16px;
-      }
-
-      .task-title {
-        font-size:16px;
-        font-weight:900;
-        letter-spacing:-.03em;
-        line-height:1.2;
-      }
-
-      .task-title.done {
-        color:#8c96aa;
-        text-decoration:line-through;
-      }
-
-      .task-notes {
-        margin-top:7px;
-        color:var(--muted);
-        font-size:13px;
-        line-height:1.5;
-        max-width:60ch;
-      }
-
-      .chips {
-        display:flex;
-        flex-wrap:wrap;
-        gap:7px;
-        margin-top:11px;
-      }
-
-      .chip {
-        padding:6px 10px;
-        border-radius:999px;
-        font-size:10px;
-        font-weight:800;
-        letter-spacing:.01em;
-      }
-
+      .task-top { display:flex; gap:12px; align-items:flex-start; }
+      .check { width:26px; height:26px; min-width:26px; border-radius:999px; border:2px solid #667086; background:transparent; position:relative; margin-top:2px; cursor:pointer; }
+      .check.done { background:#2da96d; border-color:#2da96d; }
+      .check.done::after { content:"✓"; color:white; position:absolute; left:5px; top:-1px; font-size:16px; }
+      .task-title { font-size:16px; font-weight:900; letter-spacing:-.03em; line-height:1.2; }
+      .task-title.done { color:#8c96aa; text-decoration:line-through; }
+      .task-notes { margin-top:7px; color:var(--muted); font-size:13px; line-height:1.5; max-width:60ch; }
+      .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:11px; }
+      .chip { padding:6px 10px; border-radius:999px; font-size:10px; font-weight:800; letter-spacing:.01em; }
       .owner-m { background: var(--blue-soft); color:#9fc0ff; }
       .owner-t { background: var(--rose-soft); color:#ffb9cb; }
       .open { background: var(--amber-soft); color:#f3c46c; }
@@ -473,15 +292,8 @@
       .priority-high { background: var(--danger-soft); color:#ffaaaa; }
       .priority-normal { background: var(--purple-soft); color:#cfc0ff; }
       .priority-low { background: rgba(87,163,222,.16); color:#98dbff; }
-      .deadline { background: rgba(198,163,97,.16); color:#f4d596; }
-
-      .task-actions {
-        display:flex;
-        gap:6px;
-        flex-wrap:wrap;
-        margin-top:12px;
-      }
-
+      .deadline { background: rgba(200,169,104,.16); color:#f4d596; }
+      .task-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
       .empty {
         border-radius:20px;
         border:1px dashed #3a4258;
@@ -491,12 +303,7 @@
         background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
       }
 
-      .quick-grid {
-        display:grid;
-        grid-template-columns: repeat(2,1fr);
-        gap:10px;
-      }
-
+      .quick-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; }
       .quick-card {
         padding:14px;
         border-radius:22px;
@@ -506,25 +313,10 @@
           inset 0 1px 0 rgba(255,255,255,.04),
           0 10px 24px rgba(0,0,0,.10);
       }
+      .quick-card-title { font-size:12px; color:var(--muted); }
+      .quick-card-value { margin-top:6px; font-size:18px; font-weight:900; }
 
-      .quick-card-title {
-        font-size:12px;
-        color:var(--muted);
-      }
-
-      .quick-card-value {
-        margin-top:6px;
-        font-size:18px;
-        font-weight:900;
-      }
-
-      .chat-feed {
-        max-height:420px;
-        overflow:auto;
-        display:grid;
-        gap:10px;
-      }
-
+      .chat-feed { max-height:420px; overflow:auto; display:grid; gap:10px; }
       .chat-msg {
         padding:12px 13px;
         border-radius:18px;
@@ -532,79 +324,21 @@
         border:1px solid var(--line);
         box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
       }
+      .chat-msg.mine { background: linear-gradient(135deg, rgba(200,169,104,.18), rgba(146,109,59,.14)); }
+      .chat-meta { font-size:12px; color:var(--muted); margin-bottom:4px; font-weight:800; }
+      .chat-text { font-size:14px; line-height:1.45; }
 
-      .chat-msg.mine {
-        background: linear-gradient(135deg, rgba(198,163,97,.18), rgba(146,109,59,.14));
-      }
-
-      .chat-meta {
-        font-size:12px;
-        color:var(--muted);
-        margin-bottom:4px;
-        font-weight:800;
-      }
-
-      .chat-text {
-        font-size:14px;
-        line-height:1.45;
-      }
-
-      .modal {
-        position:fixed;
-        inset:0;
-        background:rgba(9,13,22,.56);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:18px;
-        z-index:60;
-      }
-
-      .modal-card {
-        width:min(860px,100%);
-        max-height:90vh;
-        overflow:auto;
-      }
-
-      .detail-grid {
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:12px;
-      }
-
-      .detail-box {
-        padding:14px;
-        border-radius:18px;
-        background:rgba(255,255,255,.04);
-        border:1px solid var(--line);
-      }
-
-      .detail-label {
-        font-size:12px;
-        color:var(--muted);
-        font-weight:800;
-      }
-
-      .detail-value {
-        margin-top:6px;
-        font-size:15px;
-        line-height:1.5;
-      }
+      .modal { position:fixed; inset:0; background:rgba(9,13,22,.56); display:flex; align-items:center; justify-content:center; padding:18px; z-index:60; }
+      .modal-card { width:min(860px,100%); max-height:90vh; overflow:auto; }
+      .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+      .detail-box { padding:14px; border-radius:18px; background:rgba(255,255,255,.04); border:1px solid var(--line); }
+      .detail-label { font-size:12px; color:var(--muted); font-weight:800; }
+      .detail-value { margin-top:6px; font-size:15px; line-height:1.5; }
 
       details summary { cursor:pointer; list-style:none; }
       details summary::-webkit-details-marker { display:none; }
-
-      .composer-summary {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:10px;
-      }
-
-      .composer-summary span:last-child {
-        color:var(--muted);
-        font-size:13px;
-      }
+      .composer-summary { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+      .composer-summary span:last-child { color:var(--muted); font-size:13px; }
 
       .mobile-tabs {
         position:fixed;
@@ -621,7 +355,6 @@
         border:1px solid rgba(255,255,255,.08);
         box-shadow:0 24px 44px rgba(0,0,0,.42);
       }
-
       .mobile-tab {
         flex:1;
         border:0;
@@ -633,22 +366,14 @@
         font-weight:800;
         letter-spacing:.01em;
       }
-
       .mobile-tab.active {
-        background:linear-gradient(135deg, rgba(198,163,97,.22), rgba(198,163,97,.14));
+        background:linear-gradient(135deg, rgba(200,169,104,.22), rgba(200,169,104,.14));
         color:#f4d596;
-        box-shadow: inset 0 0 0 1px rgba(198,163,97,.18);
+        box-shadow: inset 0 0 0 1px rgba(200,169,104,.18);
       }
 
-      @media (max-width: 1100px) {
-        .layout { grid-template-columns:1fr; }
-      }
-
-      @media (max-width: 860px) {
-        .stats { grid-template-columns: repeat(3,1fr); }
-        .task-toolbar { grid-template-columns: repeat(2,1fr); }
-      }
-
+      @media (max-width: 1100px) { .layout { grid-template-columns:1fr; } }
+      @media (max-width: 860px) { .stats { grid-template-columns: repeat(3,1fr); } .task-toolbar { grid-template-columns: repeat(2,1fr); } }
       @media (max-width: 680px) {
         .shell { padding:8px 8px 92px; }
         .title { font-size:22px; }
@@ -670,32 +395,11 @@
           <h1 class="title">Samen Taken <span class="lux">voor Maurits & Titia</span></h1>
           <div class="subtitle">Een rustige, stijlvolle app voor taken, updates en berichtjes samen.</div>
         </div>
-
         <div class="glass card">
-          <div class="segmented">
-            <button id="tabLogin" class="active" type="button">Inloggen</button>
-            <button id="tabSignup" type="button">Account maken</button>
-          </div>
-
-          <div id="signupNameWrap" class="hidden">
-            <label for="name">Naam</label>
-            <select id="name">
-              <option value="">Kies je naam</option>
-              <option value="Maurits">Maurits</option>
-              <option value="Titia">Titia</option>
-            </select>
-          </div>
-
-          <div style="margin-top:12px;">
-            <label for="email">E-mailadres</label>
-            <input id="email" type="email" placeholder="naam@email.com">
-          </div>
-
-          <div style="margin-top:12px;">
-            <label for="password">Wachtwoord</label>
-            <input id="password" type="password" placeholder="Minimaal 6 tekens">
-          </div>
-
+          <div class="segmented"><button id="tabLogin" class="active" type="button">Inloggen</button><button id="tabSignup" type="button">Account maken</button></div>
+          <div id="signupNameWrap" class="hidden"><label for="name">Naam</label><select id="name"><option value="">Kies je naam</option><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select></div>
+          <div style="margin-top:12px;"><label for="email">E-mailadres</label><input id="email" type="email" placeholder="naam@email.com"></div>
+          <div style="margin-top:12px;"><label for="password">Wachtwoord</label><input id="password" type="password" placeholder="Minimaal 6 tekens"></div>
           <button id="authActionBtn" class="btn-gold" style="margin-top:14px;" type="button">Inloggen</button>
           <div id="authMsg" class="msg"></div>
         </div>
@@ -737,18 +441,8 @@
               </div>
 
               <div class="task-toolbar">
-                <select id="statusFilter">
-                  <option value="all">Alle statussen</option>
-                  <option value="open">Alleen open</option>
-                  <option value="done">Alleen klaar</option>
-                </select>
-
-                <select id="ownerFilter">
-                  <option value="all">Iedereen</option>
-                  <option value="Maurits">Maurits</option>
-                  <option value="Titia">Titia</option>
-                </select>
-
+                <select id="statusFilter"><option value="all">Alle statussen</option><option value="open">Alleen open</option><option value="done">Alleen klaar</option></select>
+                <select id="ownerFilter"><option value="all">Iedereen</option><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select>
                 <input id="searchInput" placeholder="Zoek taak...">
               </div>
 
@@ -771,55 +465,19 @@
                 <h3 class="toolbar-title">Nieuwe taak</h3>
                 <div class="toolbar-meta">Snel toevoegen</div>
               </div>
-
-              <div style="margin:-2px 0 12px; color:var(--muted); font-size:12px;">
-                Voeg iets toe en de ander krijgt automatisch een melding.
-              </div>
-
+              <div style="margin:-2px 0 12px; color:var(--muted); font-size:12px;">Voeg iets toe en de ander krijgt automatisch een melding.</div>
               <details id="composerDetails" open>
                 <summary class="composer-summary">
                   <strong>Taakformulier</strong>
                   <span id="composerHint">Inklappen</span>
                 </summary>
-
                 <div style="margin-top:12px; display:grid; gap:10px;">
-                  <div>
-                    <label for="taskTitle">Titel</label>
-                    <input id="taskTitle" placeholder="Bijv. afspraak bellen of bloemen halen">
-                  </div>
-
-                  <div>
-                    <label for="taskNotes">Algemene notities</label>
-                    <textarea id="taskNotes" placeholder="Extra details of context..."></textarea>
-                  </div>
-
-                  <div>
-                    <label for="taskPersonalNote">Bericht bij deze taak</label>
-                    <textarea id="taskPersonalNote" placeholder="Bijv. ik ben ermee bezig"></textarea>
-                  </div>
-
-                  <div>
-                    <label for="taskOwner">Voor wie?</label>
-                    <select id="taskOwner">
-                      <option value="Maurits">Maurits</option>
-                      <option value="Titia">Titia</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label for="taskPriority">Prioriteit</label>
-                    <select id="taskPriority">
-                      <option value="Normaal">Normaal</option>
-                      <option value="Hoog">Hoog</option>
-                      <option value="Laag">Laag</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label for="taskDeadline">Deadline</label>
-                    <input id="taskDeadline" type="date">
-                  </div>
-
+                  <div><label for="taskTitle">Titel</label><input id="taskTitle" placeholder="Bijv. afspraak bellen of bloemen halen"></div>
+                  <div><label for="taskNotes">Algemene notities</label><textarea id="taskNotes" placeholder="Extra details of context..."></textarea></div>
+                  <div><label for="taskPersonalNote">Bericht bij deze taak</label><textarea id="taskPersonalNote" placeholder="Bijv. ik ben ermee bezig"></textarea></div>
+                  <div><label for="taskOwner">Voor wie?</label><select id="taskOwner"><option value="Maurits">Maurits</option><option value="Titia">Titia</option></select></div>
+                  <div><label for="taskPriority">Prioriteit</label><select id="taskPriority"><option value="Normaal">Normaal</option><option value="Hoog">Hoog</option><option value="Laag">Laag</option></select></div>
+                  <div><label for="taskDeadline">Deadline</label><input id="taskDeadline" type="date"></div>
                   <button id="addTaskBtn" class="btn-gold" type="button">Taak toevoegen</button>
                 </div>
               </details>
@@ -830,7 +488,6 @@
                 <h3 class="toolbar-title">Snelle status</h3>
                 <div class="toolbar-meta">In één oogopslag</div>
               </div>
-
               <div class="quick-grid">
                 <div class="quick-card"><div class="quick-card-title">Open</div><div id="qaOpen" class="quick-card-value">0</div></div>
                 <div class="quick-card"><div class="quick-card-title">Afgerond</div><div id="qaDone" class="quick-card-value">0</div></div>
@@ -844,9 +501,7 @@
                 <h3 class="toolbar-title">Chat samen</h3>
                 <div class="toolbar-meta" id="loveNote">Korte updates, lief of praktisch.</div>
               </div>
-
               <div id="chatFeed" class="chat-feed"></div>
-
               <div style="display:grid; gap:10px; margin-top:10px;">
                 <textarea id="chatInput" placeholder="Stuur iets liefs of praktischs..."></textarea>
                 <button id="sendChatBtn" class="btn-primary" type="button">Bericht versturen</button>
@@ -862,15 +517,7 @@
         <button class="mobile-tab" data-tab="chat">Chat</button>
       </div>
 
-      <div id="taskModal" class="modal hidden">
-        <div class="glass card modal-card">
-          <div class="topbar" style="margin-bottom:14px;">
-            <h3 style="margin:0;">Taakdetails</h3>
-            <button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button>
-          </div>
-          <div id="taskModalBody"></div>
-        </div>
-      </div>
+      <div id="taskModal" class="modal hidden"><div class="glass card modal-card"><div class="topbar" style="margin-bottom:14px;"><h3 style="margin:0;">Taakdetails</h3><button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button></div><div id="taskModalBody"></div></div></div>
     </div>
 
     <script>
@@ -879,7 +526,6 @@
       const HOUSEHOLD = "maurits-titia-home";
       const VAPID_PUBLIC_KEY = "BNFy8PKHfQfxVQ7hJWKa-wVFW4UUU-co9kYp2Pt-oY_pv19kMnmu47QT6ZLzqoIBUcbCbC3XAbtZakB6YFPEOrs";
       const PUSH_FUNCTION_URL = "https://eviycjtoduiwoiyqvayt.supabase.co/functions/v1/bright-endpoint";
-
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       const authView = document.getElementById('authView');
@@ -910,34 +556,27 @@
 
       const smartSuggestion = document.getElementById('smartSuggestion');
       const loveNote = document.getElementById('loveNote');
-
       const pillMauritsCount = document.getElementById('pillMauritsCount');
       const pillTitiaCount = document.getElementById('pillTitiaCount');
-
       const statTotal = document.getElementById('statTotal');
       const statOpen = document.getElementById('statOpen');
       const statDone = document.getElementById('statDone');
       const statMaurits = document.getElementById('statMaurits');
       const statTitia = document.getElementById('statTitia');
-
       const personMaurits = document.getElementById('personMaurits');
       const personTitia = document.getElementById('personTitia');
       const showEveryoneBtn = document.getElementById('showEveryoneBtn');
-
       const chatFeed = document.getElementById('chatFeed');
       const chatInput = document.getElementById('chatInput');
-
       const taskModal = document.getElementById('taskModal');
       const taskModalBody = document.getElementById('taskModalBody');
       const composerDetails = document.getElementById('composerDetails');
       const composerHint = document.getElementById('composerHint');
-
       const tasksPanel = document.getElementById('tasksPanel');
       const mainPanel = document.getElementById('mainPanel');
       const sidePanel = document.getElementById('sidePanel');
       const chatPanel = document.getElementById('chatPanel');
       const composerWrap = document.getElementById('composerWrap');
-
       const qaOpen = document.getElementById('qaOpen');
       const qaDone = document.getElementById('qaDone');
       const qaMaurits = document.getElementById('qaMaurits');
@@ -999,11 +638,9 @@
       function getDisplayName() {
         const name = currentUser?.user_metadata?.name;
         if (name === 'Maurits' || name === 'Titia') return name;
-
         const email = (currentUser?.email || '').toLowerCase();
         if (email.includes('mjmodekerken')) return 'Maurits';
         if (email.includes('titia')) return 'Titia';
-
         return name || currentUser?.email || 'Gebruiker';
       }
 
@@ -1011,19 +648,13 @@
         return getDisplayName() === 'Maurits' ? 'Titia' : 'Maurits';
       }
 
-      function ownerClass(o) {
-        return o === 'Maurits' ? 'owner-m' : 'owner-t';
-      }
-
+      function ownerClass(o) { return o === 'Maurits' ? 'owner-m' : 'owner-t'; }
       function priorityClass(p) {
         if (p === 'Hoog') return 'priority-high';
         if (p === 'Laag') return 'priority-low';
         return 'priority-normal';
       }
-
-      function chatMine(n) {
-        return n === getDisplayName();
-      }
+      function chatMine(n) { return n === getDisplayName(); }
 
       function setPersonView(v) {
         personView = v;
@@ -1035,7 +666,7 @@
       }
 
       function scrollToTasks() {
-        tasksPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        tasksPanel.scrollIntoView({ behavior:'smooth', block:'start' });
       }
 
       function updateComposerHint() {
@@ -1051,23 +682,16 @@
 
         mainPanel.classList.toggle('mobile-hidden', !showTasks);
         sidePanel.classList.toggle('mobile-hidden', showTasks);
-
         composerWrap.classList.toggle('mobile-hidden', !showNew);
         chatPanel.classList.toggle('mobile-hidden', !showChat);
 
         if (showNew) {
           composerDetails.open = true;
           updateComposerHint();
-          composerWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          composerWrap.scrollIntoView({ behavior:'smooth', block:'start' });
         }
-
-        if (showChat) {
-          chatPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        if (showTasks) {
-          tasksPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (showChat) chatPanel.scrollIntoView({ behavior:'smooth', block:'start' });
+        if (showTasks) tasksPanel.scrollIntoView({ behavior:'smooth', block:'start' });
 
         document.querySelectorAll('.mobile-tab').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.tab === tab);
@@ -1080,10 +704,8 @@
         statDone.textContent = tasks.filter(t => t.done).length;
         statMaurits.textContent = tasks.filter(t => t.owner === 'Maurits').length;
         statTitia.textContent = tasks.filter(t => t.owner === 'Titia').length;
-
         pillMauritsCount.textContent = `${tasks.filter(t => t.owner === 'Maurits' && !t.done).length} open`;
         pillTitiaCount.textContent = `${tasks.filter(t => t.owner === 'Titia' && !t.done).length} open`;
-
         qaOpen.textContent = tasks.filter(t => !t.done).length;
         qaDone.textContent = tasks.filter(t => t.done).length;
         qaMaurits.textContent = tasks.filter(t => !t.done && t.owner === 'Maurits').length;
@@ -1093,15 +715,11 @@
       function renderInsights() {
         const openM = tasks.filter(t => !t.done && t.owner === 'Maurits').length;
         const openT = tasks.filter(t => !t.done && t.owner === 'Titia').length;
-
         if (Math.abs(openM - openT) >= 2) {
-          smartSuggestion.textContent = openM > openT
-            ? 'Maurits heeft nu duidelijk meer openstaan.'
-            : 'Titia heeft nu duidelijk meer openstaan.';
+          smartSuggestion.textContent = openM > openT ? 'Maurits heeft nu duidelijk meer openstaan.' : 'Titia heeft nu duidelijk meer openstaan.';
         } else {
           smartSuggestion.textContent = 'Rustig, helder en mooi in balans.';
         }
-
         loveNote.textContent = loveNotes[tasks.length % loveNotes.length];
       }
 
@@ -1119,7 +737,6 @@
             (task.notes || '').toLowerCase().includes(q) ||
             (task.personal_note || '').toLowerCase().includes(q) ||
             (task.personal_note_by || '').toLowerCase().includes(q);
-
           return statusOk && ownerOk && searchOk;
         });
       }
@@ -1137,7 +754,6 @@
           setPersonView(kind);
           return;
         }
-
         renderTasks();
         setMobileTab('tasks');
         scrollToTasks();
@@ -1147,7 +763,6 @@
         return `
           <div class="task-card ${task.done ? 'done-card' : ''}" data-task-id="${task.id}">
             <button class="icon-delete" data-action="delete" data-id="${task.id}" type="button" aria-label="Verwijderen">×</button>
-
             <div class="task-top">
               <button class="check ${task.done ? 'done' : ''}" data-action="toggle" data-id="${task.id}" type="button"></button>
               <div style="flex:1; padding-right:30px;">
@@ -1179,10 +794,8 @@
             e.stopPropagation();
             const task = tasks.find(t => String(t.id) === String(btn.dataset.id));
             if (!task) return;
-
             const nextDone = !task.done;
             const { error } = await client.from('tasks').update({ done: nextDone }).eq('id', task.id);
-
             if (!error) {
               await loadTasks();
               if (nextDone) {
@@ -1216,10 +829,8 @@
             const task = tasks.find(t => String(t.id) === String(btn.dataset.id));
             if (!task) return;
             if (!confirm(`Verwijder taak: ${task.title}?`)) return;
-
             const { error } = await client.from('tasks').delete().eq('id', task.id);
             if (error) return alert(error.message);
-
             await loadTasks();
           });
         });
@@ -1276,75 +887,50 @@
       function renderTasks() {
         renderStats();
         renderInsights();
-
         const filtered = getFilteredTasks();
         const openTasks = filtered.filter(t => !t.done);
         const doneTasks = filtered.filter(t => t.done);
 
-        openTaskList.innerHTML = openTasks.length
-          ? openTasks.map(taskMarkup).join('')
-          : `<div class="empty">Geen open taken in deze weergave.</div>`;
-
-        doneTaskList.innerHTML = doneTasks.length
-          ? doneTasks.map(taskMarkup).join('')
-          : `<div class="empty">Nog niets afgerond in deze weergave.</div>`;
-
+        openTaskList.innerHTML = openTasks.length ? openTasks.map(taskMarkup).join('') : `<div class="empty">Geen open taken in deze weergave.</div>`;
+        doneTaskList.innerHTML = doneTasks.length ? doneTasks.map(taskMarkup).join('') : `<div class="empty">Nog niets afgerond in deze weergave.</div>`;
         attachTaskListeners();
       }
 
       async function loadTasks() {
         if (!currentUser) return;
-
-        const { data, error } = await client
-          .from('tasks')
-          .select('*')
-          .eq('household', HOUSEHOLD)
-          .order('created_at', { ascending: false });
-
+        const { data, error } = await client.from('tasks').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending:false });
         if (error) {
           openTaskList.innerHTML = `<div class="empty">Kon taken niet laden.</div>`;
           doneTaskList.innerHTML = '';
           return;
         }
-
         tasks = data || [];
         renderTasks();
       }
 
       async function loadMessages() {
         if (!currentUser) return;
-
-        const { data, error } = await client
-          .from('messages')
-          .select('*')
-          .eq('household', HOUSEHOLD)
-          .order('created_at', { ascending: true });
-
+        const { data, error } = await client.from('messages').select('*').eq('household', HOUSEHOLD).order('created_at', { ascending:true });
         if (error) {
           chatFeed.innerHTML = `<div class="empty">Kon chat niet laden.</div>`;
           return;
         }
-
         messages = data || [];
-
         if (!messages.length) {
           chatFeed.innerHTML = `<div class="empty">Nog geen berichten.</div>`;
           return;
         }
-
         chatFeed.innerHTML = messages.map(msg => `
           <div class="chat-msg ${chatMine(msg.sender_name) ? 'mine' : ''}">
             <div class="chat-meta">${safeText(msg.sender_name || 'Onbekend')} • ${safeText(new Date(msg.created_at).toLocaleString('nl-NL'))}</div>
             <div class="chat-text">${safeText(msg.body)}</div>
           </div>
         `).join('');
-
         chatFeed.scrollTop = chatFeed.scrollHeight;
       }
 
       async function handleAuthAction() {
         authMsg.textContent = 'Bezig...';
-
         const email = emailEl.value.trim();
         const password = passwordEl.value.trim();
         const name = nameEl.value;
@@ -1359,25 +945,17 @@
             authMsg.textContent = 'Kies Maurits of Titia.';
             return;
           }
-
-          const { error } = await client.auth.signUp({
-            email,
-            password,
-            options: { data: { name } }
-          });
-
+          const { error } = await client.auth.signUp({ email, password, options:{ data:{ name } } });
           if (error) {
             authMsg.textContent = error.message;
             return;
           }
-
           authMsg.textContent = 'Account gemaakt. Je kunt nu inloggen.';
           setAuthMode('login');
           return;
         }
 
         const { data, error } = await client.auth.signInWithPassword({ email, password });
-
         if (error) {
           authMsg.textContent = error.message;
           return;
@@ -1419,7 +997,6 @@
 
         if (window.innerWidth <= 680) composerDetails.open = false;
         updateComposerHint();
-
         await loadTasks();
         setMobileTab('tasks');
         scrollToTasks();
@@ -1431,32 +1008,26 @@
 
       async function updateTaskNote(id, note) {
         const task = tasks.find(t => String(t.id) === String(id));
-
         const { error } = await client.from('tasks').update({
           personal_note: note,
           personal_note_by: getDisplayName()
         }).eq('id', id);
 
         if (error) return alert(error.message);
-
         await loadTasks();
         await notifyOther('Update bij taak', `${getDisplayName()} plaatste een bericht bij: ${task?.title || 'Taak'}`);
       }
 
       async function sendMessage() {
         if (!currentUser || !chatInput.value.trim()) return;
-
         const outgoing = chatInput.value.trim();
-
         const { error } = await client.from('messages').insert({
           household: HOUSEHOLD,
           sender_id: currentUser.id,
           sender_name: getDisplayName(),
           body: outgoing
         });
-
         if (error) return alert(error.message);
-
         chatInput.value = '';
         await loadMessages();
       }
@@ -1471,7 +1042,6 @@
 
       async function restoreSession() {
         const { data } = await client.auth.getSession();
-
         if (data?.session?.user) {
           currentUser = data.session.user;
           currentUserBadge.textContent = getDisplayName();
@@ -1497,11 +1067,7 @@
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
         const rawData = atob(base64);
         const outputArray = new Uint8Array(rawData.length);
-
-        for (let i = 0; i < rawData.length; ++i) {
-          outputArray[i] = rawData.charCodeAt(i);
-        }
-
+        for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
         return outputArray;
       }
 
@@ -1510,7 +1076,6 @@
           alert('Push wordt op dit apparaat of in deze modus niet ondersteund.');
           return;
         }
-
         if (!currentUser) {
           alert('Log eerst in.');
           return;
@@ -1533,7 +1098,6 @@
         }
 
         const payload = subscription.toJSON();
-
         const { error } = await client.from('push_subscriptions').upsert({
           household: HOUSEHOLD,
           user_id: currentUser.id,
@@ -1551,30 +1115,23 @@
         alert('Meldingen staan aan op dit apparaat.');
       }
 
-      async function sendPushTo(targetName, titleText = 'Samen Taken', messageText = `${getDisplayName()} heeft een update`) {
+      async function sendPushTo(targetName, titleText='Samen Taken', messageText=`${getDisplayName()} heeft een update`) {
         const { data: sessionData } = await client.auth.getSession();
         const accessToken = sessionData?.session?.access_token;
-
         if (!accessToken) return { ok:false, reason:'not_logged_in' };
 
         const res = await fetch(PUSH_FUNCTION_URL, {
           method:'POST',
-          headers: {
+          headers:{
             'Content-Type':'application/json',
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${accessToken}`
           },
-          body: JSON.stringify({
-            targetName,
-            title: titleText,
-            message: messageText
-          })
+          body: JSON.stringify({ targetName, title:titleText, message:messageText })
         });
 
         const data = await res.json().catch(() => ({}));
-
         if (!res.ok) return { ok:false, error:data.error || 'http_error', data };
-
         const anySuccess = Array.isArray(data.results) && data.results.some(r => r.ok);
         return { ok:anySuccess, data };
       }
@@ -1591,14 +1148,11 @@
       window.toggleTaskFromModal = async function(id) {
         const task = tasks.find(t => String(t.id) === String(id));
         if (!task) return;
-
         const nextDone = !task.done;
         const { error } = await client.from('tasks').update({ done: nextDone }).eq('id', id);
-
         if (!error) {
           taskModal.classList.add('hidden');
           await loadTasks();
-
           if (nextDone) {
             await notifyOther('Taak afgerond', `${getDisplayName()} rondde af: ${task.title}`);
           }
@@ -1608,10 +1162,8 @@
       window.addTaskMessageFromModal = async function(id) {
         const task = tasks.find(t => String(t.id) === String(id));
         if (!task) return;
-
         const note = prompt('Bericht bij deze taak', task.personal_note || '');
         if (note === null) return;
-
         await updateTaskNote(id, note);
         taskModal.classList.add('hidden');
       };
@@ -1619,12 +1171,9 @@
       window.deleteTaskFromModal = async function(id) {
         const task = tasks.find(t => String(t.id) === String(id));
         if (!task) return;
-
         if (!confirm(`Verwijder taak: ${task.title}?`)) return;
-
         const { error } = await client.from('tasks').delete().eq('id', id);
         if (error) return alert(error.message);
-
         taskModal.classList.add('hidden');
         await loadTasks();
       };
@@ -1635,7 +1184,6 @@
       document.getElementById('logoutBtn').addEventListener('click', logout);
       document.getElementById('addTaskBtn').addEventListener('click', addTask);
       document.getElementById('sendChatBtn').addEventListener('click', sendMessage);
-
       statusFilter.addEventListener('change', renderTasks);
       ownerFilter.addEventListener('change', () => {
         personView = 'all';
@@ -1643,27 +1191,15 @@
         personTitia.classList.remove('active');
         renderTasks();
       });
-
       searchInput.addEventListener('input', renderTasks);
       personMaurits.addEventListener('click', () => setPersonView('Maurits'));
       personTitia.addEventListener('click', () => setPersonView('Titia'));
       showEveryoneBtn.addEventListener('click', () => setPersonView('all'));
-
-      document.querySelectorAll('.stat').forEach(el => {
-        el.addEventListener('click', () => applyStatFilter(el.dataset.stat));
-      });
-
+      document.querySelectorAll('.stat').forEach(el => el.addEventListener('click', () => applyStatFilter(el.dataset.stat)));
       document.getElementById('closeTaskModalBtn').addEventListener('click', () => taskModal.classList.add('hidden'));
-      taskModal.addEventListener('click', e => {
-        if (e.target === taskModal) taskModal.classList.add('hidden');
-      });
-
+      taskModal.addEventListener('click', e => { if (e.target === taskModal) taskModal.classList.add('hidden'); });
       composerDetails.addEventListener('toggle', updateComposerHint);
-
-      document.querySelectorAll('.mobile-tab').forEach(btn => {
-        btn.addEventListener('click', () => setMobileTab(btn.dataset.tab));
-      });
-
+      document.querySelectorAll('.mobile-tab').forEach(btn => btn.addEventListener('click', () => setMobileTab(btn.dataset.tab)));
       enablePushBtn.addEventListener('click', enablePush);
 
       restoreSession();
