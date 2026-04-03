@@ -177,12 +177,45 @@
         background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
         border:1px solid var(--line);
         border-radius:16px;
-        transition:transform .12s ease, background .12s ease;
+        transition:transform .16s ease, background .16s ease, box-shadow .16s ease;
         box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
       }
       .stat:hover {
-        transform:translateY(-1px);
+        transform:translateY(-2px) scale(1.01);
         background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 10px 20px rgba(0,0,0,.10);
+      }
+      .stat-icon {
+        width:24px;
+        height:24px;
+        border-radius:999px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:12px;
+        font-weight:900;
+        color:#f1deba;
+        background:linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.10));
+        border:1px solid rgba(200,169,104,.16);
+        margin-bottom:6px;
+        transition:transform .16s ease;
+      }
+      .stat:hover .stat-icon {
+        transform:scale(1.08) rotate(-4deg);
+      }
+      .stat-icon {
+        width:24px;
+        height:24px;
+        border-radius:999px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:12px;
+        font-weight:900;
+        color:#f1deba;
+        background:linear-gradient(135deg, rgba(200,169,104,.22), rgba(200,169,104,.10));
+        border:1px solid rgba(200,169,104,.16);
+        margin-bottom:6px;
       }
       .stat-label { font-size:9px; color:var(--muted); }
       .stat-value { margin-top:4px; font-size:15px; line-height:1; font-weight:900; letter-spacing:-.03em; }
@@ -229,6 +262,14 @@
           0 14px 30px rgba(0,0,0,.18);
         position:relative;
         overflow:hidden;
+        transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      }
+      .task-card:hover {
+        transform:translateY(-2px);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.04),
+          0 18px 34px rgba(0,0,0,.22);
+        border-color: rgba(200,169,104,.18);
       }
       .task-card::before {
         content:'';
@@ -278,7 +319,21 @@
         border-color:rgba(255,255,255,.12);
       }
       .task-top { display:flex; gap:12px; align-items:flex-start; }
-      .check { width:26px; height:26px; min-width:26px; border-radius:999px; border:2px solid #667086; background:transparent; position:relative; margin-top:2px; cursor:pointer; }
+      .check {
+        width:26px;
+        height:26px;
+        min-width:26px;
+        border-radius:999px;
+        border:2px solid #667086;
+        background:transparent;
+        position:relative;
+        margin-top:2px;
+        cursor:pointer;
+        transition:transform .16s ease, border-color .16s ease, background .16s ease;
+      }
+      .check:hover {
+        transform:scale(1.08);
+      }
       .check.done { background:#2da96d; border-color:#2da96d; }
       .check.done::after { content:"✓"; color:white; position:absolute; left:5px; top:-1px; font-size:16px; }
       .task-title { font-size:16px; font-weight:900; letter-spacing:-.03em; line-height:1.2; }
@@ -305,6 +360,10 @@
         letter-spacing:.01em;
         border:1px solid rgba(255,255,255,.08);
         box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+        transition:transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+      }
+      .task-action:hover {
+        transform:translateY(-1px) scale(1.02);
       }
       .task-action-primary {
         background: linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.12));
@@ -391,17 +450,48 @@
         flex:1;
         border:0;
         border-radius:18px;
-        padding:11px 8px;
+        padding:10px 8px;
         background:transparent;
         color:var(--muted);
-        font-size:12px;
+        font-size:11px;
         font-weight:800;
         letter-spacing:.01em;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:4px;
+        transition:transform .16s ease, background .16s ease;
+      }
+      .mobile-tab:hover {
+        transform:translateY(-1px);
+      }
+      .mobile-tab-icon {
+        width:24px;
+        height:24px;
+        border-radius:999px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:12px;
+        background:rgba(255,255,255,.05);
+        border:1px solid rgba(255,255,255,.06);
+        transition:transform .16s ease, background .16s ease;
+      }
+      .mobile-tab-label {
+        font-size:11px;
+        font-weight:800;
       }
       .mobile-tab.active {
         background:linear-gradient(135deg, rgba(200,169,104,.22), rgba(200,169,104,.14));
         color:#f4d596;
         box-shadow: inset 0 0 0 1px rgba(200,169,104,.18);
+      }
+      .mobile-tab.active .mobile-tab-icon {
+        background:linear-gradient(135deg, rgba(200,169,104,.26), rgba(200,169,104,.12));
+        border-color:rgba(200,169,104,.18);
+        color:#f7e0b3;
+        transform:scale(1.08);
       }
 
       @media (max-width: 1100px) { .layout { grid-template-columns:1fr; } }
@@ -449,11 +539,11 @@
         </div>
 
         <div class="stats" id="statsBar">
-          <div class="stat" data-stat="all"><div class="stat-label">Totaal</div><div id="statTotal" class="stat-value">0</div></div>
-          <div class="stat" data-stat="open"><div class="stat-label">Open</div><div id="statOpen" class="stat-value">0</div></div>
-          <div class="stat" data-stat="done"><div class="stat-label">Klaar</div><div id="statDone" class="stat-value">0</div></div>
-          <div class="stat" data-stat="Maurits"><div class="stat-label">Maurits</div><div id="statMaurits" class="stat-value">0</div></div>
-          <div class="stat" data-stat="Titia"><div class="stat-label">Titia</div><div id="statTitia" class="stat-value">0</div></div>
+          <div class="stat" data-stat="all"><div class="stat-icon">▦</div><div class="stat-label">Totaal</div><div id="statTotal" class="stat-value">0</div></div>
+          <div class="stat" data-stat="open"><div class="stat-icon">◌</div><div class="stat-label">Open</div><div id="statOpen" class="stat-value">0</div></div>
+          <div class="stat" data-stat="done"><div class="stat-icon">✓</div><div class="stat-label">Klaar</div><div id="statDone" class="stat-value">0</div></div>
+          <div class="stat" data-stat="Maurits"><div class="stat-icon">M</div><div class="stat-label">Maurits</div><div id="statMaurits" class="stat-value">0</div></div>
+          <div class="stat" data-stat="Titia"><div class="stat-icon">T</div><div class="stat-label">Titia</div><div id="statTitia" class="stat-value">0</div></div>
         </div>
 
         <div class="layout">
@@ -544,9 +634,9 @@
       </div>
 
       <div class="mobile-tabs" id="mobileTabs">
-        <button class="mobile-tab active" data-tab="tasks">Taken</button>
-        <button class="mobile-tab" data-tab="new">Nieuw</button>
-        <button class="mobile-tab" data-tab="chat">Chat</button>
+        <button class="mobile-tab active" data-tab="tasks"><span class="mobile-tab-icon">✓</span><span class="mobile-tab-label">Taken</span></button>
+        <button class="mobile-tab" data-tab="new"><span class="mobile-tab-icon">＋</span><span class="mobile-tab-label">Nieuw</span></button>
+        <button class="mobile-tab" data-tab="chat"><span class="mobile-tab-icon">✦</span><span class="mobile-tab-label">Chat</span></button>
       </div>
 
       <div id="taskModal" class="modal hidden"><div class="glass card modal-card"><div class="topbar" style="margin-bottom:14px;"><h3 style="margin:0;">Taakdetails</h3><button id="closeTaskModalBtn" class="btn-soft btn-mini" type="button">Sluiten</button></div><div id="taskModalBody"></div></div></div>
