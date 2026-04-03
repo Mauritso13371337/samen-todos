@@ -57,10 +57,10 @@
       }
 
       .glass {
-        background: var(--card);
-        backdrop-filter: blur(18px);
-        border: 1px solid var(--line);
-        box-shadow: var(--shadow);
+        background: linear-gradient(180deg, rgba(18, 25, 41, .92), rgba(14, 20, 33, .88));
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,.07);
+        box-shadow: 0 28px 70px rgba(0,0,0,.38);
         border-radius: var(--radius-xl);
       }
 
@@ -242,7 +242,37 @@
       .stack { display:grid; gap:14px; }
 
       .toolbar-row { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
-      .toolbar-title { margin:0; font-size:17px; letter-spacing:-.03em; font-weight:900; }
+      .toolbar-title {
+        margin:0;
+        font-size:17px;
+        letter-spacing:-.03em;
+        font-weight:900;
+      }
+      .section-divider {
+        height:1px;
+        background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+        margin:10px 0 14px;
+      }
+      .collapsed-header {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:12px 14px;
+        border-radius:18px;
+        background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.025));
+        border:1px solid rgba(255,255,255,.07);
+        cursor:pointer;
+      }
+      .collapsed-title {
+        font-size:14px;
+        font-weight:800;
+        color:var(--text);
+      }
+      .collapsed-meta {
+        color:var(--muted);
+        font-size:12px;
+      }
       .toolbar-meta { color:var(--muted); font-size:12px; }
       .task-toolbar { display:grid; grid-template-columns: 1fr 1fr 1.2fr; gap:8px; margin-bottom:10px; }
 
@@ -251,15 +281,15 @@
       .task-list { display:grid; gap:12px; }
       .task-card {
         border-radius:24px;
-        border:1px solid rgba(255,255,255,.09);
+        border:1px solid rgba(255,255,255,.08);
         background:
-          radial-gradient(circle at top right, rgba(200,169,104,.16), transparent 28%),
-          linear-gradient(180deg, rgba(29,40,61,.98), rgba(16,22,34,.98));
+          radial-gradient(circle at top right, rgba(200,169,104,.14), transparent 30%),
+          linear-gradient(180deg, rgba(30,40,59,.98), rgba(17,23,35,.98));
         padding:14px;
         cursor:pointer;
         box-shadow:
           inset 0 1px 0 rgba(255,255,255,.04),
-          0 14px 30px rgba(0,0,0,.18);
+          0 18px 34px rgba(0,0,0,.22);
         position:relative;
         overflow:hidden;
         transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
@@ -394,11 +424,11 @@
       .quick-card {
         padding:14px;
         border-radius:22px;
-        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-        border:1px solid var(--line);
+        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+        border:1px solid rgba(255,255,255,.07);
         box-shadow:
           inset 0 1px 0 rgba(255,255,255,.04),
-          0 10px 24px rgba(0,0,0,.10);
+          0 12px 26px rgba(0,0,0,.12);
       }
       .quick-card-title { font-size:12px; color:var(--muted); }
       .quick-card-value { margin-top:6px; font-size:18px; font-weight:900; }
@@ -574,11 +604,21 @@
                   <h4 class="task-section-title">Openstaand</h4>
                   <div id="openTaskList" class="task-list"></div>
                 </div>
+                <div class="section-divider"></div>
                 <div>
-                  <h4 class="task-section-title">Afgerond</h4>
-                  <div id="doneTaskList" class="task-list"></div>
+                  <button id="doneToggleBtn" class="collapsed-header" type="button">
+                    <span>
+                      <span class="collapsed-title">Afgeronde taken</span>
+                      <span class="collapsed-meta" id="doneToggleMeta">Verberg of toon afgeronde taken</span>
+                    </span>
+                    <span id="doneToggleCount" class="chip done">0</span>
+                  </button>
+                  <div id="doneTasksWrap" style="margin-top:10px;">
+                    <div id="doneTaskList" class="task-list"></div>
+                  </div>
                 </div>
               </div>
+            </div>
             </div>
           </div>
 
@@ -702,6 +742,10 @@
       const composerWrap = document.getElementById('composerWrap');
       const qaOpen = document.getElementById('qaOpen');
       const qaDone = document.getElementById('qaDone');
+      const doneToggleBtn = document.getElementById('doneToggleBtn');
+      const doneTasksWrap = document.getElementById('doneTasksWrap');
+      const doneToggleCount = document.getElementById('doneToggleCount');
+      const doneToggleMeta = document.getElementById('doneToggleMeta');
       const qaMaurits = document.getElementById('qaMaurits');
       const qaTitia = document.getElementById('qaTitia');
 
@@ -710,6 +754,7 @@
       let tasks = [];
       let messages = [];
       let personView = 'all';
+      let doneExpanded = false;
 
       const loveNotes = [
         'Het hoeft niet perfect. Samen overzicht hebben is al luxe.',
@@ -1009,12 +1054,25 @@
       function renderTasks() {
         renderStats();
         renderInsights();
+
         const filtered = getFilteredTasks();
         const openTasks = filtered.filter(t => !t.done);
         const doneTasks = filtered.filter(t => t.done);
 
-        openTaskList.innerHTML = openTasks.length ? openTasks.map(taskMarkup).join('') : `<div class="empty">Geen open taken in deze weergave.</div>`;
-        doneTaskList.innerHTML = doneTasks.length ? doneTasks.map(taskMarkup).join('') : `<div class="empty">Nog niets afgerond in deze weergave.</div>`;
+        openTaskList.innerHTML = openTasks.length
+          ? openTasks.map(taskMarkup).join('')
+          : `<div class="empty">Geen open taken in deze weergave.</div>`;
+
+        doneTaskList.innerHTML = doneTasks.length
+          ? doneTasks.map(taskMarkup).join('')
+          : `<div class="empty">Nog niets afgerond in deze weergave.</div>`;
+
+        doneToggleCount.textContent = String(doneTasks.length);
+        doneToggleMeta.textContent = doneExpanded
+          ? 'Tik om afgeronde taken te verbergen'
+          : 'Tik om afgeronde taken te tonen';
+        doneTasksWrap.classList.toggle('hidden', !doneExpanded);
+
         attachTaskListeners();
       }
 
@@ -1323,6 +1381,10 @@
       composerDetails.addEventListener('toggle', updateComposerHint);
       document.querySelectorAll('.mobile-tab').forEach(btn => btn.addEventListener('click', () => setMobileTab(btn.dataset.tab)));
       enablePushBtn.addEventListener('click', enablePush);
+      doneToggleBtn.addEventListener('click', () => {
+        doneExpanded = !doneExpanded;
+        renderTasks();
+      });
 
       restoreSession();
       setupRealtime();
