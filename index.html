@@ -902,7 +902,7 @@
             </div>
 
             <div class="task-actions">
-              <button class="task-action task-action-primary" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Open' : 'Klaar'}</button>
+              <button class="task-action task-action-primary" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Heropenen' : 'Klaar'}</button>
               <button class="task-action task-action-secondary" data-action="open" data-id="${task.id}" type="button">Open taak</button>
               <button class="task-action task-action-tertiary" data-action="note" data-id="${task.id}" type="button">Bericht</button>
             </div>
@@ -996,7 +996,7 @@
             </div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="task-action task-action-primary" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Open' : 'Klaar'}</button>
+              <button class="task-action task-action-primary" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Heropenen' : 'Klaar'}</button>
               <button class="task-action task-action-tertiary" onclick="window.addTaskMessageFromModal('${task.id}')" type="button">Bericht</button>
               <button class="btn-danger btn-mini" onclick="window.deleteTaskFromModal('${task.id}')" type="button">Verwijderen</button>
             </div>
