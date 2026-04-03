@@ -65,94 +65,19 @@
         box-shadow: 0 30px 80px rgba(0,0,0,.42);
         border-radius: var(--radius-xl);
       }
-      .premium-topbar {
+      .simple-topbar {
         display:flex;
         align-items:center;
         justify-content:space-between;
-        gap:12px;
-        padding:4px 2px 2px;
+        gap:10px;
+        padding:2px 2px 0;
       }
-      .premium-topbar-left {
+      .simple-topbar-left {
         display:flex;
         align-items:center;
-        gap:10px;
+        gap:8px;
         min-width:0;
         overflow:auto;
-      }
-      .premium-title-wrap {
-        display:flex;
-        flex-direction:column;
-        gap:2px;
-      }
-      .premium-kicker {
-        font-size:10px;
-        letter-spacing:.16em;
-        text-transform:uppercase;
-        color:var(--gold-2);
-        opacity:.86;
-        font-weight:800;
-      }
-      .premium-headline {
-        font-size:18px;
-        line-height:1;
-        letter-spacing:-.04em;
-        font-weight:900;
-        color:var(--text);
-      }
-      .premium-subline {
-        margin-top:10px;
-        display:grid;
-        grid-template-columns: 1.2fr .8fr;
-        gap:10px;
-      }
-      .premium-highlight {
-        padding:14px 16px;
-        border-radius:22px;
-        border:1px solid rgba(255,255,255,.07);
-        background:
-          radial-gradient(circle at top right, rgba(200,169,104,.14), transparent 30%),
-          linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
-      }
-      .premium-highlight-title {
-        font-size:12px;
-        color:var(--muted);
-        font-weight:700;
-      }
-      .premium-highlight-value {
-        margin-top:6px;
-        font-size:24px;
-        line-height:1.05;
-        letter-spacing:-.05em;
-        font-weight:900;
-        color:var(--text);
-      }
-      .premium-highlight-note {
-        margin-top:6px;
-        font-size:12px;
-        color:var(--muted);
-      }
-      .premium-mini-stack {
-        display:grid;
-        gap:10px;
-      }
-      .premium-mini-card {
-        padding:12px 14px;
-        border-radius:20px;
-        border:1px solid rgba(255,255,255,.07);
-        background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
-      }
-      .premium-mini-label {
-        font-size:11px;
-        color:var(--muted);
-        font-weight:700;
-      }
-      .premium-mini-value {
-        margin-top:5px;
-        font-size:15px;
-        font-weight:900;
-        letter-spacing:-.03em;
       }
 
       .auth-wrap { max-width: 560px; margin: 26px auto; }
@@ -599,7 +524,6 @@
 
       @media (max-width: 1100px) { .layout { grid-template-columns:1fr; } }
       @media (max-width: 860px) {
-        .premium-subline { grid-template-columns: 1fr; }
         .stats { grid-template-columns: repeat(3,1fr); }
         .task-toolbar { grid-template-columns: repeat(2,1fr); }
       }
@@ -611,9 +535,6 @@
         .topbar { gap:6px; }
         .badge-user { font-size:11px; padding:7px 10px; }
         .btn-mini { padding:8px 10px; font-size:12px; }
-        .premium-topbar { align-items:flex-start; gap:10px; }
-        .premium-headline { font-size:16px; }
-        .premium-highlight-value { font-size:21px; }
         .mobile-tabs { display:flex; }
         .detail-grid { grid-template-columns:1fr; }
       }
@@ -639,36 +560,12 @@
 
       <div id="appView" class="hidden app-grid">
         <div class="glass card">
-          <div class="premium-topbar">
-            <div class="premium-topbar-left">
+          <div class="simple-topbar">
+            <div class="simple-topbar-left">
               <div id="currentUserBadge" class="badge-user"></div>
-              <div class="premium-title-wrap">
-                <div class="premium-kicker">Luxury Calm</div>
-                <div class="premium-headline">Samen slim geregeld</div>
-              </div>
-            </div>
-            <div style="display:flex; gap:8px; align-items:center;">
               <button id="enablePushBtn" class="btn-soft btn-mini" type="button">Meldingen aan</button>
-              <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
             </div>
-          </div>
-
-          <div class="premium-subline">
-            <div class="premium-highlight">
-              <div class="premium-highlight-title">Vandaag samen overzicht</div>
-              <div class="premium-highlight-value" id="premiumHeroValue">0 open punten</div>
-              <div class="premium-highlight-note" id="premiumHeroNote">Alles rustig op één plek.</div>
-            </div>
-            <div class="premium-mini-stack">
-              <div class="premium-mini-card">
-                <div class="premium-mini-label">Focus</div>
-                <div class="premium-mini-value" id="premiumFocusValue">Geen haast</div>
-              </div>
-              <div class="premium-mini-card">
-                <div class="premium-mini-label">Balans</div>
-                <div class="premium-mini-value" id="premiumBalanceValue">Mooi verdeeld</div>
-              </div>
-            </div>
+            <button id="logoutBtn" class="btn-soft btn-mini" type="button">Uitloggen</button>
           </div>
         </div>
 
@@ -845,10 +742,6 @@
       const composerWrap = document.getElementById('composerWrap');
       const qaOpen = document.getElementById('qaOpen');
       const qaDone = document.getElementById('qaDone');
-      const premiumHeroValue = document.getElementById('premiumHeroValue');
-      const premiumHeroNote = document.getElementById('premiumHeroNote');
-      const premiumFocusValue = document.getElementById('premiumFocusValue');
-      const premiumBalanceValue = document.getElementById('premiumBalanceValue');
       const doneToggleBtn = document.getElementById('doneToggleBtn');
       const doneTasksWrap = document.getElementById('doneTasksWrap');
       const doneToggleCount = document.getElementById('doneToggleCount');
@@ -993,13 +886,7 @@
         qaMaurits.textContent = mauritsOpen;
         qaTitia.textContent = titiaOpen;
 
-        premiumHeroValue.textContent = `${openCount} open ${openCount === 1 ? 'punt' : 'punten'}`;
-        premiumHeroNote.textContent = doneCount > 0 ? `${doneCount} afgerond en netjes opgeborgen.` : 'Alles rustig op één plek.';
-        premiumFocusValue.textContent = openCount > 0 ? `${openCount} om op te focussen` : 'Geen haast';
-        premiumBalanceValue.textContent = Math.abs(mauritsOpen - titiaOpen) >= 2
-          ? (mauritsOpen > titiaOpen ? 'Meer bij Maurits' : 'Meer bij Titia')
-          : 'Mooi verdeeld';
-      }
+        }
 
       function renderInsights() {
         const openM = tasks.filter(t => !t.done && t.owner === 'Maurits').length;
