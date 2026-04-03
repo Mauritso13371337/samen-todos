@@ -199,10 +199,10 @@
         font-weight:800;
       }
       .switch-chip.active {
-        background:linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.12));
+        background:linear-gradient(135deg, rgba(200,169,104,.28), rgba(200,169,104,.14));
         color:#f6ddb0;
-        border-color:rgba(200,169,104,.24);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+        border-color:rgba(200,169,104,.26);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 8px 18px rgba(200,169,104,.10);
       }
 
       .layout { display:grid; grid-template-columns: 1.15fr .85fr; gap:14px; }
@@ -261,8 +261,8 @@
         height:28px;
         border-radius:999px;
         border:1px solid rgba(255,255,255,.08);
-        background:rgba(12,17,27,.56);
-        color:#c8bfb0;
+        background:rgba(255,255,255,.04);
+        color:#b9b0a1;
         display:flex;
         align-items:center;
         justify-content:center;
@@ -270,11 +270,12 @@
         line-height:1;
         cursor:pointer;
         z-index:2;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
       }
       .icon-delete:hover {
-        background:rgba(220,38,38,.16);
-        color:#ffb2b2;
-        border-color:rgba(220,38,38,.22);
+        background:rgba(255,255,255,.08);
+        color:#f3e7cc;
+        border-color:rgba(255,255,255,.12);
       }
       .task-top { display:flex; gap:12px; align-items:flex-start; }
       .check { width:26px; height:26px; min-width:26px; border-radius:999px; border:2px solid #667086; background:transparent; position:relative; margin-top:2px; cursor:pointer; }
@@ -293,7 +294,33 @@
       .priority-normal { background: var(--purple-soft); color:#cfc0ff; }
       .priority-low { background: rgba(87,163,222,.16); color:#98dbff; }
       .deadline { background: rgba(200,169,104,.16); color:#f4d596; }
-      .task-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
+      .task-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+      .task-action {
+        width:auto;
+        min-width:98px;
+        padding:10px 14px;
+        border-radius:14px;
+        font-size:12px;
+        font-weight:900;
+        letter-spacing:.01em;
+        border:1px solid rgba(255,255,255,.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      }
+      .task-action-primary {
+        background: linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.12));
+        color:#f4dfb3;
+        border-color: rgba(200,169,104,.20);
+      }
+      .task-action-secondary {
+        background: linear-gradient(135deg, rgba(74,98,150,.30), rgba(63,79,114,.18));
+        color:#dbe5ff;
+        border-color: rgba(121,145,202,.18);
+      }
+      .task-action-tertiary {
+        background: linear-gradient(135deg, rgba(128,95,214,.24), rgba(104,81,164,.16));
+        color:#e3d7ff;
+        border-color: rgba(168,143,241,.18);
+      }
       .empty {
         border-radius:20px;
         border:1px dashed #3a4258;
@@ -315,6 +342,11 @@
       }
       .quick-card-title { font-size:12px; color:var(--muted); }
       .quick-card-value { margin-top:6px; font-size:18px; font-weight:900; }
+      .glass.card {
+        background:
+          radial-gradient(circle at top right, rgba(200,169,104,.08), transparent 26%),
+          linear-gradient(180deg, rgba(19,26,42,.90), rgba(15,21,33,.88));
+      }
 
       .chat-feed { max-height:420px; overflow:auto; display:grid; gap:10px; }
       .chat-msg {
@@ -780,9 +812,9 @@
             </div>
 
             <div class="task-actions">
-              <button class="btn-soft btn-mini" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Open' : 'Klaar'}</button>
-              <button class="btn-soft btn-mini" data-action="open" data-id="${task.id}" type="button">Open taak</button>
-              <button class="btn-soft btn-mini" data-action="note" data-id="${task.id}" type="button">Bericht</button>
+              <button class="task-action task-action-primary" data-action="toggle" data-id="${task.id}" type="button">${task.done ? 'Open' : 'Klaar'}</button>
+              <button class="task-action task-action-secondary" data-action="open" data-id="${task.id}" type="button">Open taak</button>
+              <button class="task-action task-action-tertiary" data-action="note" data-id="${task.id}" type="button">Bericht</button>
             </div>
           </div>
         `;
@@ -874,8 +906,8 @@
             </div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button class="btn-soft btn-mini" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Open' : 'Klaar'}</button>
-              <button class="btn-soft btn-mini" onclick="window.addTaskMessageFromModal('${task.id}')" type="button">Bericht</button>
+              <button class="task-action task-action-primary" onclick="window.toggleTaskFromModal('${task.id}')" type="button">${task.done ? 'Open' : 'Klaar'}</button>
+              <button class="task-action task-action-tertiary" onclick="window.addTaskMessageFromModal('${task.id}')" type="button">Bericht</button>
               <button class="btn-danger btn-mini" onclick="window.deleteTaskFromModal('${task.id}')" type="button">Verwijderen</button>
             </div>
           </div>
