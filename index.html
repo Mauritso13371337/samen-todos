@@ -366,9 +366,10 @@
         transform:translateY(-1px) scale(1.02);
       }
       .task-action-primary {
-        background: linear-gradient(135deg, rgba(200,169,104,.24), rgba(200,169,104,.12));
-        color:#f4dfb3;
-        border-color: rgba(200,169,104,.20);
+        background: linear-gradient(135deg, rgba(46,163,98,.30), rgba(35,122,73,.18));
+        color:#dff8e8;
+        border-color: rgba(86,196,132,.20);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 18px rgba(35,122,73,.14);
       }
       .task-action-secondary {
         background: linear-gradient(135deg, rgba(74,98,150,.30), rgba(63,79,114,.18));
@@ -896,7 +897,6 @@
 
             <div class="chips">
               <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
-              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
               ${task.priority ? `<div class="chip ${priorityClass(task.priority)}">${safeText(task.priority)}</div>` : ''}
               ${task.deadline ? `<div class="chip deadline">${safeText(formatDate(task.deadline))}</div>` : ''}
             </div>
@@ -975,7 +975,7 @@
 
             <div class="chips">
               <div class="chip ${ownerClass(task.owner)}">${safeText(task.owner)}</div>
-              <div class="chip ${task.done ? 'done' : 'open'}">${task.done ? 'Afgerond' : 'Open'}</div>
+              
               <div class="chip ${priorityClass(task.priority || 'Normaal')}">${safeText(task.priority || 'Normaal')}</div>
               ${task.deadline ? `<div class="chip deadline">Deadline: ${safeText(formatDate(task.deadline))}</div>` : ''}
             </div>
