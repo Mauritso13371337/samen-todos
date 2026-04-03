@@ -568,9 +568,16 @@
         return Number.isNaN(d.getTime()) ? v : d.toLocaleDateString('nl-NL');
       }
 
-      function getDisplayName(){
-        return currentUser?.user_metadata?.name || currentUser?.email || 'Gebruiker';
-      }
+    function getDisplayName(){
+  const name = currentUser?.user_metadata?.name;
+  if (name === 'Maurits' || name === 'Titia') return name;
+
+  const email = (currentUser?.email || '').toLowerCase();
+  if (email.includes('mjmodekerken')) return 'Maurits';
+  if (email.includes('titia')) return 'Titia';
+
+  return name || currentUser?.email || 'Gebruiker';
+}
 
       function ownerClass(o){ return o==='Maurits'?'owner-m':'owner-t'; }
       function priorityClass(p){
